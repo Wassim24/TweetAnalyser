@@ -1,5 +1,6 @@
 package services.twitter;
 
+import services.dao.SqliteFactoryImpl;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
 import twitter4j.Status;
@@ -30,5 +31,11 @@ public class TweetServiceImpl implements TweetService
     public RateLimitStatus getRemainingSearchQueries() throws TwitterException
     {
         return Twitter4JFactory.getInstance().getTwitter().getRateLimitStatus("search").get("/search/tweets");
+    }
+
+    @Override
+    public boolean add(Status status, String keyword)
+    {
+        return SqliteFactoryImpl.getInstance().add(status.getUser().getName(), status.getText(), status.getCreatedAt(), keyword);
     }
 }

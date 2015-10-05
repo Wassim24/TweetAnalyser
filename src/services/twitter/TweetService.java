@@ -10,4 +10,5 @@ public interface TweetService
 {
     public List<Status> search(String keyword) throws TwitterException;
     public RateLimitStatus getRemainingSearchQueries() throws TwitterException;
+    public boolean add(Status status, String keyword);
 }
