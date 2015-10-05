@@ -67,8 +67,7 @@
 }
 
 .label {
-
-    -fx-max-width: Infinity;
+    /*-fx-max-width: Infinity; non fonctionnel sur windows */
     -fx-padding : 21px 0px 21px 24px;
 
     -fx-background-color:  #fde167;
