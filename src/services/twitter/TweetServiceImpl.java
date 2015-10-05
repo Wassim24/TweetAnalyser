@@ -1,11 +1,14 @@
 package services.twitter;
 
+import domain.TweetEntityBeans;
+import services.dao.DaoFactory;
 import services.dao.SqliteFactoryImpl;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
+import java.util.Date;
 import java.util.List;
 
 public class TweetServiceImpl implements TweetService
@@ -36,6 +39,18 @@ public class TweetServiceImpl implements TweetService
     @Override
     public boolean add(Status status, String keyword)
     {
-        return SqliteFactoryImpl.getInstance().add(status.getUser().getName(), status.getText(), status.getCreatedAt(), keyword);
+        return this.add(status.getUser().getName(), status.getText(), status.getCreatedAt(), keyword);
+    }
+
+    @Override
+    public boolean add(String username, String tweet, Date date, String keyword)
+    {
+        return DaoFactory.getInstance().add(new TweetEntityBeans(username, tweet, date, keyword));
+    }
+
+    @Override
+    public List<TweetEntityBeans> getAll()
+    {
+        return DaoFactory.getInstance().all();
     }
 }
