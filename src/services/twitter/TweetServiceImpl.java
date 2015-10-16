@@ -38,7 +38,7 @@ public class TweetServiceImpl implements TweetService
     @Override
     public boolean add(TweetEntityBeans tweet)
     {
-        tweet.cleanText();
+        tweet.cleanCurrentText();
         return DaoFactory.getInstance().add(tweet);
     }
 

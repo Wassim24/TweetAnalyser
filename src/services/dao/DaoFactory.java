@@ -6,7 +6,8 @@ public class DaoFactory
     private static DataAccessObject daoFactoryImpl = null;
     private DaoFactory() {}
 
-    public static DataAccessObject getInstance() {
+    public static DataAccessObject getInstance()
+    {
         if (daoFactoryImpl == null)
             try
             {

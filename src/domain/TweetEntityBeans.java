@@ -15,40 +15,47 @@ public class TweetEntityBeans
     private int id;
     private String username, tweet, keyword;
     private Date date;
+    private Annotation annotation;
 
-    public TweetEntityBeans(int id, String username, String tweet, Date date, String keyword)
+    public TweetEntityBeans(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
     {
-        this(username, tweet, date, keyword);
+        this(username, tweet, date, keyword, annotation);
         this.setId(id);
     }
 
     public TweetEntityBeans(String username, String tweet, Date date, String keyword)
     {
-        this.setId(id);
+        this(username, tweet, date, keyword, Annotation.NEUTRE);
+    }
+
+    public TweetEntityBeans(String username, String tweet, Date date, String keyword, Annotation annotation)
+    {
         this.setUsername(username);
         this.setTweet(tweet);
         this.setKeyword(keyword);
         this.setDate(date);
+        this.setAnnotation(annotation);
+        this.setId(-1);
     }
 
-    public String cleanText()
+    public String cleanCurrentText()
     {
         LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
         {{
-            put("(https?)://(www\\d?|[a-zA-Z0-9]+)?.[a-zA-Z0-9-]+(\\:|.)([a-zA-Z0-9.]+|(\\d+)?)([/?:].*)?", "");
+                put("(https?)://(www\\d?|[a-zA-Z0-9]+)?.[a-zA-Z0-9-]+(\\:|.)([a-zA-Z0-9.]+|(\\d+)?)([/?:].*)?", "");
 
-            put("@[a-zA-Z0-9-_]+\\s?:?", "");
-            put("#[a-zA-Z0-9-_]+\\s?:?", "");
-            put("\\s?RT\\s", "");
-            put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
-            put("\\d", "");
-        }};
+                put("@[a-zA-Z0-9-_]+\\s?:?", "");
+                put("#[a-zA-Z0-9-_]+\\s?:?", "");
+                put("\\s?RT\\s", "");
+                put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
+                put("\\d", "");
+            }};
 
-        regexes.forEach((regex, replaceWith) ->  {
-            setTweet(getTweet().replaceAll(regex, replaceWith));
+        regexes.forEach((regex, replaceWith) ->
+        {
+            this.setTweet(this.getTweet().replaceAll(regex, replaceWith));
         });
 
-        System.out.println(this.getTweet());
         return this.getTweet();
     }
 
@@ -95,5 +102,13 @@ public class TweetEntityBeans
     public String toString()
     {
         return this.getUsername() + " : "+ this.getTweet();
+    }
+    public void setAnnotation(Annotation annotation)
+    {
+        this.annotation = annotation;
+    }
+    public int getAnnotation()
+    {
+        return this.annotation.getValue();
     }
 }
