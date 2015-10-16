@@ -54,7 +54,7 @@
                         <HBox styleClass="statusBar" spacing="3">
                             <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="statusLabel" maxWidth="Infinity"/>
                             <Button text="Save selected tweet(s)"/>
-                            <Button text="Save all the tweets"/>
+                            <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
                             <Button text="Clear results" onAction="#clearListViewFromResults"/>
                         </HBox>
                     </children>

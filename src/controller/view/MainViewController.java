@@ -1,5 +1,6 @@
 package controller.view;
 
+import domain.TweetEntityBeans;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,12 +13,13 @@ import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainViewController {
 
     @FXML
-    private ListView foundTweetsListView;
+    private ListView<TweetEntityBeans> foundTweetsListView;
     @FXML
     private Label statusLabel;
     @FXML
@@ -29,8 +31,8 @@ public class MainViewController {
 
         try
         {
-            ObservableList foundTweets = FXCollections.observableArrayList();
-            foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()).stream().map(status -> "@" + status.getUser().getScreenName() + " : " + status.getText()).collect(Collectors.toList()));
+            ObservableList<TweetEntityBeans> foundTweets = FXCollections.observableArrayList();
+            foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
             foundTweetsListView.setItems(foundTweets);
         }
         catch (TwitterException e)
@@ -67,4 +69,8 @@ public class MainViewController {
         foundTweetsListView.getItems().clear();
     }
 
+    public void onClickSaveAllTweetsBtn(ActionEvent actionEvent)
+    {
+        TweetServiceImpl.getInstance().addAll(this.foundTweetsListView.getItems());
+    }
 }

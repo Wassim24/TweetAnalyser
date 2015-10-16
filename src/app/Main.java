@@ -18,12 +18,12 @@ public class Main extends Application {
         /*
          * Test Database
          */
-
+/*
         TweetServiceImpl.getInstance();
         TweetServiceImpl.getInstance().add("Khaled", "Mon premier tweet", new Date(), "premier");
         TweetServiceImpl.getInstance().add("Khaled", "Mon deuxieme tweet", new Date(), "deuxieme");
         TweetServiceImpl.getInstance().add("Khaled", "Mon troisieme tweet", new Date(), "troisieme");
-        System.out.println(TweetServiceImpl.getInstance().getAll());
+        System.out.println(TweetServiceImpl.getInstance().getAll());*/
 
 
 

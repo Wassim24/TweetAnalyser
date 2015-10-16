@@ -10,9 +10,10 @@ import java.util.List;
 
 public interface TweetService
 {
-    public List<Status> search(String keyword) throws TwitterException;
+    public List<TweetEntityBeans> search(String keyword) throws TwitterException;
     public RateLimitStatus getRemainingSearchQueries() throws TwitterException;
-    public boolean add(Status status, String keyword);
+    public boolean add(TweetEntityBeans tweet);
     public boolean add(String username, String tweet, Date date, String keyword);
+    public boolean addAll(List<TweetEntityBeans> tweets);
     public List<TweetEntityBeans> getAll();
 }

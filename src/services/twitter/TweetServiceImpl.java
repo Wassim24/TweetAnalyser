@@ -2,14 +2,13 @@ package services.twitter;
 
 import domain.TweetEntityBeans;
 import services.dao.DaoFactory;
-import services.dao.SqliteFactoryImpl;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
-import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TweetServiceImpl implements TweetService
 {
@@ -25,9 +24,9 @@ public class TweetServiceImpl implements TweetService
     }
 
     @Override
-    public List<Status> search(String keyword) throws TwitterException
+    public List<TweetEntityBeans> search(String keyword) throws TwitterException
     {
-        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword)).getTweets();
+        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword)).getTweets().stream().map(s -> new TweetEntityBeans(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword)).collect(Collectors.toList());
     }
 
     @Override
@@ -37,15 +36,25 @@ public class TweetServiceImpl implements TweetService
     }
 
     @Override
-    public boolean add(Status status, String keyword)
+    public boolean add(TweetEntityBeans tweet)
     {
-        return this.add(status.getUser().getName(), status.getText(), status.getCreatedAt(), keyword);
+        tweet.cleanText();
+        return DaoFactory.getInstance().add(tweet);
     }
 
     @Override
     public boolean add(String username, String tweet, Date date, String keyword)
     {
-        return DaoFactory.getInstance().add(new TweetEntityBeans(username, tweet, date, keyword));
+        return this.add(new TweetEntityBeans(username, tweet, date, keyword));
+    }
+
+    @Override
+    public boolean addAll(List<TweetEntityBeans> tweets)
+    {
+        for (TweetEntityBeans tweet : tweets)
+            this.add(tweet);
+
+        return true;
     }
 
     @Override
