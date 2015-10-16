@@ -28,7 +28,7 @@
                             <children>
                                 <HBox styleClass="searchBox" spacing="3">
                                     <children>
-                                        <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"/>
+                                        <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField" onKeyPressed="#onKeyPressKeywords"/>
                                         <Button text="Search" onAction="#searchForTweets"/>
                                         <Button text="Advanced Search"/>
                                     </children>
