@@ -1,15 +1,14 @@
 package domain;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
-/**
- * Created by r99t on 06-10-15.
- */
 public class TweetEntityBeans
 {
     private int id;
@@ -25,7 +24,7 @@ public class TweetEntityBeans
 
     public TweetEntityBeans(String username, String tweet, Date date, String keyword)
     {
-        this(username, tweet, date, keyword, Annotation.NEUTRE);
+        this(username, tweet, date, keyword, Annotation.NONANNOTE);
     }
 
     public TweetEntityBeans(String username, String tweet, Date date, String keyword, Annotation annotation)
@@ -52,9 +51,7 @@ public class TweetEntityBeans
             }};
 
         regexes.forEach((regex, replaceWith) ->
-        {
-            this.setTweet(this.getTweet().replaceAll(regex, replaceWith));
-        });
+                this.setTweet(this.getTweet().replaceAll(regex, replaceWith)));
 
         return this.getTweet();
     }

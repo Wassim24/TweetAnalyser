@@ -1,79 +1,99 @@
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.TitledPane?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <TabPane fx:controller="controller.view.MainViewController"
          xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
          side="LEFT"
          tabClosingPolicy="UNAVAILABLE"
          stylesheets="/css/bootstrap.css">
-    <tabs>
-        <Tab text="" styleClass="searchTab">
-            <content>
-                <VBox>
-                    <children>
-                        <!-- Label for displaying the bigger title -->
-                        <Label text="Searching for tweets" maxWidth="Infinity"/>
+    <Tab text="" styleClass="searchTab">
+        <VBox>
+            <!-- Label for displaying the big title -->
+            <Label styleClass="bigTitle" text="Searching for tweets" maxWidth="Infinity"/>
 
-                        <!-- HBox containig the serach tools -->
-                        <VBox>
-                            <children>
-                                <HBox styleClass="searchBox" spacing="3">
-                                    <children>
-                                        <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField" onKeyPressed="#onKeyPressKeywords"/>
-                                        <Button text="Search" onAction="#searchForTweets"/>
-                                        <Button text="Advanced Search"/>
-                                    </children>
-                                </HBox>
+            <!-- HBox containig the serach tools -->
+            <VBox>
+                <HBox styleClass="searchBox" spacing="3">
+                    <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"
+                               onKeyPressed="#onKeyPressKeywords"/>
+                    <Button text="Search" onAction="#searchForTweets"/>
+                    <Button text="Advanced Search"/>
+                </HBox>
 
-                                <!-- Collapsible menu for setting up the advanced search -->
-                                <Accordion>
-                                    <panes>
-                                        <TitledPane text="Advanced Search Settings">
-                                            <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                            </content>
-                                        </TitledPane>
-                                    </panes>
-                                </Accordion>
-                            </children>
-                        </VBox>
+                <!-- Collapsible menu for setting up the advanced search -->
+                <Accordion>
+                    <panes>
+                        <TitledPane text="Advanced Search Settings">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </VBox>
 
-                        <!-- List view for displaying the found tweets -->
-                        <ListView editable="true" VBox.vgrow="ALWAYS" fx:id="foundTweetsListView"/>
+            <!-- List view for displaying the found tweets -->
+            <ListView editable="true" VBox.vgrow="ALWAYS" fx:id="foundTweetsListView"/>
 
-                        <!-- HBox containig the save buttons and state of the search -->
-                        <HBox styleClass="statusBar" spacing="3">
-                            <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="statusLabel" maxWidth="Infinity"/>
-                            <Button text="Save selected tweet(s)"/>
-                            <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
-                            <Button text="Clear results" onAction="#clearListViewFromResults"/>
-                        </HBox>
-                    </children>
-                </VBox>
-            </content>
-        </Tab>
+            <!-- HBox containing the save buttons and state of the search -->
+            <HBox styleClass="statusBar" spacing="3">
+                <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="statusLabel"
+                       maxWidth="Infinity"/>
+                <Button text="Save selected tweet(s)"/>
+                <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
+                <Button text="Clear results" onAction="#clearListViewFromResults"/>
+            </HBox>
+        </VBox>
+    </Tab>
 
-        <!-- Tab for displaying various charts -->
-        <Tab text="" styleClass="chartsTab">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </content>
-        </Tab>
+    <!-- Tab for displaying various charts -->
+    <Tab text="" styleClass="chartsTab">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+    </Tab>
 
-        <!-- Tab for modifiying the different settings of the app -->
-        <Tab text="" styleClass="settingsTab">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </content>
-        </Tab>
-    </tabs>
+    <!-- Tab for modifiying the different settings of the app -->
+    <Tab text="" styleClass="settingsTab">
+        <VBox>
+            <!-- Label for displaying the bigger title -->
+            <Label styleClass="bigTitle" text="Editing settings" maxWidth="Infinity"/>
+
+            <!-- Grid pane containing authentication settings -->
+            <GridPane styleClass="authSettingsGP">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="230.0"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Authentication Settings" styleClass="menuLabel"/>
+
+                <Label styleClass="menuItemLabel" text="Consumer Key" GridPane.rowIndex="1"/>
+                <Label styleClass="menuItemLabel" text="Consumer Key Secret" GridPane.rowIndex="2"/>
+                <Label styleClass="menuItemLabel" text="Access Token" GridPane.rowIndex="3"/>
+                <Label styleClass="menuItemLabel" text="Access Token Secret" GridPane.rowIndex="4"/>
+
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                           promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                           promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"
+                           promptText="Enter your Access Token : 3736207823-IfY..."/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="4"
+                           promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
+
+            </GridPane>
+
+            <GridPane styleClass="authSettingsGP">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="230.0"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Proxy Settings" styleClass="menuLabel"/>
+
+                <Label styleClass="menuItemLabel" text="HTTP Proxy" GridPane.rowIndex="1"/>
+                <Label styleClass="menuItemLabel" text="Port" GridPane.rowIndex="2"/>
+
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="cache-etu.univ-lille1.fr"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="3128"/>
+
+            </GridPane>
+        </VBox>
+    </Tab>
 </TabPane>

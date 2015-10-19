@@ -31,7 +31,7 @@ public class SqliteFactoryImpl implements DataAccessObject
                     " "+ COLUMN_TWEET +" TEXT NOT NULL," +
                     " "+ COLUMN_DATE +" DATETIME NOT NULL," +
                     " "+ COLUMN_KEYWORD +" TEXT NOT NULL," +
-                    " "+ COLUMN_ANNOTATION +" INTEGER CHECK("+ COLUMN_ANNOTATION +" IN("+ Annotation.NEGATIF.getValue() +","+ Annotation.NEUTRE.getValue() +","+ Annotation.POSITIF.getValue() +")) NOT NULL)");
+                    " "+ COLUMN_ANNOTATION +" INTEGER CHECK("+ COLUMN_ANNOTATION +" IN("+ Annotation.NONANNOTE.getValue() +","+ Annotation.NEGATIF.getValue() +","+ Annotation.NEUTRE.getValue() +","+ Annotation.POSITIF.getValue() +")) NOT NULL DEFAULT(-2) )");
 
                 stmt.close();
                 dbConnection.close();
@@ -70,7 +70,7 @@ public class SqliteFactoryImpl implements DataAccessObject
     @Override
     public List<TweetEntityBeans> all()
     {
-        List<TweetEntityBeans> response = new ArrayList<TweetEntityBeans>();
+        List<TweetEntityBeans> response = new ArrayList<>();
 
         try
         {

@@ -60,20 +60,6 @@
     -fx-background-color : #E0E0E0;
 }
 
-.label {
-    /*-fx-max-width: Infinity; non fonctionnel sur windows */
-    -fx-padding : 19px 0px 21px 24px;
-
-    -fx-background-color: #eceef1;
-    //-fx-background-image : url(../img/medium/transparentPattern.png);
-
-    -fx-font-size : 24px;
-
-    -fx-border-color : rgba(34, 36, 38, 0.15);
-    -fx-border-width : 0 0 3 0;
-
-    //-fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
-}
 
 .button, .button:focused {
     -fx-min-height : 34px;
@@ -112,8 +98,9 @@
 }
 
 .accordion {
-    -fx-background-color: #eceef1;
+    -fx-background-color: #f7f7f7;
     -fx-border-width :0;
+    -fx-min-height : 30px;
 }
 
 .accordion > .titled-pane {
@@ -141,7 +128,7 @@
 
 .list-cell {
     -fx-cell-size: 75px;
-    -fx-padding : 0 0 0 20px;
+    -fx-padding : 29px 0 0 20px;
 
     -fx-background-color : #f7f7f7;
 
@@ -152,6 +139,21 @@
 .list-cell:hover {
     -fx-cell-size: 75px;
     -fx-background-color : #FAFAFA;
+}
+
+.foundTweetContent {
+    -fx-text-fill : BLACK;
+    -fx-padding : 0 0 0 10px;
+}
+
+.radio-button .radio {
+    -fx-height : 24px;
+    -fx-width : 24px;
+    -fx-background-color : transparent;
+}
+
+.radio-button .dot {
+    -fx-background-color :transparent ;
 }
 
 .list-cell:filled:selected:focused,.list-cell:filled:selected, .list-view:horizontal > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
@@ -242,4 +244,70 @@
     -fx-effect : innershadow( gaussian , rgba(0,0,0,0.2) , 10 , 0.1 , 0 , 0 );
 }
 
+.authSettingsGP {
 
+    -fx-border-width : 0 0 3px 0;
+    -fx-border-color : #E0E0E0;
+
+    -fx-padding : 0 15px 20px 15px;
+    -fx-vgap : 10px;
+}
+
+
+.bigTitle {
+    -fx-padding : 22px 0px 21px 24px;
+
+    -fx-background-color: #eceef1;
+    //-fx-background-image : url(../img/medium/transparentPattern.png);
+
+    -fx-font-size : 24px;
+
+    -fx-border-color : rgba(34, 36, 38, 0.15);
+    -fx-border-width : 0 0 3 0;
+
+    -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
+}
+
+.menuLabel {
+    -fx-font-size : 16px;
+    -fx-font-weight : bold;
+
+    -fx-padding : 15px 0px 0px 0px;
+}
+
+.menuItemLabel {
+
+    -fx-padding : 0px 0px 0px 15px;
+}
+
+
+// -----------------------   Styling for the feelings radio buttons starts here ---------------------- //
+.anotePositiveRadio {
+    -fx-background-image : url(../img/small/positive.png);
+    -fx-background-repeat : no-repeat;
+}
+
+.anoteNegativeRadio {
+    -fx-background-image : url(../img/small/negative.png);
+    -fx-background-repeat : no-repeat;
+}
+
+.anoteNeutralRadio {
+    -fx-background-image : url(../img/small/neutral.png);
+    -fx-background-repeat : no-repeat;
+}
+
+.anotePositiveRadio-selected{
+    -fx-background-image : url(../img/small/positive-selected.png);
+    -fx-background-repeat : no-repeat;
+}
+
+.anoteNegativeRadio-selected{
+    -fx-background-image : url(../img/small/negative-selected.png);
+    -fx-background-repeat : no-repeat;
+}
+.anoteNeutralRadio-selected{
+    -fx-background-image : url(../img/small/neutral-selected.png);
+    -fx-background-repeat : no-repeat;
+}
+// -----------------------   Styling for the feelings radio buttons ends here ---------------------- //
