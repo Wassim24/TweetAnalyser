@@ -2,6 +2,7 @@ package services.twitter;
 
 import domain.TweetEntityBeans;
 import services.dao.DaoFactory;
+import services.strings.StringsServiceImpl;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -38,7 +39,7 @@ public class TweetServiceImpl implements TweetService
     @Override
     public boolean add(TweetEntityBeans tweet)
     {
-        tweet.cleanCurrentText();
+        tweet.setTweet(StringsServiceImpl.getInstance().cleanString(tweet.getTweet()));
         return DaoFactory.getInstance().add(tweet);
     }
 

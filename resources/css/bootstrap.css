@@ -26,8 +26,9 @@
 }
 
 .tab-pane .tab-header-background {
-    -fx-background-color : #4c4743;
-    //-fx-background-image : url(../img/medium/pattern.png);
+    -fx-background-color : linear-gradient(to bottom, #eceef1, #BDBDBD);
+    //-fx-background-color : linear-gradient(to bottom, #212121, #404040);
+    -fx-background-image : url(../img/medium/transparentPattern.png);
 
     -fx-border-color : #BDBDBD;
     -fx-border-width : 0 0 5 0;
@@ -51,8 +52,8 @@
 }
 
 .tab:selected {
-    -fx-border-color : #EF6C00;
-    -fx-border-width : 0 0 5 0;
+    -fx-border-color : #ee8d00;
+    -fx-border-width : 0 0 5 1;
     -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.2) , 30 , 0.1 , 0 , 0 );
 }
 
@@ -60,28 +61,25 @@
     -fx-background-color : #E0E0E0;
 }
 
-
 .button, .button:focused {
     -fx-min-height : 34px;
     -fx-max-height : 34px;
     -fx-font-size: 10pt;
 
-    -fx-background-color : #5cb85c;
+    -fx-background-color : linear-gradient(from 0px 0px to 0px 30px, #E3E3E3,#C3C3C3 100%);
 
-    //-fx-border-width : 2;
-    -fx-border-color : #4cae4c;
-    //-fx-border-insets : -1 0 -1 0;
-    -fx-border-radius: 3;
+    -fx-border-width : 1;
+    -fx-border-color : #828282;
 
-    -fx-text-fill: white;
+    -fx-text-fill: #212121;
     -fx-font-weight: bold;
 
     //-fx-effect : dropshadow( three-pass-box , rgba(0,0,0,0.12) , 3 , 0.1 , 1 , 3 );
 }
 
 .button:hover {
-    -fx-background-color: #449d44;
-    -fx-border-color : #398439;
+    -fx-background-color: linear-gradient(from 0px 0px to 0px 30px, #77b8eb, #4b97d2 100%);
+    -fx-border-color : #3b77a5;
 }
 
 .text-field {
@@ -101,17 +99,20 @@
     -fx-background-color: #f7f7f7;
     -fx-border-width :0;
     -fx-min-height : 30px;
+    -fx-border-width : 0;
 }
 
 .accordion > .titled-pane {
     -fx-content-display : center;
     -fx-alignment : center;
     -fx-padding : 2 0 2 0;
+    -fx-border-width : 0;
 }
 
 .accordion > .titled-pane > .title {
     -fx-background-color : #f7f7f7;
     -fx-background-insets : 0;
+    -fx-border-width : 0;
 }
 
 .accordion > .titled-pane > .content { -fx-background-color: #f7f7f7; -fx-border-width : 0;}
@@ -133,7 +134,7 @@
     -fx-background-color : #f7f7f7;
 
     -fx-border-color : #BDBDBD;
-    -fx-border-width : 0 0 1 0;
+    -fx-border-width : 1 0 1 0;
 }
 
 .list-cell:hover {
@@ -202,6 +203,51 @@
     -fx-shape: "M -3 0 L 0 -4 L 3 0 z";
 }
 
+.table-view {
+    -fx-table-cell-border-color: #BDBDBD;
+    -fx-control-inner-background: #BDBDBD;
+    -fx-background-color: #BDBDBD;
+}
+
+.table-row-cell {
+    -fx-background-color: #f7f7f7;
+    -fx-text-fill: #212121;
+    -fx-cell-size: 35px;
+}
+
+.table-row-cell:hover {-fx-background-color : #FEFEFE;}
+.table-row-cell:odd {-fx-background-color: #FAFAFA;}
+.table-row-cell:focused, .tree-table-row-cell:focused {-fx-background-color: #EEEEEE;}
+
+.table-row-cell:filled:selected {
+        -fx-border-width : 1 0 1 0;
+        -fx-border-color : #ee8d00;
+        }
+
+.table-row-cell:filled:selected > .table-cell{
+        -fx-border-color : #BDBDBD;
+        -fx-border-width : 0 1 0 0;
+
+        -fx-text-fill: #212121;
+        -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-padding : 10px 0 0 5px;
+    -fx-text-alignment: center;
+
+}
+
+
+.table-view .filler, .tree-table-view .filler {-fx-background-color: #BDBDBD;}
+.table-view .column-header-background, .tree-table-view .column-header-background {-fx-background-color: #BDBDBD;}
+
+.table-view .column-header {
+    -fx-background-color: #BDBDBD;
+    -fx-border-width : 0 1 0 0;
+    -fx-border-color: #999999;
+}
+
       /********************************************************************************/
      /**/                                                                          /**/
     /**/                                                                          /**/
@@ -214,6 +260,10 @@
 
 .searchTab {
     -fx-background-image : url(../img/medium/search.png);
+}
+
+.databaseTab {
+    -fx-background-image : url(../img/medium/database.png);
 }
 
 .chartsTab {
@@ -255,12 +305,14 @@
 
 
 .bigTitle {
-    -fx-padding : 22px 0px 21px 24px;
+    -fx-padding : 22px 0px 23px 24px;
 
     -fx-background-color: #eceef1;
-    //-fx-background-image : url(../img/medium/transparentPattern.png);
+    //-fx-background-color : linear-gradient(to bottom, #212121, #404040);
+    -fx-background-image : url(../img/medium/transparentPattern.png);
 
     -fx-font-size : 24px;
+    //-fx-text-fill : white;
 
     -fx-border-color : rgba(34, 36, 38, 0.15);
     -fx-border-width : 0 0 3 0;
@@ -268,7 +320,7 @@
     -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
 }
 
-.menuLabel {
+.settingsMenuLabel {
     -fx-font-size : 16px;
     -fx-font-weight : bold;
 
@@ -280,8 +332,16 @@
     -fx-padding : 0px 0px 0px 15px;
 }
 
+.settingsTabButtonsHBox {
+
+    -fx-padding: 10 10 10 0;
+    -fx-alignment : center-right;
+    -fx-spacing : 5;
+}
+
 
 // -----------------------   Styling for the feelings radio buttons starts here ---------------------- //
+
 .anotePositiveRadio {
     -fx-background-image : url(../img/small/positive.png);
     -fx-background-repeat : no-repeat;

@@ -1,11 +1,5 @@
 package domain;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 
@@ -15,6 +9,7 @@ public class TweetEntityBeans
     private String username, tweet, keyword;
     private Date date;
     private Annotation annotation;
+    private int wordsCount;
 
     public TweetEntityBeans(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
     {
@@ -35,25 +30,6 @@ public class TweetEntityBeans
         this.setDate(date);
         this.setAnnotation(annotation);
         this.setId(-1);
-    }
-
-    public String cleanCurrentText()
-    {
-        LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
-        {{
-                put("(https?)://(www\\d?|[a-zA-Z0-9]+)?.[a-zA-Z0-9-]+(\\:|.)([a-zA-Z0-9.]+|(\\d+)?)([/?:].*)?", "");
-
-                put("@[a-zA-Z0-9-_]+\\s?:?", "");
-                put("#[a-zA-Z0-9-_]+\\s?:?", "");
-                put("\\s?RT\\s", "");
-                put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
-                put("\\d", "");
-            }};
-
-        regexes.forEach((regex, replaceWith) ->
-                this.setTweet(this.getTweet().replaceAll(regex, replaceWith)));
-
-        return this.getTweet();
     }
 
     public String getUsername()
@@ -100,12 +76,11 @@ public class TweetEntityBeans
     {
         return this.getUsername() + " : "+ this.getTweet();
     }
-    public void setAnnotation(Annotation annotation)
-    {
-        this.annotation = annotation;
-    }
+    public void setAnnotation(Annotation annotation) {this.annotation = annotation;}
     public int getAnnotation()
     {
         return this.annotation.getValue();
     }
+    public void setWordsCount(int wordsCount) {this.wordsCount = wordsCount;}
+    public int getWordsCount() {return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);}
 }

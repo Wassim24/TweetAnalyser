@@ -1,21 +1,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <TabPane fx:controller="controller.view.MainViewController"
          xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
          side="LEFT"
          tabClosingPolicy="UNAVAILABLE"
          stylesheets="/css/bootstrap.css">
+
+    <!-- Tab to search for tweets -->
     <Tab text="" styleClass="searchTab">
         <VBox>
             <!-- Label for displaying the big title -->
             <Label styleClass="bigTitle" text="Searching for tweets" maxWidth="Infinity"/>
 
             <!-- HBox containig the serach tools -->
-            <VBox>
+            <VBox styleClass="kiwkiwkiw">
                 <HBox styleClass="searchBox" spacing="3">
                     <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"
                                onKeyPressed="#onKeyPressKeywords"/>
-                    <Button text="Search" onAction="#searchForTweets"/>
+                    <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
                     <Button text="Advanced Search"/>
                 </HBox>
 
@@ -34,13 +37,33 @@
 
             <!-- HBox containing the save buttons and state of the search -->
             <HBox styleClass="statusBar" spacing="3">
-                <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="statusLabel"
+                <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="queriesStatusLabel"
                        maxWidth="Infinity"/>
-                <Button text="Save selected tweet(s)"/>
+                <Button text="Save selected tweet(s)" onAction="#onClickSaveSelectedTweetsBtn"/>
                 <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
-                <Button text="Clear results" onAction="#clearListViewFromResults"/>
+                <Button text="Clear results" onAction="#onClickClearTweetsListBtn"/>
             </HBox>
         </VBox>
+    </Tab>
+
+    <!-- Tab to display saved in the database -->
+    <Tab text="" styleClass="databaseTab" onSelectionChanged="#onSelectingDatabaseTab">
+        <Label styleClass="bigTitle" text="Your saved Tweets" maxWidth="Infinity"/>
+            <VBox>
+                <Label maxWidth="Infinity" styleClass="bigTitle" text="Your saved Tweets" />
+                <TableView VBox.vgrow="ALWAYS" fx:id="tweetsInDatabaseTableView">
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="id" text="ID" />
+                        <TableColumn fx:id="user" text="Username" />
+                        <TableColumn fx:id="tweet" text="Tweet" />
+                        <TableColumn fx:id="keyword" text="Keyword" />
+                        <TableColumn fx:id="annotation" text="Annotation" />
+                        <TableColumn fx:id="created" text="Created" />
+                        <TableColumn fx:id="wordsCount" text="Words Number" />
+                    </columns>
+                </TableView>
+            </VBox>
     </Tab>
 
     <!-- Tab for displaying various charts -->
@@ -49,7 +72,7 @@
     </Tab>
 
     <!-- Tab for modifiying the different settings of the app -->
-    <Tab text="" styleClass="settingsTab">
+    <Tab text="" styleClass="settingsTab" onSelectionChanged="#onSelectingSettingsTab">
         <VBox>
             <!-- Label for displaying the bigger title -->
             <Label styleClass="bigTitle" text="Editing settings" maxWidth="Infinity"/>
@@ -61,7 +84,7 @@
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
-                <Label text="Authentication Settings" styleClass="menuLabel"/>
+                <Label text="Authentication Settings" styleClass="settingsMenuLabel"/>
 
                 <Label styleClass="menuItemLabel" text="Consumer Key" GridPane.rowIndex="1"/>
                 <Label styleClass="menuItemLabel" text="Consumer Key Secret" GridPane.rowIndex="2"/>
@@ -69,13 +92,13 @@
                 <Label styleClass="menuItemLabel" text="Access Token Secret" GridPane.rowIndex="4"/>
 
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
-                           promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
+                           fx:id="consumerKeyTextField" promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
-                           promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
+                           fx:id="consumerKeySecretTextField" promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"
-                           promptText="Enter your Access Token : 3736207823-IfY..."/>
+                           fx:id="accessTokenTextField" promptText="Enter your Access Token : 3736207823-IfY..."/>
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="4"
-                           promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
+                           fx:id="accessTokenSecretTextField" promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
 
             </GridPane>
 
@@ -85,15 +108,24 @@
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
-                <Label text="Proxy Settings" styleClass="menuLabel"/>
+                <Label text="Proxy Settings" styleClass="settingsMenuLabel"/>
 
                 <Label styleClass="menuItemLabel" text="HTTP Proxy" GridPane.rowIndex="1"/>
                 <Label styleClass="menuItemLabel" text="Port" GridPane.rowIndex="2"/>
 
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="cache-etu.univ-lille1.fr"/>
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="3128"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                           fx:id="proxyHostTextField" promptText="cache-etu.univ-lille1.fr"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                           fx:id="proxyPortTextField" promptText="3128"/>
 
             </GridPane>
+
+            <HBox styleClass="settingsTabButtonsHBox">
+                <Button text="Reset Settings" onAction="#onClickResetSettingsBtn"/>
+                <Button text="Save Settings" onAction="#onClickSaveSettingsBtn"/>
+            </HBox>
+
         </VBox>
     </Tab>
+
 </TabPane>

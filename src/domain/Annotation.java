@@ -2,7 +2,7 @@ package domain;
 
 public enum Annotation
 {
-    NEGATIF(-1), NEUTRE(0), POSITIF(1), NONANNOTE(-2);
+    NONANNOTE(-2), NEGATIF(-1), NEUTRE(0), POSITIF(1);
     private int value;
 
     Annotation(int i)
@@ -14,5 +14,4 @@ public enum Annotation
     {
         return this.value;
     }
-
 }
