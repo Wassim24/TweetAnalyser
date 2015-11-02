@@ -10,9 +10,7 @@ public class Twitter4JFactory
 
     private Twitter4JFactory()
     {
-        this.setTwitterFactory(
-            new TwitterFactory()
-        );
+        this.setTwitterFactory(new TwitterFactory());
     }
 
     /*new ConfigurationBuilder()

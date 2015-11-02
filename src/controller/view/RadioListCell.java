@@ -8,21 +8,21 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
-public class RadioListCell extends ListCell<TweetEntityBeans> {
-
-
-
+public class RadioListCell extends ListCell<TweetEntityBeans>
+{
     @Override
-    public void updateItem(TweetEntityBeans obj, boolean empty) {
-
+    public void updateItem(TweetEntityBeans obj, boolean empty)
+    {
         super.updateItem(obj, empty);
 
 
-        if (empty) {
+        if (empty)
+        {
             setText(null);
             setGraphic(null);
-        } else {
-
+        }
+        else
+        {
             ToggleGroup radioButtonsFeelingsGroup = new ToggleGroup();
             RadioButton negative = new RadioButton();
             RadioButton neutral = new RadioButton();
@@ -31,23 +31,25 @@ public class RadioListCell extends ListCell<TweetEntityBeans> {
 
             // Settings the css class names for the radio buttons
             negative.getStyleClass().add("anoteNegativeRadio");
-            neutral. getStyleClass().add("anoteNeutralRadio");
+            neutral.getStyleClass().add("anoteNeutralRadio");
             positive.getStyleClass().add("anotePositiveRadio");
 
-            if(obj.getAnnotation() == -1)
-                negative.getStyleClass().add("anoteNegativeRadio-selected");
-            else if(obj.getAnnotation() == 0)
-                neutral. getStyleClass().add("anoteNeutralRadio-selected");
-            else if (obj.getAnnotation() == 1)
-                positive.getStyleClass().add("anotePositiveRadio-selected");
-
-
-
-
+            switch (obj.getAnnotation())
+            {
+                case -1:
+                    negative.getStyleClass().add("anoteNegativeRadio-selected");
+                    break;
+                case 0:
+                    neutral.getStyleClass().add("anoteNeutralRadio-selected");
+                    break;
+                case 1:
+                    positive.getStyleClass().add("anotePositiveRadio-selected");
+                    break;
+            }
 
             // Adding the radio buttons to a ToggleGroup to avoid multiple checking
             negative.setToggleGroup(radioButtonsFeelingsGroup);
-            neutral .setToggleGroup(radioButtonsFeelingsGroup);
+            neutral.setToggleGroup(radioButtonsFeelingsGroup);
             positive.setToggleGroup(radioButtonsFeelingsGroup);
 
             // Adding the tweet to the label and a css class name
@@ -55,7 +57,6 @@ public class RadioListCell extends ListCell<TweetEntityBeans> {
 
             // Adding everything to the layout
             HBox layoutForFeelingsTweet = new HBox();
-
             layoutForFeelingsTweet.getChildren().addAll(negative, neutral, positive, tweet);
 
             // Used to generate action listeners for the radio buttons
@@ -101,12 +102,11 @@ public class RadioListCell extends ListCell<TweetEntityBeans> {
         }
     }
 
-
     /**
      * @param obj of type TweetEntityBeans
      * @implNote Used to generate the action listeners for the radio buttons
      */
-    private void generateActions(TweetEntityBeans obj) {
-
+    private void generateActions(TweetEntityBeans obj)
+    {
     }
 }

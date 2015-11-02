@@ -28,7 +28,7 @@
 .tab-pane .tab-header-background {
     -fx-background-color : linear-gradient(to bottom, #eceef1, #BDBDBD);
     //-fx-background-color : linear-gradient(to bottom, #212121, #404040);
-    -fx-background-image : url(../img/medium/transparentPattern.png);
+    //-fx-background-image : url(../img/medium/transparentPattern.png);
 
     -fx-border-color : #BDBDBD;
     -fx-border-width : 0 0 5 0;
@@ -309,7 +309,7 @@
 
     -fx-background-color: #eceef1;
     //-fx-background-color : linear-gradient(to bottom, #212121, #404040);
-    -fx-background-image : url(../img/medium/transparentPattern.png);
+    //-fx-background-image : url(../img/medium/transparentPattern.png);
 
     -fx-font-size : 24px;
     //-fx-text-fill : white;

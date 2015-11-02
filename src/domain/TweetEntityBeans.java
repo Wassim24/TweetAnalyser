@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TweetEntityBeans
 {
@@ -9,7 +10,6 @@ public class TweetEntityBeans
     private String username, tweet, keyword;
     private Date date;
     private Annotation annotation;
-    private int wordsCount;
 
     public TweetEntityBeans(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
     {
@@ -30,6 +30,27 @@ public class TweetEntityBeans
         this.setDate(date);
         this.setAnnotation(annotation);
         this.setId(-1);
+    }
+
+    public String cleanString()
+    {
+        LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
+        {{
+            put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)\\W+", "");
+            put("@[a-zA-Z0-9-_]+\\s?:?", "");
+            put("#[a-zA-Z0-9-_]+\\s?:?", "");
+            put("\\s?RT\\s", "");
+            put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
+            put("\\d[_]+", "");
+            put("\\s{1,}", " ");
+            put("\\A\\s{1,}", "");
+            put("\\z\\s{1,}", "");
+        }};
+
+        for (Map.Entry<String, String> entry : regexes.entrySet())
+            this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()));
+
+        return this.getTweet();
     }
 
     public String getUsername()
@@ -81,6 +102,5 @@ public class TweetEntityBeans
     {
         return this.annotation.getValue();
     }
-    public void setWordsCount(int wordsCount) {this.wordsCount = wordsCount;}
     public int getWordsCount() {return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);}
 }
