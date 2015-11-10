@@ -28,8 +28,6 @@ public class Main extends Application
 
     public static void main(String[] args)
     {
-        DictionaryServiceImpl.getInstance().addFromFile(new File("positive.txt"), Annotation.POSITIF);
-
         launch(args);
     }
 }

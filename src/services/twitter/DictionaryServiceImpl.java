@@ -37,4 +37,10 @@ public class DictionaryServiceImpl implements DictionaryService
 
         return DictionaryDaoFactory.getInstance().addAll(d);
     }
+
+    @Override
+    public Dictionary get(Annotation annotation)
+    {
+        return DictionaryDaoFactory.getInstance().get(annotation);
+    }
 }
