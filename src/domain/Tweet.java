@@ -4,25 +4,25 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class TweetEntityBeans
+public class Tweet implements EntityBeans
 {
     private int id;
     private String username, tweet, keyword;
     private Date date;
     private Annotation annotation;
 
-    public TweetEntityBeans(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
+    public Tweet(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
     {
         this(username, tweet, date, keyword, annotation);
         this.setId(id);
     }
 
-    public TweetEntityBeans(String username, String tweet, Date date, String keyword)
+    public Tweet(String username, String tweet, Date date, String keyword)
     {
         this(username, tweet, date, keyword, Annotation.NONANNOTE);
     }
 
-    public TweetEntityBeans(String username, String tweet, Date date, String keyword, Annotation annotation)
+    public Tweet(String username, String tweet, Date date, String keyword, Annotation annotation)
     {
         this.setUsername(username);
         this.setTweet(tweet);

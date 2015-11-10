@@ -1,8 +1,7 @@
 package services.twitter;
 
-import domain.TweetEntityBeans;
-import services.dao.DaoFactory;
-import services.strings.StringsServiceImpl;
+import domain.Tweet;
+import services.dao.TweetDaoFactory;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -25,9 +24,9 @@ public class TweetServiceImpl implements TweetService
     }
 
     @Override
-    public List<TweetEntityBeans> search(String keyword) throws TwitterException
+    public List<Tweet> search(String keyword) throws TwitterException
     {
-        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword)).getTweets().stream().map(s -> new TweetEntityBeans(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword)).collect(Collectors.toList());
+        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword)).getTweets().stream().map(s -> new Tweet(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword)).collect(Collectors.toList());
     }
 
     @Override
@@ -37,30 +36,30 @@ public class TweetServiceImpl implements TweetService
     }
 
     @Override
-    public boolean add(TweetEntityBeans tweet)
+    public boolean add(Tweet tweet)
     {
         tweet.cleanString();
-        return DaoFactory.getInstance().add(tweet);
+        return TweetDaoFactory.getInstance().add(tweet);
     }
 
     @Override
     public boolean add(String username, String tweet, Date date, String keyword)
     {
-        return this.add(new TweetEntityBeans(username, tweet, date, keyword));
+        return this.add(new Tweet(username, tweet, date, keyword));
     }
 
     @Override
-    public boolean addAll(List<TweetEntityBeans> tweets)
+    public boolean addAll(List<Tweet> tweets)
     {
-        for (TweetEntityBeans tweet : tweets)
+        for (Tweet tweet : tweets)
             this.add(tweet);
 
         return true;
     }
 
     @Override
-    public List<TweetEntityBeans> getAll()
+    public List<Tweet> getAll()
     {
-        return DaoFactory.getInstance().all();
+        return TweetDaoFactory.getInstance().all();
     }
 }

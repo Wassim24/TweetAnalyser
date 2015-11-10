@@ -1,17 +1,17 @@
 package controller.view;
 
 import domain.Annotation;
-import domain.TweetEntityBeans;
+import domain.Tweet;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
-public class RadioListCell extends ListCell<TweetEntityBeans>
+public class RadioListCell extends ListCell<Tweet>
 {
     @Override
-    public void updateItem(TweetEntityBeans obj, boolean empty)
+    public void updateItem(Tweet obj, boolean empty)
     {
         super.updateItem(obj, empty);
 
@@ -103,10 +103,10 @@ public class RadioListCell extends ListCell<TweetEntityBeans>
     }
 
     /**
-     * @param obj of type TweetEntityBeans
+     * @param obj of type Tweet
      * @implNote Used to generate the action listeners for the radio buttons
      */
-    private void generateActions(TweetEntityBeans obj)
+    private void generateActions(Tweet obj)
     {
     }
 }

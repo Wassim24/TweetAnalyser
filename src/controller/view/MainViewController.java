@@ -1,7 +1,7 @@
 package controller.view;
 
 import domain.Annotation;
-import domain.TweetEntityBeans;
+import domain.Tweet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import services.dao.DaoFactory;
+import services.dao.TweetDaoFactory;
 import services.algorithm.classification.KNN;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
@@ -23,7 +23,7 @@ public class MainViewController
     @FXML
     private TextField keywordsTextField;
     @FXML
-    private ListView<TweetEntityBeans> foundTweetsListView;
+    private ListView<Tweet> foundTweetsListView;
     @FXML
     private TextField consumerKeyTextField;
     @FXML
@@ -37,21 +37,21 @@ public class MainViewController
     @FXML
     private TextField proxyPortTextField;
     @FXML
-    private TableView<TweetEntityBeans> tweetsInDatabaseTableView;
+    private TableView<Tweet> tweetsInDatabaseTableView;
     @FXML
-    private TableColumn<TweetEntityBeans, String> id;
+    private TableColumn<Tweet, String> id;
     @FXML
-    private TableColumn<TweetEntityBeans, String> user;
+    private TableColumn<Tweet, String> user;
     @FXML
-    private TableColumn<TweetEntityBeans, String> tweet;
+    private TableColumn<Tweet, String> tweet;
     @FXML
-    private TableColumn<TweetEntityBeans, Date> created;
+    private TableColumn<Tweet, Date> created;
     @FXML
-    private TableColumn<TweetEntityBeans, Annotation> annotation;
+    private TableColumn<Tweet, Annotation> annotation;
     @FXML
-    private TableColumn<TweetEntityBeans, String> keyword;
+    private TableColumn<Tweet, String> keyword;
     @FXML
-    private TableColumn<TweetEntityBeans, Integer> wordsCount;
+    private TableColumn<Tweet, Integer> wordsCount;
     @FXML
     private Label queriesStatusLabel;
     private File configFile = null;
@@ -69,7 +69,7 @@ public class MainViewController
 
         try
         {
-            ObservableList<TweetEntityBeans> foundTweets = FXCollections.observableArrayList();
+            ObservableList<Tweet> foundTweets = FXCollections.observableArrayList();
             foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
             this.foundTweetsListView.setItems(foundTweets);
         }
@@ -92,18 +92,18 @@ public class MainViewController
 
     public void onClickSaveSelectedTweetsBtn()
     {
-        List<TweetEntityBeans> tweetsToAnnote = new ArrayList<>();
-        List<TweetEntityBeans> tweetsToSave = new ArrayList<>();
+        List<Tweet> tweetsToAnnote = new ArrayList<>();
+        List<Tweet> tweetsToSave = new ArrayList<>();
 
 
-        for (TweetEntityBeans tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
+        for (Tweet tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
             if(tweet.getAnnotation() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
 
         if (tweetsToAnnote.size() != 0)
         {
             tweetsToSave.addAll(new KNN(tweetsToAnnote, 3).compute());
             TweetServiceImpl.getInstance().addAll(tweetsToSave);
-        }
+        }else TweetServiceImpl.getInstance().addAll(tweetsToSave);
     }
 
     public void onClickResetSettingsBtn() throws IOException
@@ -149,6 +149,8 @@ public class MainViewController
             this.consumerKeySecretTextField.setText(props.getProperty("oauth.consumerSecret"));
             this.accessTokenTextField.setText(props.getProperty("oauth.accessToken"));
             this.accessTokenSecretTextField.setText(props.getProperty("oauth.accessTokenSecret"));
+            this.proxyHostTextField.setText(props.getProperty("http.proxyHost"));
+            this.proxyPortTextField.setText(props.getProperty("http.proxyPort"));
         }
     }
 
@@ -167,7 +169,7 @@ public class MainViewController
         this.annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
         this.wordsCount.setCellValueFactory(new PropertyValueFactory("wordsCount"));
 
-        this.tweetsInDatabaseTableView.setItems((ObservableList<TweetEntityBeans>) DaoFactory.getInstance().all());
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Tweet>) TweetDaoFactory.getInstance().all());
     }
 
     private void updateRateInStatusBar()

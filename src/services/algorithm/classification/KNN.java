@@ -1,36 +1,36 @@
 package services.algorithm.classification;
 
 import domain.Annotation;
-import domain.TweetEntityBeans;
-import services.dao.DaoFactory;
+import domain.Tweet;
+import services.dao.TweetDaoFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class KNN
 {
-    private List<TweetEntityBeans> tweetsToAnnote;
+    private List<Tweet> tweetsToAnnote;
     private int numberOfNeighbours;
 
-    public KNN(List<TweetEntityBeans> tweetsToAnnote, int numberOfNeighbours)
+    public KNN(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
     {
         this.tweetsToAnnote = tweetsToAnnote;
         this.numberOfNeighbours = numberOfNeighbours;
     }
 
-    public List<TweetEntityBeans> compute()
+    public List<Tweet> compute()
     {
         List<Float> distancess = new ArrayList<Float>();
         List<Integer> neighboursIds = new ArrayList<Integer>();
-        List<TweetEntityBeans> annotedTweets = new ArrayList<TweetEntityBeans>();
-        List<TweetEntityBeans> tweetsInDatabase = DaoFactory.getInstance().all();
+        List<Tweet> annotedTweets = new ArrayList<Tweet>();
+        List<Tweet> tweetsInDatabase = TweetDaoFactory.getInstance().all();
 
         float calculatedEuclideanDistance = 0;
         // Loop for iterating over the selected tweets
-        for (TweetEntityBeans unannotedTweet : this.tweetsToAnnote)
+        for (Tweet unannotedTweet : this.tweetsToAnnote)
         {
             // Loop for putting the first numberOfNeighbours in the distancesList
-            for (TweetEntityBeans tweetInDB : tweetsInDatabase)
+            for (Tweet tweetInDB : tweetsInDatabase)
             {
                 calculatedEuclideanDistance = this.findEuclideanDistance(unannotedTweet, tweetInDB);
 
@@ -93,7 +93,7 @@ public class KNN
         return index;
     }
 
-    private float findEuclideanDistance(TweetEntityBeans toClassifyTweet, TweetEntityBeans classifiedTweet)
+    private float findEuclideanDistance(Tweet toClassifyTweet, Tweet classifiedTweet)
     {
         float commonWordsNumber = 0;
 

@@ -1,10 +1,16 @@
 package app;
 
+import domain.Annotation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import services.dao.DictionarySqliteDaoImpl;
+import services.twitter.DictionaryService;
+import services.twitter.DictionaryServiceImpl;
+
+import java.io.File;
 
 public class Main extends Application
 {
@@ -20,7 +26,10 @@ public class Main extends Application
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        DictionaryServiceImpl.getInstance().addFromFile(new File("positive.txt"), Annotation.POSITIF);
+
         launch(args);
     }
 }
