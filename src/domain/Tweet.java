@@ -36,7 +36,7 @@ public class Tweet implements EntityBeans
     {
         LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
         {{
-            put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)\\W+", "");
+            put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)?(…)?", "");
             put("@[a-zA-Z0-9-_]+\\s?:?", "");
             put("#[a-zA-Z0-9-_]+\\s?:?", "");
             put("\\s?RT\\s", "");
@@ -48,7 +48,7 @@ public class Tweet implements EntityBeans
         }};
 
         for (Map.Entry<String, String> entry : regexes.entrySet())
-            this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()));
+            this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()).toLowerCase());
 
         return this.getTweet();
     }

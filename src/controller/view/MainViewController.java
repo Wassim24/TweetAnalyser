@@ -9,14 +9,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import services.algorithms.classification.KNN;
 import services.dao.TweetDaoFactory;
-import services.algorithm.classification.KNN;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 public class MainViewController
 {
@@ -99,10 +102,14 @@ public class MainViewController
         for (Tweet tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
             if(tweet.getAnnotation() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
 
+
         if (tweetsToAnnote.size() != 0)
         {
-            tweetsToSave.addAll(new KNN(tweetsToAnnote, 3).compute());
-            TweetServiceImpl.getInstance().addAll(tweetsToSave);
+            tweetsToSave.addAll(new KNN(tweetsToAnnote, 10).compute());
+            //TweetServiceImpl.getInstance().addAll(tweetsToSave);
+
+            //tweetsToSave.addAll(new Glossary(tweetsToAnnote).compute());
+
         }else TweetServiceImpl.getInstance().addAll(tweetsToSave);
     }
 
@@ -181,7 +188,7 @@ public class MainViewController
         }
         catch (TwitterException e)
         {
-            this.queriesStatusLabel.setText("*****");
+            this.queriesStatusLabel.setText("The Rate Limit Status is unavailable");
         }
     }
 }

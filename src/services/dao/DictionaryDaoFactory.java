@@ -1,7 +1,5 @@
 package services.dao;
 
-import domain.Dictionary;
-
 public class DictionaryDaoFactory
 {
     private static final String DAO_ACCESS = "DictionarySqliteDaoImpl";

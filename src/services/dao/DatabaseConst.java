@@ -27,6 +27,7 @@ public class DatabaseConst
             try {
                 SQLiteConnection dbConnection = getSubSQLiteConnection();
                 Statement stmt = dbConnection.createStatement();
+
                 stmt.executeUpdate("CREATE TABLE " + TweetSqliteDaoImpl.TABLE_NAME_TWEET +
                         "(" + TweetSqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " " + TweetSqliteDaoImpl.COLUMN_USERNAME + " TEXT NOT NULL," +
@@ -40,6 +41,14 @@ public class DatabaseConst
                         "(" + DictionarySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " " + DictionarySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
                         " " + DictionarySqliteDaoImpl.COLUMN_ANNOTATION + " INTEGER CHECK(" + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " IN(" + Annotation.NONANNOTE.getValue() + "," + Annotation.NEGATIF.getValue() + "," + Annotation.NEUTRE.getValue() + "," + Annotation.POSITIF.getValue() + ")) NOT NULL DEFAULT(-2))");
+
+                stmt.executeUpdate("CREATE TABLE " + VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY+
+                        "(" + VocabularySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER, " +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER, " +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER )");
+
 
                 stmt.close();
                 dbConnection.close();
