@@ -1,6 +1,5 @@
 package services.dao.sqlite;
 
-
 import domain.Vocabulary;
 import org.sqlite.SQLiteConnection;
 import services.dao.VocabularyDao;
@@ -12,8 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VocabularySqliteDaoImpl implements VocabularyDao {
-
+public class VocabularySqliteDaoImpl implements VocabularyDao
+{
     public static final String TABLE_NAME_VOCABULARY = "vocabulary";
     public static final String COLUMN_ID = "id", COLUMN_WORD = "word", COLUMN_POSOCC = "posocc", COLUMN_NEGOCC = "negocc", COLUMN_NEUOCC = "neuocc";
 
@@ -22,7 +21,10 @@ public class VocabularySqliteDaoImpl implements VocabularyDao {
     @Override
     public boolean addAll(List<Vocabulary> vocabularies)
     {
-        vocabularies.forEach(vocabulary -> this.add(vocabulary));
+        for (Vocabulary vocabulary : vocabularies)
+            if (this.add(vocabulary) == false)
+                return false;
+
         return true;
     }
 
@@ -37,6 +39,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao {
             stmt.setInt(2, vocabulary.getPosocc());
             stmt.setInt(3, vocabulary.getNegocc());
             stmt.setInt(3, vocabulary.getNeuocc());
+
             stmt.executeUpdate();
             stmt.close();
             dbConnection.close();
@@ -51,24 +54,15 @@ public class VocabularySqliteDaoImpl implements VocabularyDao {
     @Override
     public List<Vocabulary> get()
     {
-        List<Vocabulary> response = new ArrayList<>();
+        List<Vocabulary> response = new ArrayList<Vocabulary>();
 
         try
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT word, posocc, negocc, neuocc FROM "+ TABLE_NAME_VOCABULARY);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +" FROM "+ TABLE_NAME_VOCABULARY);
             while (rs.next())
-            {
-                Vocabulary word = new Vocabulary();
-
-                word.setWord(rs.getString(COLUMN_WORD));
-                word.setPosocc(rs.getInt(COLUMN_POSOCC));
-                word.setNegocc(rs.getInt(COLUMN_NEGOCC));
-                word.setNeuocc(rs.getInt(COLUMN_NEGOCC));
-
-                response.add(word);
-            }
+                response.add(new Vocabulary(rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC)));
 
             stmt.close();
             dbConnection.close();

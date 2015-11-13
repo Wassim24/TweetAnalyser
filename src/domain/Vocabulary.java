@@ -1,14 +1,12 @@
 package domain;
 
-public class Vocabulary {
-
+public class Vocabulary implements EntityBeans
+{
     private String word;
     private int posocc, negocc, neuocc;
 
-    public Vocabulary() {}
-
-    public Vocabulary(String word, int posocc, int negocc, int neuocc) {
-
+    public Vocabulary(String word, int posocc, int negocc, int neuocc)
+    {
         this.setWord(word);
         this.setPosocc(posocc);
         this.setNegocc(negocc);
@@ -19,10 +17,10 @@ public class Vocabulary {
     {
         if(vocabulary == this)
             return true;
+
         if(!(vocabulary instanceof Vocabulary))
             return false;
 
-        Vocabulary autre = (Vocabulary) vocabulary;
         return this.getWord().equals(((Vocabulary) vocabulary).getWord());
     }
 
@@ -30,12 +28,8 @@ public class Vocabulary {
     public void setPosocc(int posocc) {this.posocc = posocc;}
     public void setNegocc(int negocc) {this.negocc = negocc;}
     public void setNeuocc(int neuocc) {this.neuocc = neuocc;}
-
-    public int getNegocc() {return negocc;}
-    public int getPosocc() {return posocc;}
-    public String getWord() {return word;}
-    public int getNeuocc() {return neuocc;}
-
-
-
+    public int getNegocc() {return this.negocc;}
+    public int getPosocc() {return this.posocc;}
+    public String getWord() {return this.word;}
+    public int getNeuocc() {return this.neuocc;}
 }
