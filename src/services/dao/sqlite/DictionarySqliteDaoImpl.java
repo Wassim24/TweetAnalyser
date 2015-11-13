@@ -2,6 +2,8 @@ package services.dao.sqlite;
 
 import domain.Annotation;
 import domain.Dictionary;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.sqlite.SQLiteConnection;
 import services.dao.DictionaryDao;
 
@@ -9,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class DictionarySqliteDaoImpl implements DictionaryDao
 {
@@ -67,4 +70,26 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
 
         return response;
     }
+
+    @Override
+    public List<Dictionary> getAll()
+    {
+        ObservableList<Dictionary> response = FXCollections.observableArrayList();
+
+        try
+        {
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
+            Statement stmt = dbConnection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id, word, annotation FROM "+ TABLE_NAME_DICTIONARY);
+            while (rs.next())
+                response.add(new Dictionary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), Annotation.values()[(rs.getInt(COLUMN_ANNOTATION) < 0 ) ? (2 - Math.abs(rs.getInt(COLUMN_ANNOTATION))) : (rs.getInt(COLUMN_ANNOTATION) + 2) ]));
+
+            stmt.close();
+            dbConnection.close();
+        }
+        catch (SQLException e) { e.printStackTrace(); }
+
+        return response;
+    }
+
 }

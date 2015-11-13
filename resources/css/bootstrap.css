@@ -248,6 +248,60 @@
     -fx-border-color: #999999;
 }
 
+.separator:horizontal {
+    -fx-background : transparent;
+    -fx-background-color : transparent;
+}
+
+.separator:horizontal .line {
+    -fx-border-color: transparent;
+}
+
+.titleHbox {
+    -fx-background-color: #eceef1;
+            -fx-min-height : 77px;
+            -fx-max-height : 77px;
+    -fx-background-insets : 0;
+        -fx-border-color : rgba(34, 36, 38, 0.15);
+        -fx-border-width : 0 0 3 0;
+
+        -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
+
+
+}
+
+.combo-box {
+
+    -fx-background-color: #eceef1;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-background-insets : 0;
+    -fx-border-width : 0;
+    -fx-min-width: 160px;
+    -fx-max-width: 160px;
+}
+
+.combo-box .arrow, .combo-box .arrow-button{
+
+    -fx-background-color: transparent;
+    -fx-shape: "M -1 0 L 0 2 L 1 0 z";
+
+
+}
+
+.combo-box > .list-cell {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+
+    -fx-text-fill: -fx-text-base-color;
+    -fx-underline : true;
+
+    -fx-border-width : 0;
+    -fx-min-width: 160px;
+    -fx-max-width: 160px;
+    -fx-font-size : 24px;
+    -fx-padding: 3px -20px 4px 5px; /* 4 8 4 8 */
+}
+
       /********************************************************************************/
      /**/                                                                          /**/
     /**/                                                                          /**/
@@ -307,17 +361,12 @@
 .bigTitle {
     -fx-padding : 22px 0px 23px 24px;
 
-    -fx-background-color: #eceef1;
     //-fx-background-color : linear-gradient(to bottom, #212121, #404040);
     //-fx-background-image : url(../img/medium/transparentPattern.png);
 
     -fx-font-size : 24px;
     //-fx-text-fill : white;
 
-    -fx-border-color : rgba(34, 36, 38, 0.15);
-    -fx-border-width : 0 0 3 0;
-
-    -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
 }
 
 .settingsMenuLabel {

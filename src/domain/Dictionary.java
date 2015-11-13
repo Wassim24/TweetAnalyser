@@ -5,13 +5,21 @@ import java.util.List;
 
 public class Dictionary implements EntityBeans
 {
+    private int id;
     private List<String> words;
     private Annotation annotation;
+    private String word;
+
+    public Dictionary(int id, String word, Annotation annotation) {
+        this.setId(id);
+        this.setWord(word);
+        this.setAnnotation(annotation);
+    }
 
     public Dictionary(Annotation annotation)
     {
         this.setAnnotation(annotation);
-        this.setWords(new ArrayList<String>());
+        this.setWords(new ArrayList<>());
     }
 
     public Dictionary(List<String> words, Annotation annotation)
@@ -19,6 +27,8 @@ public class Dictionary implements EntityBeans
         this.setWords(words);
         this.setAnnotation(annotation);
     }
+
+
     public List<String> getWords()
     {
         return this.words;
@@ -40,4 +50,10 @@ public class Dictionary implements EntityBeans
     {
         this.annotation = annotation;
     }
+
+    public int getId() {return this.id;}
+    public void setId(int id) {this.id = id;}
+
+    public String getWord() {return this.word;}
+    public void setWord(String word) {this.word = word;}
 }

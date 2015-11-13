@@ -1,7 +1,9 @@
 package controller.view;
 
 import domain.Annotation;
+import domain.Dictionary;
 import domain.Tweet;
+import domain.Vocabulary;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,9 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import services.algorithms.classification.Glossary;
 import services.algorithms.classification.KNN;
+import services.dao.DictionaryDaoFactory;
 import services.dao.TweetDaoFactory;
+import services.dao.VocabularyDaoFactory;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -41,26 +44,32 @@ public class MainViewController
     @FXML
     private TextField proxyPortTextField;
     @FXML
-    private TableView<Tweet> tweetsInDatabaseTableView;
-    @FXML
-    private TableColumn<Tweet, String> id;
-    @FXML
-    private TableColumn<Tweet, String> user;
-    @FXML
-    private TableColumn<Tweet, String> tweet;
-    @FXML
-    private TableColumn<Tweet, Date> created;
-    @FXML
-    private TableColumn<Tweet, Annotation> annotation;
-    @FXML
-    private TableColumn<Tweet, String> keyword;
-    @FXML
-    private TableColumn<Tweet, Integer> wordsCount;
+    private TableView tweetsInDatabaseTableView;
+
+    private TableColumn id;
+
+    private TableColumn user;
+
+    private TableColumn tweet;
+
+    private TableColumn created;
+
+    private TableColumn annotation;
+
+    private TableColumn keyword;
+
+    private TableColumn wordsCount;
     @FXML
     private Label queriesStatusLabel;
+    @FXML
+    private ComboBox dataBaseComboBox;
+
+
+
+
     private File configFile = null;
 
-    public void onKeyPressKeywords(KeyEvent keyEvent)
+    public void onKeyPressSearchField(KeyEvent keyEvent)
     {
         if (keyEvent.getCode() == KeyCode.ENTER)
             onClickSearchForTweetsBtn();
@@ -96,7 +105,22 @@ public class MainViewController
 
     public void onClickSaveSelectedTweetsBtn()
     {
-        TweetServiceImpl.getInstance().addAll(this.foundTweetsListView.getSelectionModel().getSelectedItems());
+        List<Tweet> tweetsToAnnote = new ArrayList<>();
+        List<Tweet> tweetsToSave = new ArrayList<>();
+
+
+        for (Tweet tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
+            if(tweet.getAnnotationValue() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
+
+
+        if (tweetsToAnnote.size() != 0)
+        {
+            tweetsToSave.addAll(KNN.compute(tweetsToAnnote, 10));
+            //TweetServiceImpl.getInstance().addAll(tweetsToSave);
+
+            //tweetsToSave.addAll(new Glossary(tweetsToAnnote).compute());
+
+        }//else TweetServiceImpl.getInstance().addAll(tweetsToSave);
     }
 
     public void onClickResetSettingsBtn() throws IOException
@@ -153,15 +177,65 @@ public class MainViewController
 
     private void displayTweetsSavedInDatabase()
     {
-        this.id.setCellValueFactory(new PropertyValueFactory("id"));
-        this.user.setCellValueFactory(new PropertyValueFactory("username"));
-        this.tweet.setCellValueFactory(new PropertyValueFactory("tweet"));
-        this.created.setCellValueFactory(new PropertyValueFactory("date"));
-        this.keyword.setCellValueFactory(new PropertyValueFactory("keyword"));
-        this.annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
-        this.wordsCount.setCellValueFactory(new PropertyValueFactory("wordsCount"));
+
+        TableColumn id = new TableColumn<Tweet, String>("ID");
+        TableColumn user = new TableColumn<Tweet, String>("User");
+        TableColumn tweet = new TableColumn<Tweet, String>("Tweet");
+        TableColumn created = new TableColumn<Tweet, Date>("Date");
+        TableColumn keyword = new TableColumn<Tweet, Annotation>("Annotation");
+        TableColumn annotation = new TableColumn<Tweet, String>("Keyword");
+        TableColumn wordsCount = new TableColumn<Tweet, Integer>("Words Count");
+
+        id.setCellValueFactory(new PropertyValueFactory("id"));
+        user.setCellValueFactory(new PropertyValueFactory("username"));
+        tweet.setCellValueFactory(new PropertyValueFactory("tweet"));
+        created.setCellValueFactory(new PropertyValueFactory("date"));
+        keyword.setCellValueFactory(new PropertyValueFactory("keyword"));
+        annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
+        wordsCount.setCellValueFactory(new PropertyValueFactory("wordsCount"));
+
+        tweetsInDatabaseTableView.getColumns().clear();
+        tweetsInDatabaseTableView.getColumns().addAll(id, user, tweet, created, keyword, annotation, wordsCount);
 
         this.tweetsInDatabaseTableView.setItems((ObservableList<Tweet>) TweetDaoFactory.getInstance().all());
+
+    }
+
+    private void displayDictionarySavedInDatabase()
+    {
+        TableColumn id = new TableColumn<Dictionary, Integer>("ID");
+        TableColumn word = new TableColumn<Dictionary, String>("Word");
+        TableColumn annotation = new TableColumn<Dictionary, String>("Annotation");
+
+        id.setCellValueFactory(new PropertyValueFactory("id"));
+        word.setCellValueFactory(new PropertyValueFactory("word"));
+        annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
+
+        tweetsInDatabaseTableView.getColumns().clear();
+        tweetsInDatabaseTableView.getColumns().addAll(id, word, annotation);
+
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Dictionary>) DictionaryDaoFactory.getInstance().getAll());
+    }
+
+    private void displayVocabularySavedInDatabase()
+    {
+
+        TableColumn id = new TableColumn<Vocabulary, Integer>("ID");
+        TableColumn word = new TableColumn<Vocabulary, String>("Word");
+        TableColumn posocc = new TableColumn<Vocabulary, Integer>("Positive Occurences");
+        TableColumn negocc= new TableColumn<Vocabulary, Integer> ("Negative Occurences");
+        TableColumn neuocc = new TableColumn<Vocabulary, Integer>("Neutral Occurences");
+
+        id.setCellValueFactory(new PropertyValueFactory("id"));
+        word.setCellValueFactory(new PropertyValueFactory("word"));
+        posocc.setCellValueFactory(new PropertyValueFactory("posocc"));
+        negocc.setCellValueFactory(new PropertyValueFactory("negocc"));
+        neuocc.setCellValueFactory(new PropertyValueFactory("neuocc"));
+
+        tweetsInDatabaseTableView.getColumns().clear();
+        tweetsInDatabaseTableView.getColumns().addAll(id, word, posocc, negocc, neuocc);
+
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Vocabulary>) VocabularyDaoFactory.getInstance().get());
     }
 
     private void updateRateInStatusBar()
@@ -175,5 +249,15 @@ public class MainViewController
         {
             this.queriesStatusLabel.setText("The Rate Limit Status is unavailable");
         }
+    }
+
+    public void onSelectingTableCombobox() {
+
+        if(dataBaseComboBox.getValue().toString().equals("Tweets"))
+            this.displayTweetsSavedInDatabase();
+        else if(dataBaseComboBox.getValue().toString().equals("Dictionary"))
+            this.displayDictionarySavedInDatabase();
+        else
+            this.displayVocabularySavedInDatabase();
     }
 }

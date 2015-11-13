@@ -1,6 +1,8 @@
 package services.dao.sqlite;
 
 import domain.Vocabulary;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.sqlite.SQLiteConnection;
 import services.dao.VocabularyDao;
 
@@ -8,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class VocabularySqliteDaoImpl implements VocabularyDao
@@ -54,7 +55,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
     @Override
     public List<Vocabulary> get()
     {
-        List<Vocabulary> response = new ArrayList<Vocabulary>();
+        ObservableList<Vocabulary> response = FXCollections.observableArrayList();
 
         try
         {
