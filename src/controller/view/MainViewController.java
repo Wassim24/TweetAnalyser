@@ -188,7 +188,10 @@ public class MainViewController implements javafx.fxml.Initializable
         this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
         ObservableList<Tweet> annotedTweet = FXCollections.observableArrayList();
 
-        List<Tweet> copy = new ArrayList<Tweet>(this.queriedTweets);
+        List<Tweet> copy = new ArrayList<Tweet>(this.queriedTweets.size());
+        for (Tweet t : this.queriedTweets)
+            copy.add(t.clone());
+
         switch ((Algorithm)this.queryAlgorithm.getValue())
         {
             case DICTIONARY:
