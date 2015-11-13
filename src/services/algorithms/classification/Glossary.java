@@ -36,8 +36,6 @@ public class Glossary
                     tweetToAnnotate.setAnnotation(Annotation.NEGATIF);
                 else
                     tweetToAnnotate.setAnnotation(Annotation.POSITIF);
-
-            System.out.println(tweetToAnnotate.getAnnotationValue());
         }
 
         return tweetsToAnnote;

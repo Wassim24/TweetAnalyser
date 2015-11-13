@@ -4,11 +4,17 @@ import domain.Tweet;
 import services.dao.TweetDaoFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KNN
 {
     private KNN() {}
+
+    public static List<Tweet> compute(List<Tweet> tweetsToAnnote)
+    {
+        return compute(tweetsToAnnote, 10);
+    }
 
     public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
     {
@@ -56,38 +62,32 @@ public class KNN
 
     private static int findIndexOfMin(List<Float> listOfDistances, float currentDistance)
     {
-        for (int i = 0; i < listOfDistances.size(); i++)
-            if (currentDistance <= listOfDistances.get(i))
-                return i;
+        int minIndex = 0;
 
-        return 0;
+        for (int i = 0; i < listOfDistances.size(); i++)
+            if (currentDistance > listOfDistances.get(i))
+            {
+                currentDistance = listOfDistances.get(i);
+                minIndex = i;
+            }
+
+        return minIndex;
     }
 
     private static int findIndexOfMin(List<Float> listOfDistances)
     {
-        int index = 0;
-        float min = Integer.MIN_VALUE;
-
-        for (int i = 0; i < listOfDistances.size(); i++)
-            if (listOfDistances.get(i) <= min)
-            {
-                min = listOfDistances.get(i);
-                index = i;
-            }
-
-        return index;
+        return findIndexOfMin(listOfDistances, Integer.MIN_VALUE);
     }
 
     private static float findEuclideanDistance(Tweet toClassifyTweet, Tweet classifiedTweet)
     {
-        float commonWordsNumber = 0;
+        List<String> classifiedTweetWords = Arrays.asList(classifiedTweet.getTweet().toLowerCase().split(" "));
+        int commonWordsNumber = 0;
 
-        String[] toCompareWords = classifiedTweet.getTweet().split(" ");
         for (String tweetWord : toClassifyTweet.getTweet().split(" "))
-            for (String toCompareWord : toCompareWords)
-                if (tweetWord.equalsIgnoreCase(toCompareWord))
-                    commonWordsNumber++;
+            if (classifiedTweetWords.contains(tweetWord.toLowerCase()))
+                commonWordsNumber++;
 
-        return 1 - commonWordsNumber / (float) (toClassifyTweet.getWordsCount() + classifiedTweet.getWordsCount());
+        return 1 - commonWordsNumber / (float)(toClassifyTweet.getWordsCount() + classifiedTweet.getWordsCount());
     }
 }

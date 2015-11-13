@@ -1,13 +1,10 @@
 package app;
 
-import domain.Tweet;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Date;
 
 public class Main extends Application
 {
