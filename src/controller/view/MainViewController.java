@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import services.algorithms.classification.Glossary;
 import services.algorithms.classification.KNN;
 import services.dao.TweetDaoFactory;
 import services.twitter.TweetServiceImpl;
@@ -74,6 +75,8 @@ public class MainViewController
         {
             ObservableList<Tweet> foundTweets = FXCollections.observableArrayList();
             foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
+            System.out.println(foundTweets);
+
             this.foundTweetsListView.setItems(foundTweets);
         }
         catch (TwitterException ignored)
@@ -100,17 +103,17 @@ public class MainViewController
 
 
         for (Tweet tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
-            if(tweet.getAnnotation() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
+            if(tweet.getAnnotationValue() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
 
 
-        if (tweetsToAnnote.size() != 0)
+        if (tweetsToAnnote.size() > 0)
         {
-            tweetsToSave.addAll(new KNN(tweetsToAnnote, 10).compute());
+            //tweetsToSave.addAll(KNN.compute(tweetsToAnnote, 1));
             //TweetServiceImpl.getInstance().addAll(tweetsToSave);
 
-            //tweetsToSave.addAll(new Glossary(tweetsToAnnote).compute());
+            //tweetsToSave.addAll(Glossary.compute(tweetsToAnnote));
 
-        }else TweetServiceImpl.getInstance().addAll(tweetsToSave);
+        }/*else TweetServiceImpl.getInstance().addAll(tweetsToSave);*/
     }
 
     public void onClickResetSettingsBtn() throws IOException

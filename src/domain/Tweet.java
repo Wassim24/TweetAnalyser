@@ -10,6 +10,7 @@ public class Tweet implements EntityBeans
     private String username, tweet, keyword;
     private Date date;
     private Annotation annotation;
+    private boolean isCleanTweet;
 
     public Tweet(int id, String username, String tweet, Date date, String keyword, Annotation annotation)
     {
@@ -34,12 +35,17 @@ public class Tweet implements EntityBeans
 
     public String cleanString()
     {
+        if (this.isCleanTweet)
+            return this.getTweet();
+
         LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
         {{
             put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)?(…)?", "");
             put("@[a-zA-Z0-9-_]+\\s?:?", "");
             put("#[a-zA-Z0-9-_]+\\s?:?", "");
             put("\\s?RT\\s", "");
+            put("\"", " ");
+            put("\'", " ");
             put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
             put("\\d[_]+", "");
             put("\\s{1,}", " ");
@@ -50,6 +56,7 @@ public class Tweet implements EntityBeans
         for (Map.Entry<String, String> entry : regexes.entrySet())
             this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()).toLowerCase());
 
+        this.isCleanTweet = true;
         return this.getTweet();
     }
 
@@ -98,9 +105,17 @@ public class Tweet implements EntityBeans
         return this.getUsername() + " : "+ this.getTweet();
     }
     public void setAnnotation(Annotation annotation) {this.annotation = annotation;}
-    public int getAnnotation()
+    public int getAnnotationValue()
     {
-        return this.annotation.getValue();
+        return this.getAnnotation().getValue();
     }
-    public int getWordsCount() {return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);}
+    public Annotation getAnnotation()
+    {
+        return this.annotation;
+    }
+    public int getWordsCount()
+    {
+        this.cleanString();
+        return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);
+    }
 }

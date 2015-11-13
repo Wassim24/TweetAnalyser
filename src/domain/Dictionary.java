@@ -25,6 +25,11 @@ public class Dictionary implements EntityBeans
     }
     public void setWords(List<String> words)
     {
+        words.forEach(s -> {
+            s = s.toLowerCase();
+            System.out.println(s);
+        });
+
         this.words = words;
     }
     public Annotation getAnnotation()

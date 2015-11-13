@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.sqlite.SQLiteConnection;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +30,7 @@ public class TweetSqliteDaoImpl implements TweetDao
             stmt.setString(2, tweet.getTweet());
             stmt.setDate(3, new java.sql.Date(tweet.getDate().getTime()));
             stmt.setString(4, tweet.getKeyword());
-            stmt.setInt(5, tweet.getAnnotation());
+            stmt.setInt(5, tweet.getAnnotationValue());
             stmt.setInt(6, tweet.getWordsCount());
             stmt.executeUpdate();
             stmt.close();

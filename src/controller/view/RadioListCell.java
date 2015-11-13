@@ -34,7 +34,7 @@ public class RadioListCell extends ListCell<Tweet>
             neutral.getStyleClass().add("anoteNeutralRadio");
             positive.getStyleClass().add("anotePositiveRadio");
 
-            switch (obj.getAnnotation())
+            switch (obj.getAnnotationValue())
             {
                 case -1:
                     negative.getStyleClass().add("anoteNegativeRadio-selected");

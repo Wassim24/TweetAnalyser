@@ -33,7 +33,7 @@ public class Bayes {
                 for (Tweet tweetToCompareTo : tweets) {
 
                     // Getting the annotation of a tweet
-                    int annotation = tweetToCompareTo.getAnnotation();
+                    int annotation = tweetToCompareTo.getAnnotationValue();
 
                     // Looping through each tweet to to compare the words
                     for (String wordToCompareTo : tweetToCompareTo.getTweet().split(" ")) {

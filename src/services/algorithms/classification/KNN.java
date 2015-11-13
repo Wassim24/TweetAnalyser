@@ -1,54 +1,38 @@
 package services.algorithms.classification;
 
-import domain.Annotation;
 import domain.Tweet;
 import services.dao.TweetDaoFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class KNN
 {
-    private List<Tweet> tweetsToAnnoteList;
-    private int numberOfNeighbours;
+    private KNN() {}
 
-    public KNN(List<Tweet> tweetsToAnnoteList, int numberOfNeighbours)
+    public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
     {
-        this.tweetsToAnnoteList = tweetsToAnnoteList;
-        this.numberOfNeighbours = numberOfNeighbours;
-    }
-
-    public List<Tweet> compute()
-    {
-
-        List<Float> distancesList = new ArrayList<>();
-        List<Integer> neighboursIdsList = new ArrayList<>();
-        List<Tweet> annotedTweets = new ArrayList<>();
-        List<Tweet> tweetsInDataBase = TweetDaoFactory.getInstance().all();
-
-        float calculatedEuclideanDistance = 0;
+        List<Float> distancesList = new ArrayList<Float>();
+        List<Integer> neighboursIdsList = new ArrayList<Integer>();
+        List<Tweet> annotedTweets = new ArrayList<Tweet>(), tweetsInDataBase = TweetDaoFactory.getInstance().all();
 
         // Loop for iterating over the selected tweets
-        for (Tweet unannotedTweet : tweetsToAnnoteList) {
-
+        for (Tweet unannotedTweet : tweetsToAnnote)
+        {
             // Loop for putting the first numberOfNeighbours in the distancesList
-            for (Tweet tweetInDB : tweetsInDataBase) {
-
-                calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet.getTweet(), tweetInDB.getTweet(), tweetInDB.getWordsCount());
-
-                distancesList.add(calculatedEuclideanDistance);
+            for (Tweet tweetInDB : tweetsInDataBase)
+            {
+                distancesList.add(findEuclideanDistance(unannotedTweet, tweetInDB));
                 neighboursIdsList.add(tweetInDB.getId());
 
-                if (distancesList.size() == numberOfNeighbours) break;
+                if (distancesList.size() == numberOfNeighbours)
+                    break;
             }
 
             //Loop for getting the tweets in DB and comparing them to the neighbours
-            for (int i = numberOfNeighbours + 1; i < tweetsInDataBase.size() - 1; i++) {
-
-                calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet.getTweet(), tweetsInDataBase.get(i).getTweet(), tweetsInDataBase.get(i).getWordsCount());
-
+            for (int i = numberOfNeighbours + 1; i < tweetsInDataBase.size() - 1; i++)
+            {
+                float calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet, tweetsInDataBase.get(i));
                 int minDistIndex = findIndexOfMin(distancesList, calculatedEuclideanDistance);
 
                 // For replacing the distance at minDistIndex with the new calculatedEuclideanDistance and the id
@@ -57,12 +41,8 @@ public class KNN
             }
 
             // For annotating the new tweets based on the min distance of the neighbours annotation
-            int tweetInDBAnnotation = tweetsInDataBase.get(neighboursIdsList.get(findIndexOfMin(distancesList)) - 1).getAnnotation();
-            System.out.println(neighboursIdsList.get(findIndexOfMin(distancesList)) - 1);
-            unannotedTweet.setAnnotation(Annotation.valueOf((tweetInDBAnnotation == -1) ? "NEGATIF" : (tweetInDBAnnotation == 0) ? "NEUTRE" : "POSITIF"));
-
+            unannotedTweet.setAnnotation(tweetsInDataBase.get(neighboursIdsList.get(findIndexOfMin(distancesList)) - 1).getAnnotation());
             //Adding the newly annoted Tweet to the annotedTweetsList
-
             annotedTweets.add(unannotedTweet);
 
             //Clearing the lists for the new round :P
@@ -74,22 +54,23 @@ public class KNN
         return annotedTweets;
     }
 
-    public int findIndexOfMin(List<Float> listOfDistances, float currentDistance) {
-
-        int minIndex = 0;
+    private static int findIndexOfMin(List<Float> listOfDistances, float currentDistance)
+    {
         for (int i = 0; i < listOfDistances.size(); i++)
-            if (currentDistance <= listOfDistances.get(i)) minIndex = i;
+            if (currentDistance <= listOfDistances.get(i))
+                return i;
 
-        return minIndex;
+        return 0;
     }
 
-    public int findIndexOfMin(List<Float> listOfDistances) {
-
-        float min = listOfDistances.get(0);
+    private static int findIndexOfMin(List<Float> listOfDistances)
+    {
         int index = 0;
+        float min = Integer.MIN_VALUE;
 
         for (int i = 0; i < listOfDistances.size(); i++)
-            if (listOfDistances.get(i) <= min) {
+            if (listOfDistances.get(i) <= min)
+            {
                 min = listOfDistances.get(i);
                 index = i;
             }
@@ -97,53 +78,16 @@ public class KNN
         return index;
     }
 
-    public int findCommonWordsNumber(String tweet, String toCompare) {
+    private static float findEuclideanDistance(Tweet toClassifyTweet, Tweet classifiedTweet)
+    {
+        float commonWordsNumber = 0;
 
-        String[] tweetWords = tweet.split(" ");
-        String[] toCompareWords = toCompare.split(" ");
-
-        byte commonWordsNumber = 0;
-
-        for (String tweetWord : tweetWords)
+        String[] toCompareWords = classifiedTweet.getTweet().split(" ");
+        for (String tweetWord : toClassifyTweet.getTweet().split(" "))
             for (String toCompareWord : toCompareWords)
-                if(tweetWord.equalsIgnoreCase(toCompareWord)) commonWordsNumber++;
+                if (tweetWord.equalsIgnoreCase(toCompareWord))
+                    commonWordsNumber++;
 
-        return commonWordsNumber;
-    }
-
-    public int findNumberOfWords(String tweet) {
-
-        tweet = cleanString(tweet);
-        System.out.println(tweet + (tweet.length() - tweet.replaceAll(" ", "").length()) + "  ");
-        return tweet.length() - tweet.replaceAll(" ", "").length();
-    }
-
-    public String cleanString(String tweet) {
-        LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
-        {{
-            put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)?(…)?", "");
-            put("@[a-zA-Z0-9-_]+\\s?:?", "");
-            put("#[a-zA-Z0-9-_]+\\s?:?", "");
-            put("\\s?RT\\s", "");
-            put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
-            put("\\d[_]+", "");
-            put("\\s{1,}", " ");
-            put("\\A\\s{1,}", "");
-            put("\\z\\s{1,}", "");
-        }};
-
-
-        for (Map.Entry<String, String> entry : regexes.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            tweet = tweet.replaceAll(key, value);
-        }
-
-        return tweet;
-    }
-
-    public float findEuclideanDistance(String tweet, String classifiedTweet, int classifiedTweetWordsCount) {
-
-        return 1 - findCommonWordsNumber(tweet, classifiedTweet) / (float) (findNumberOfWords(tweet) + classifiedTweetWordsCount);
+        return 1 - commonWordsNumber / (float) (toClassifyTweet.getWordsCount() + classifiedTweet.getWordsCount());
     }
 }
