@@ -371,3 +371,26 @@
     -fx-background-repeat : no-repeat;
 }
 // -----------------------   Styling for the feelings radio buttons ends here ---------------------- //
+
+.selectAlgorithm
+{
+    -fx-min-height : 34px;
+    -fx-max-height : 34px;
+    -fx-font-size: 10pt;
+
+    -fx-border-width : 1;
+    -fx-border-color : #828282;
+}
+
+.selectAlgorithm .list-view .list-cell:filled, .selectAlgorithm, .selectAlgorithm .list-view .list-cell:filled:hover, .selectAlgorithm .list-view .list-cell:filled:selected, .selectAlgorithm .list-view .list-cell:filled:selected:hover, .selectAlgorithm .text-input
+{
+    -fx-min-height : 34px;
+    -fx-max-height : 34px;
+}
+
+.selectAlgorithm .list-view .list-cell:filled, .selectAlgorithm, .selectAlgorithm .list-view .list-cell:filled:hover, .selectAlgorithm .list-view .list-cell:filled:selected, .selectAlgorithm .list-view .list-cell:filled:selected:hover, .selectAlgorithm .text-input, .selectAlgorithm .list-view, .selectAlgorithm .list-cell
+{
+    -fx-cell-size: 5px;
+    -fx-padding: 0 0 0 5px;
+    -fx-text-fill : #000000;
+}

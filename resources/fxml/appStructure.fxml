@@ -1,5 +1,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.collections.*?>
 <TabPane fx:controller="controller.view.MainViewController"
          xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
          side="LEFT"
@@ -11,24 +13,17 @@
         <VBox>
             <!-- Label for displaying the big title -->
             <Label styleClass="bigTitle" text="Searching for tweets" maxWidth="Infinity"/>
-
             <!-- HBox containig the serach tools -->
             <VBox>
                 <HBox styleClass="searchBox" spacing="3">
-                    <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"
-                               onKeyPressed="#onKeyPressKeywords"/>
+                    <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField" onKeyPressed="#onKeyPressKeywords"/>
                     <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
-                    <Button text="Advanced Search"/>
+                    <ComboBox styleClass="selectAlgorithm" fx:id="queryAlgorithm" onAction="#onChangeAlgorithm">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList"></FXCollections>
+                        </items>
+                    </ComboBox>
                 </HBox>
-
-                <!-- Collapsible menu for setting up the advanced search -->
-                <Accordion>
-                    <panes>
-                        <TitledPane text="Advanced Search Settings">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
             </VBox>
 
             <!-- List view for displaying the found tweets -->
@@ -36,8 +31,7 @@
 
             <!-- HBox containing the save buttons and state of the search -->
             <HBox styleClass="statusBar" spacing="3">
-                <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="queriesStatusLabel"
-                       maxWidth="Infinity"/>
+                <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="queriesStatusLabel" maxWidth="Infinity"/>
                 <Button text="Save selected tweet(s)" onAction="#onClickSaveSelectedTweetsBtn"/>
                 <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
                 <Button text="Clear results" onAction="#onClickClearTweetsListBtn"/>
@@ -48,21 +42,21 @@
     <!-- Tab to display saved in the database -->
     <Tab text="" styleClass="databaseTab" onSelectionChanged="#onSelectingDatabaseTab">
         <Label styleClass="bigTitle" text="Your saved Tweets" maxWidth="Infinity"/>
-            <VBox>
-                <Label maxWidth="Infinity" styleClass="bigTitle" text="Your saved Tweets" />
-                <TableView VBox.vgrow="ALWAYS" fx:id="tweetsInDatabaseTableView">
-                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
-                    <columns>
-                        <TableColumn fx:id="id" text="ID" />
-                        <TableColumn fx:id="user" text="Username" />
-                        <TableColumn fx:id="tweet" text="Tweet" />
-                        <TableColumn fx:id="keyword" text="Keyword" />
-                        <TableColumn fx:id="annotation" text="Annotation" />
-                        <TableColumn fx:id="created" text="Created" />
-                        <TableColumn fx:id="wordsCount" text="Words Number" />
-                    </columns>
-                </TableView>
-            </VBox>
+        <VBox>
+            <Label maxWidth="Infinity" styleClass="bigTitle" text="Your saved Tweets" />
+            <TableView VBox.vgrow="ALWAYS" fx:id="tweetsInDatabaseTableView">
+                <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+                <columns>
+                    <TableColumn fx:id="id" text="ID" />
+                    <TableColumn fx:id="user" text="Username" />
+                    <TableColumn fx:id="tweet" text="Tweet" />
+                    <TableColumn fx:id="keyword" text="Keyword" />
+                    <TableColumn fx:id="annotation" text="Annotation" />
+                    <TableColumn fx:id="created" text="Created" />
+                    <TableColumn fx:id="wordsCount" text="Words Number" />
+                </columns>
+            </TableView>
+        </VBox>
     </Tab>
 
     <!-- Tab for displaying various charts -->

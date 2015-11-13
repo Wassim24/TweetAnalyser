@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import services.algorithms.classification.Algorithm;
 import services.algorithms.classification.Glossary;
 import services.algorithms.classification.KNN;
 import services.dao.TweetDaoFactory;
@@ -16,13 +17,14 @@ import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
+import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.net.URL;
+import java.util.*;
 
-public class MainViewController
+import static services.algorithms.classification.Algorithm.DICTIONARY;
+
+public class MainViewController implements javafx.fxml.Initializable
 {
     @FXML
     private TextField keywordsTextField;
@@ -58,6 +60,10 @@ public class MainViewController
     private TableColumn<Tweet, Integer> wordsCount;
     @FXML
     private Label queriesStatusLabel;
+    private List<Tweet> queriedTweets;
+    @FXML
+    private ComboBox queryAlgorithm;
+
     private File configFile = null;
 
     public void onKeyPressKeywords(KeyEvent keyEvent)
@@ -68,14 +74,10 @@ public class MainViewController
 
     public void onClickSearchForTweetsBtn()
     {
-        this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
-
         try
         {
-            ObservableList<Tweet> foundTweets = FXCollections.observableArrayList();
-            foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
-            this.foundTweetsListView.setItems(foundTweets);
+            this.queriedTweets = TweetServiceImpl.getInstance().search(this.keywordsTextField.getText());
+            this.onChangeAlgorithm();
         }
         catch (TwitterException ignored)
         {
@@ -175,5 +177,41 @@ public class MainViewController
         {
             this.queriesStatusLabel.setText("The Rate Limit Status is unavailable");
         }
+    }
+
+    public void onChangeAlgorithm()
+    {
+        if (this.queriedTweets == null || this.queriedTweets.isEmpty())
+            return;
+
+        this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
+        ObservableList<Tweet> annotedTweet = FXCollections.observableArrayList();
+
+        List<Tweet> copy = new ArrayList<Tweet>(this.queriedTweets);
+        switch ((Algorithm)this.queryAlgorithm.getValue())
+        {
+            case DICTIONARY:
+                annotedTweet.addAll(Glossary.compute(copy));
+                break;
+
+            case KNN:
+                annotedTweet.addAll(KNN.compute(copy));
+                break;
+
+            case NONE:
+            default:
+                annotedTweet.addAll(copy);
+                break;
+        }
+
+        this.foundTweetsListView.setItems(annotedTweet);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
+        this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
     }
 }
