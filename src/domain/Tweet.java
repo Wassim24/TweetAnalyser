@@ -23,6 +23,11 @@ public class Tweet implements EntityBeans
         this(username, tweet, date, keyword, Annotation.NONANNOTE);
     }
 
+    public Tweet clone()
+    {
+        return new Tweet(this.getId(), this.getUsername(), this.getTweet(), this.getDate(), new String(this.getKeyword()), this.getAnnotation());
+    }
+
     public Tweet(String username, String tweet, Date date, String keyword, Annotation annotation)
     {
         this.setUsername(username);

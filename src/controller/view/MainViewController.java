@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import services.algorithms.classification.Glossary;
 import services.algorithms.classification.KNN;
 import services.dao.DictionaryDaoFactory;
 import services.dao.TweetDaoFactory;
@@ -44,21 +45,21 @@ public class MainViewController
     @FXML
     private TextField proxyPortTextField;
     @FXML
-    private TableView tweetsInDatabaseTableView;
-
-    private TableColumn id;
-
-    private TableColumn user;
-
-    private TableColumn tweet;
-
-    private TableColumn created;
-
-    private TableColumn annotation;
-
-    private TableColumn keyword;
-
-    private TableColumn wordsCount;
+    private TableView<Tweet> tweetsInDatabaseTableView;
+    @FXML
+    private TableColumn<Tweet, String> id;
+    @FXML
+    private TableColumn<Tweet, String> user;
+    @FXML
+    private TableColumn<Tweet, String> tweet;
+    @FXML
+    private TableColumn<Tweet, Date> created;
+    @FXML
+    private TableColumn<Tweet, Annotation> annotation;
+    @FXML
+    private TableColumn<Tweet, String> keyword;
+    @FXML
+    private TableColumn<Tweet, Integer> wordsCount;
     @FXML
     private Label queriesStatusLabel;
     @FXML
@@ -66,6 +67,10 @@ public class MainViewController
 
 
 
+
+    private List<Tweet> queriedTweets;
+    @FXML
+    private ComboBox queryAlgorithm;
 
     private File configFile = null;
 
@@ -77,14 +82,10 @@ public class MainViewController
 
     public void onClickSearchForTweetsBtn()
     {
-        this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
-
         try
         {
-            ObservableList<Tweet> foundTweets = FXCollections.observableArrayList();
-            foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
-            this.foundTweetsListView.setItems(foundTweets);
+            this.queriedTweets = TweetServiceImpl.getInstance().search(this.keywordsTextField.getText());
+            this.onChangeAlgorithm();
         }
         catch (TwitterException ignored)
         {
@@ -259,5 +260,44 @@ public class MainViewController
             this.displayDictionarySavedInDatabase();
         else
             this.displayVocabularySavedInDatabase();
+    }
+
+    public void onChangeAlgorithm()
+    {
+        if (this.queriedTweets == null || this.queriedTweets.isEmpty())
+            return;
+
+        this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
+        ObservableList<Tweet> annotedTweet = FXCollections.observableArrayList();
+
+        List<Tweet> copy = new ArrayList<Tweet>(this.queriedTweets.size());
+        for (Tweet t : this.queriedTweets)
+            copy.add(t.clone());
+
+        switch ((Algorithm)this.queryAlgorithm.getValue())
+        {
+            case DICTIONARY:
+                annotedTweet.addAll(Glossary.compute(copy));
+                break;
+
+            case KNN:
+                annotedTweet.addAll(KNN.compute(copy));
+                break;
+
+            case NONE:
+            default:
+                annotedTweet.addAll(copy);
+                break;
+        }
+
+        this.foundTweetsListView.setItems(annotedTweet);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
+        this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
     }
 }
