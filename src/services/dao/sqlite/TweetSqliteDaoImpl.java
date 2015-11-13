@@ -1,10 +1,11 @@
-package services.dao;
+package services.dao.sqlite;
 
 import domain.Annotation;
 import domain.Tweet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.sqlite.SQLiteConnection;
+import services.dao.TweetDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ public class TweetSqliteDaoImpl implements TweetDao
     {
         try
         {
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO " + TABLE_NAME_TWEET +"("+ COLUMN_USERNAME +", "+ COLUMN_TWEET +", "+ COLUMN_DATE +", "+ COLUMN_KEYWORD +", "+ COLUMN_ANNOTATION +", "+ COLUMN_WORDSCOUNT +") VALUES (?, ?, ?, ?, ?, ?);");
             stmt.setString(1, tweet.getUsername());
             stmt.setString(2, tweet.getTweet());
@@ -50,7 +51,7 @@ public class TweetSqliteDaoImpl implements TweetDao
 
         try
         {
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT id, username, tweet, date, keyword, annotation, wordsCount FROM "+ TABLE_NAME_TWEET);
             while (rs.next())

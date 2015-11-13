@@ -1,6 +1,5 @@
 package services.twitter;
 
-
 import domain.Annotation;
 import domain.Dictionary;
 import services.dao.DictionaryDaoFactory;
@@ -12,9 +11,9 @@ import java.nio.file.Files;
 
 public class DictionaryServiceImpl implements DictionaryService
 {
-    private static DictionaryServiceImpl ourInstance = new DictionaryServiceImpl();
+    private static DictionaryServiceImpl dictionaryServiceImpl = new DictionaryServiceImpl();
     public static DictionaryServiceImpl getInstance() {
-        return ourInstance;
+        return dictionaryServiceImpl;
     }
     private DictionaryServiceImpl() {}
 
@@ -22,18 +21,22 @@ public class DictionaryServiceImpl implements DictionaryService
     public boolean addFromFile(File dictionary, Annotation annotation)
     {
         Dictionary d = new Dictionary(annotation);
+
         try
         {
-            Files.readAllLines(dictionary.toPath(), StandardCharsets.ISO_8859_1).forEach(s -> {
+            Files.readAllLines(dictionary.toPath(), StandardCharsets.ISO_8859_1).forEach(s ->
+            {
                 for (String s1 : s.split(", "))
-                    if (s1.trim().length() > 0)
-                        d.getWords().add(s1.trim());
+                {
+                    s1 = s1.trim();
+
+                    if (s1.length() > 0)
+                        d.getWords().add(s1);
+                }
+
             });
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        catch (IOException e) {}
 
         return DictionaryDaoFactory.getInstance().addAll(d);
     }

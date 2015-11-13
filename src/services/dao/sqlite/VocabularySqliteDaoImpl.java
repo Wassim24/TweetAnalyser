@@ -1,8 +1,9 @@
-package services.dao;
+package services.dao.sqlite;
 
 
 import domain.Vocabulary;
 import org.sqlite.SQLiteConnection;
+import services.dao.VocabularyDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VocabularySqliteDaoImpl implements VocabularyDao{
+public class VocabularySqliteDaoImpl implements VocabularyDao {
 
     public static final String TABLE_NAME_VOCABULARY = "vocabulary";
     public static final String COLUMN_ID = "id", COLUMN_WORD = "word", COLUMN_POSOCC = "posocc", COLUMN_NEGOCC = "negocc", COLUMN_NEUOCC = "neuocc";
@@ -19,18 +20,18 @@ public class VocabularySqliteDaoImpl implements VocabularyDao{
     public VocabularySqliteDaoImpl() {}
 
     @Override
-    public boolean addAll(List<Vocabulary> vocabularies) {
-
+    public boolean addAll(List<Vocabulary> vocabularies)
+    {
         vocabularies.forEach(vocabulary -> this.add(vocabulary));
-
         return true;
     }
 
     @Override
-    public boolean add(Vocabulary vocabulary) {
+    public boolean add(Vocabulary vocabulary)
+    {
         try
         {
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO " + TABLE_NAME_VOCABULARY +"("+ COLUMN_WORD +", "+ COLUMN_POSOCC + ", "+  COLUMN_NEGOCC +", "+ COLUMN_NEUOCC+ " ) VALUES (?, ?, ?, ?);");
             stmt.setString(1, vocabulary.getWord());
             stmt.setInt(2, vocabulary.getPosocc());
@@ -48,17 +49,17 @@ public class VocabularySqliteDaoImpl implements VocabularyDao{
     }
 
     @Override
-    public List<Vocabulary> get() {
-
+    public List<Vocabulary> get()
+    {
         List<Vocabulary> response = new ArrayList<>();
 
         try
         {
-
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT word, posocc, negocc, neuocc FROM "+ TABLE_NAME_VOCABULARY);
-            while (rs.next()) {
+            while (rs.next())
+            {
                 Vocabulary word = new Vocabulary();
 
                 word.setWord(rs.getString(COLUMN_WORD));
@@ -68,10 +69,11 @@ public class VocabularySqliteDaoImpl implements VocabularyDao{
 
                 response.add(word);
             }
+
             stmt.close();
             dbConnection.close();
         }
-        catch (SQLException e) { e.printStackTrace(); }
+        catch (SQLException e) { }
 
         return response;
     }

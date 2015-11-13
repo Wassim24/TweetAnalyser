@@ -1,4 +1,4 @@
-package services.dao;
+package services.dao.sqlite;
 
 import domain.Annotation;
 import org.sqlite.SQLiteConnection;
@@ -8,23 +8,23 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseConst
+public class DaoSqliteFactory
 {
-    public static final String DATABASE_NAME = "project";
-
-    public DatabaseConst()  {}
+    public static final String PACKAGE = "services.dao.sqlite";
+    private static final String DATABASE_NAME = "project.sqlite";
+    private DaoSqliteFactory() {}
 
     private static SQLiteConnection getSubSQLiteConnection() throws SQLException
     {
-        return new SQLiteConnection("/", DATABASE_NAME +".db");
+        return new SQLiteConnection("/", DATABASE_NAME);
     }
 
     public static SQLiteConnection getSQLiteConnection() throws SQLException
     {
-
-        if (!Files.exists(Paths.get(DatabaseConst.DATABASE_NAME +".db")))
+        if (!Files.exists(Paths.get(DATABASE_NAME)))
         {
-            try {
+            try
+            {
                 SQLiteConnection dbConnection = getSubSQLiteConnection();
                 Statement stmt = dbConnection.createStatement();
 
@@ -45,16 +45,14 @@ public class DatabaseConst
                 stmt.executeUpdate("CREATE TABLE " + VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY+
                         "(" + VocabularySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " " + VocabularySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER, " +
-                        " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER, " +
-                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER )");
-
+                        " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER)");
 
                 stmt.close();
                 dbConnection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+            catch (SQLException e) {}
         }
 
         return getSubSQLiteConnection();

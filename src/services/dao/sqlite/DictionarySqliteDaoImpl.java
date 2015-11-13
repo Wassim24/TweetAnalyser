@@ -1,19 +1,14 @@
-package services.dao;
+package services.dao.sqlite;
 
 import domain.Annotation;
 import domain.Dictionary;
-import domain.Tweet;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.sqlite.SQLiteConnection;
+import services.dao.DictionaryDao;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 public class DictionarySqliteDaoImpl implements DictionaryDao
 {
@@ -37,7 +32,7 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
     {
         try
         {
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO " + TABLE_NAME_DICTIONARY +"("+ COLUMN_WORD +", "+ COLUMN_ANNOTATION +") VALUES (?, ?);");
             stmt.setString(1, word);
             stmt.setInt(2, annotation.getValue());
@@ -59,7 +54,7 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
 
         try
         {
-            SQLiteConnection dbConnection = DatabaseConst.getSQLiteConnection();
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT word FROM "+ TABLE_NAME_DICTIONARY +" WHERE "+ COLUMN_ANNOTATION +" = "+ annotation.getValue());
             while (rs.next())

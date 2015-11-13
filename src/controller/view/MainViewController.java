@@ -75,8 +75,6 @@ public class MainViewController
         {
             ObservableList<Tweet> foundTweets = FXCollections.observableArrayList();
             foundTweets.addAll(TweetServiceImpl.getInstance().search(this.keywordsTextField.getText()));
-            System.out.println(foundTweets);
-
             this.foundTweetsListView.setItems(foundTweets);
         }
         catch (TwitterException ignored)
@@ -98,22 +96,7 @@ public class MainViewController
 
     public void onClickSaveSelectedTweetsBtn()
     {
-        List<Tweet> tweetsToAnnote = new ArrayList<>();
-        List<Tweet> tweetsToSave = new ArrayList<>();
-
-
-        for (Tweet tweet : this.foundTweetsListView.getSelectionModel().getSelectedItems())
-            if(tweet.getAnnotationValue() == -2) tweetsToAnnote.add(tweet); else tweetsToSave.add(tweet);
-
-
-        if (tweetsToAnnote.size() > 0)
-        {
-            //tweetsToSave.addAll(KNN.compute(tweetsToAnnote, 1));
-            //TweetServiceImpl.getInstance().addAll(tweetsToSave);
-
-            //tweetsToSave.addAll(Glossary.compute(tweetsToAnnote));
-
-        }/*else TweetServiceImpl.getInstance().addAll(tweetsToSave);*/
+        TweetServiceImpl.getInstance().addAll(this.foundTweetsListView.getSelectionModel().getSelectedItems());
     }
 
     public void onClickResetSettingsBtn() throws IOException
@@ -149,7 +132,6 @@ public class MainViewController
     {
         if (this.configFile == null)
         {
-
             this.configFile = new File("twitter4j.properties");
             InputStream inputStream = new FileInputStream(this.configFile);
             Properties props = new Properties();

@@ -1,8 +1,10 @@
 package services.dao;
 
+import services.dao.sqlite.DaoSqliteFactory;
+
 public class DictionaryDaoFactory
 {
-    private static final String DAO_ACCESS = "DictionarySqliteDaoImpl";
+    private static final String DAO_ACCESS = DaoSqliteFactory.PACKAGE +".DictionarySqliteDaoImpl";
     private static DictionaryDao dictionaryDaoImpl = null;
     private DictionaryDaoFactory() {}
 
@@ -11,7 +13,7 @@ public class DictionaryDaoFactory
         if (dictionaryDaoImpl == null)
             try
             {
-                dictionaryDaoImpl = (DictionaryDao) Class.forName("services.dao." + DAO_ACCESS).newInstance();
+                dictionaryDaoImpl = (DictionaryDao) Class.forName(DAO_ACCESS).newInstance();
             }
             catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {}
 
