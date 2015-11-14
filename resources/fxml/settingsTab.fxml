@@ -1,0 +1,65 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab fx:controller="controller.view.MainViewController"
+     xmlns:fx="http://javafx.com/fxml/1"
+     xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab" onSelectionChanged="#onSelectingSettingsTab">
+
+    <VBox>
+        <!-- Label for displaying the bigger title -->
+        <HBox styleClass="titleHbox">
+            <Label styleClass="bigTitle" text="Editing settings" maxWidth="Infinity"/>
+        </HBox>
+
+        <GridPane styleClass="authSettingsGP">
+
+            <columnConstraints>
+                <ColumnConstraints minWidth="230.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Authentication Settings" styleClass="settingsMenuLabel"/>
+
+            <Label styleClass="menuItemLabel" text="Consumer Key" GridPane.rowIndex="1"/>
+            <Label styleClass="menuItemLabel" text="Consumer Key Secret" GridPane.rowIndex="2"/>
+            <Label styleClass="menuItemLabel" text="Access Token" GridPane.rowIndex="3"/>
+            <Label styleClass="menuItemLabel" text="Access Token Secret" GridPane.rowIndex="4"/>
+
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                       fx:id="consumerKeyTextField" promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                       fx:id="consumerKeySecretTextField" promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"
+                       fx:id="accessTokenTextField" promptText="Enter your Access Token : 3736207823-IfY..."/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4"
+                       fx:id="accessTokenSecretTextField" promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
+
+        </GridPane>
+
+        <GridPane styleClass="authSettingsGP">
+            <columnConstraints>
+                <ColumnConstraints minWidth="230.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Proxy Settings" styleClass="settingsMenuLabel"/>
+
+            <Label styleClass="menuItemLabel" text="HTTP Proxy" GridPane.rowIndex="1"/>
+            <Label styleClass="menuItemLabel" text="Port" GridPane.rowIndex="2"/>
+
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                       fx:id="proxyHostTextField" promptText="cache-etu.univ-lille1.fr"/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                       fx:id="proxyPortTextField" promptText="3128"/>
+
+        </GridPane>
+
+
+        <HBox styleClass="settingsTabButtonsHBox">
+            <Button text="Reset Settings" onAction="#onClickResetSettingsBtn"/>
+            <Button text="Save Settings" onAction="#onClickSaveSettingsBtn"/>
+        </HBox>
+
+    </VBox>
+
+</Tab>

@@ -33,6 +33,7 @@ public class Dictionary implements EntityBeans
     {
         return this.words;
     }
+
     public void setWords(List<String> words)
     {
         words.forEach(s -> {

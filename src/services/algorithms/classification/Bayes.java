@@ -9,9 +9,7 @@ import java.util.List;
 
 public class Bayes {
 
-    public Bayes() {
-
-    }
+    public Bayes() {}
 
     public void buildVocabulary() {
 

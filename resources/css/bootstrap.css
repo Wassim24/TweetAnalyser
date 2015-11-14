@@ -107,6 +107,9 @@
     -fx-alignment : center;
     -fx-padding : 2 0 2 0;
     -fx-border-width : 0;
+
+        -fx-border-width : 0 0 3 0;
+        -fx-border-color : #E0E0E0;
 }
 
 .accordion > .titled-pane > .title {
@@ -257,50 +260,40 @@
     -fx-border-color: transparent;
 }
 
-.titleHbox {
-    -fx-background-color: #eceef1;
-            -fx-min-height : 77px;
-            -fx-max-height : 77px;
-    -fx-background-insets : 0;
-        -fx-border-color : rgba(34, 36, 38, 0.15);
-        -fx-border-width : 0 0 3 0;
-
-        -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
-
-
-}
-
 .combo-box {
 
-    -fx-background-color: #eceef1;
+    -fx-background-color : linear-gradient(from 0px 0px to 0px 30px, #E3E3E3,#C3C3C3 100%);
     -fx-text-fill: -fx-text-base-color;
-    -fx-background-insets : 0;
-    -fx-border-width : 0;
-    -fx-min-width: 160px;
-    -fx-max-width: 160px;
-}
-
-.combo-box .arrow, .combo-box .arrow-button{
-
-    -fx-background-color: transparent;
-    -fx-shape: "M -1 0 L 0 2 L 1 0 z";
-
-
+    -fx-border-width : 1;
+    -fx-border-color : #828282;
+    -fx-min-height: 25px;
+    -fx-max-height: 25px;
 }
 
 .combo-box > .list-cell {
+
     -fx-background: transparent;
     -fx-background-color: transparent;
-
     -fx-text-fill: -fx-text-base-color;
-    -fx-underline : true;
-
-    -fx-border-width : 0;
-    -fx-min-width: 160px;
-    -fx-max-width: 160px;
-    -fx-font-size : 24px;
-    -fx-padding: 3px -20px 4px 5px; /* 4 8 4 8 */
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
 }
+
+.combo-box-popup > .list-view {
+        -fx-background-color : linear-gradient(from 0px 0px to 0px 30px, #E3E3E3,#C3C3C3 100%);
+
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+
+    -fx-background-color: #E3E3E3;
+    -fx-cell-size : 45px;
+
+    -fx-border-width: 1 1 0 1;
+    -fx-border-color: #BDBDBD;
+
+    -fx-padding: -3px 0 0 8px;
+}
+
 
       /********************************************************************************/
      /**/                                                                          /**/
@@ -377,12 +370,10 @@
 }
 
 .menuItemLabel {
-
     -fx-padding : 0px 0px 0px 15px;
 }
 
 .settingsTabButtonsHBox {
-
     -fx-padding: 10 10 10 0;
     -fx-alignment : center-right;
     -fx-spacing : 5;
@@ -421,25 +412,28 @@
 }
 // -----------------------   Styling for the feelings radio buttons ends here ---------------------- //
 
-.selectAlgorithm
-{
-    -fx-min-height : 34px;
-    -fx-max-height : 34px;
-    -fx-font-size: 10pt;
+.databaseCombobox {
+    -fx-border-insets: 21px 10px 0 0;
+    -fx-background-insets: 21px 10px 0 0;
 
-    -fx-border-width : 1;
-    -fx-border-color : #828282;
+    -fx-min-height: 50px;
+    -fx-max-height: 50px;
+
+    -fx-min-width : 250px;
+    -fx-max-width : 250px;
 }
 
-.selectAlgorithm .list-view .list-cell:filled, .selectAlgorithm, .selectAlgorithm .list-view .list-cell:filled:hover, .selectAlgorithm .list-view .list-cell:filled:selected, .selectAlgorithm .list-view .list-cell:filled:selected:hover, .selectAlgorithm .text-input
-{
-    -fx-min-height : 34px;
-    -fx-max-height : 34px;
+.titleHbox {
+    -fx-background-color: #eceef1;
+    -fx-min-height : 77px;
+    -fx-max-height : 77px;
+    -fx-background-insets : 0;
+    -fx-border-color : rgba(34, 36, 38, 0.15);
+    -fx-border-width : 0 0 3 0;
+
+    -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
 }
 
-.selectAlgorithm .list-view .list-cell:filled, .selectAlgorithm, .selectAlgorithm .list-view .list-cell:filled:hover, .selectAlgorithm .list-view .list-cell:filled:selected, .selectAlgorithm .list-view .list-cell:filled:selected:hover, .selectAlgorithm .text-input, .selectAlgorithm .list-view, .selectAlgorithm .list-cell
-{
-    -fx-cell-size: 5px;
-    -fx-padding: 0 0 0 5px;
-    -fx-text-fill : #000000;
+.advancedSearchHBox {
+    -fx-padding : 15 0 0 0;
 }

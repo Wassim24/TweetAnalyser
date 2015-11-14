@@ -1,0 +1,89 @@
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<Tab fx:controller="controller.view.MainViewController"
+     xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="searchTab">
+    <VBox>
+        <!-- Label for displaying the big title -->
+        <HBox styleClass="titleHbox">
+            <Label styleClass="bigTitle" text="Searching for tweets" maxWidth="Infinity"/>
+        </HBox>
+
+        <!-- HBox containig the serach tools -->
+        <VBox>
+            <HBox styleClass="searchBox" spacing="3">
+                <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"
+                           onKeyPressed="#onKeyPressSearchField"/>
+                <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
+                <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/>
+            </HBox>
+
+            <!-- Collapsible menu for setting up the advanced search -->
+            <Accordion>
+                <panes>
+                    <TitledPane text="Advanced Search Settings">
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                            <HBox styleClass="advancedSearchHBox">
+                                <Label text="Choose the Annotating Algorithm" />
+                                <Separator HBox.hgrow="ALWAYS" />
+                                <ComboBox prefWidth="500.0" fx:id="algoComboBox">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Glossary" />
+                                            <String fx:value="K-Nearest Neighbours" />
+                                            <String fx:value="Bayesian" />
+                                        </FXCollections>
+                                    </items>
+                                    <value> <String fx:value="Glossary" /> </value>
+                                </ComboBox>
+                            </HBox>
+
+                            <HBox styleClass="advancedSearchHBox">
+                                <Label text="Choose Annotating mode" />
+                                <Separator HBox.hgrow="ALWAYS" />
+                                <ComboBox prefWidth="500.0" fx:id="annotatingMethodComboBox">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Automatic" />
+                                            <String fx:value="Manual" />
+                                        </FXCollections>
+                                    </items>
+                                    <value> <String fx:value="Manual" /> </value>
+                                </ComboBox>
+                            </HBox>
+
+                            <HBox styleClass="advancedSearchHBox">
+                                <Label text="Choose the saving mode" />
+                                <Separator HBox.hgrow="ALWAYS" />
+                                <ComboBox prefWidth="500.0" fx:id="savingMethodComboBox">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Automatic" />
+                                            <String fx:value="Manual" />
+                                        </FXCollections>
+                                    </items>
+                                    <value> <String fx:value="Manual" /> </value>
+                                </ComboBox>
+                            </HBox>
+
+                        </VBox>
+                    </TitledPane>
+                </panes>
+            </Accordion>
+        </VBox>
+
+        <!-- List view for displaying the found tweets -->
+        <ListView editable="true" VBox.vgrow="ALWAYS" fx:id="foundTweetsListView"/>
+
+        <!-- HBox containing the save buttons and state of the search -->
+        <HBox styleClass="statusBar" spacing="3">
+            <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="queriesStatusLabel"
+                   maxWidth="Infinity"/>
+            <Button text="Save selected tweet(s)" onAction="#onClickSaveSelectedTweetsBtn"/>
+            <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
+            <Button text="Clear results" onAction="#onClickClearTweetsListBtn"/>
+        </HBox>
+    </VBox>
+</Tab>

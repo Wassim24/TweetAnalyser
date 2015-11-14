@@ -1,3 +1,5 @@
 *.class
 /out
+/resources/fxml/oauth.fxml
+/resources/fxml/proxy.fxml
 .idea
