@@ -1,9 +1,8 @@
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<Tab fx:controller="controller.view.MainViewController"
+<Tab fx:controller="controller.view.SearchTabController"
      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="searchTab">
     <VBox>
         <!-- Label for displaying the big title -->
@@ -14,13 +13,17 @@
         <!-- HBox containig the serach tools -->
         <VBox>
             <HBox styleClass="searchBox" spacing="3">
-                <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField"
-                           onKeyPressed="#onKeyPressSearchField"/>
+                <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField" onKeyPressed="#onKeyPressSearchField"/>
                 <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
-                <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/>
+                <!-- <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/> -->
+                <ComboBox styleClass="selectAlgorithm" fx:id="queryAlgorithm" onAction="#onChangeAlgorithm">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"></FXCollections>
+                    </items>
+                </ComboBox>
             </HBox>
 
-            <!-- Collapsible menu for setting up the advanced search -->
+            <!-- Collapsible menu for setting up the advanced search
             <Accordion>
                 <panes>
                     <TitledPane text="Advanced Search Settings">
@@ -71,7 +74,7 @@
                         </VBox>
                     </TitledPane>
                 </panes>
-            </Accordion>
+            </Accordion> -->
         </VBox>
 
         <!-- List view for displaying the found tweets -->

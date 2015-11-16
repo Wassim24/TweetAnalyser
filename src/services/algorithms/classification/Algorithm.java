@@ -2,7 +2,7 @@ package services.algorithms.classification;
 
 public enum Algorithm
 {
-    DICTIONARY("Dictionary"), KNN("KNN"), NONE("Without");
+    DICTIONARY("Dictionary"), KNN("KNN"), SIMPLE_BAYES("Bayésien"), NONE("Without");
     private String value;
 
     Algorithm(String i)

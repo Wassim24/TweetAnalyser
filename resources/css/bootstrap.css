@@ -437,3 +437,9 @@
 .advancedSearchHBox {
     -fx-padding : 15 0 0 0;
 }
+
+.selectAlgorithm
+{
+    -fx-min-height : 34px;
+    -fx-max-height : 34px;
+}

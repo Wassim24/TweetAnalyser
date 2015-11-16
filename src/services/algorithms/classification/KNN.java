@@ -9,25 +9,30 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class KNN {
+public class KNN
+{
+    private KNN() {}
 
-    public KNN() {}
+    public static List<Tweet> compute(List<Tweet> tweetsToAnnote)
+    {
+        return compute(tweetsToAnnote, 10);
+    }
 
-    public List<Tweet> compute(List<Tweet> tweetsToAnnoteList, int numberOfNeighbours) {
-
-        List<Float> distancesList = new ArrayList<>();
-        List<Integer> neighboursIdsList = new ArrayList<>();
-        List<Tweet> annotedTweets = new ArrayList<>();
-
+    public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
+    {
+        float calculatedEuclideanDistance;
+        List<Float> distancesList = new ArrayList<Float>();
+        List<Integer> neighboursIdsList = new ArrayList<Integer>();
+        List<Tweet> annotedTweets = new ArrayList<Tweet>();
         List<Tweet> tweetsInDataBase = TweetDaoFactory.getInstance().all();
 
-        float calculatedEuclideanDistance = 0;
-
         // Loop for iterating over the selected tweets
-        for (Tweet unannotedTweet : tweetsToAnnoteList) {
+        for (Tweet unannotedTweet : tweetsToAnnote)
+        {
 
             // Loop for putting the first numberOfNeighbours in the distancesList
-            for (Tweet tweetInDB : tweetsInDataBase) {
+            for (Tweet tweetInDB : tweetsInDataBase)
+            {
 
                 calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet.getTweet(), tweetInDB.getTweet(), tweetInDB.getWordsCount());
 
@@ -38,7 +43,8 @@ public class KNN {
             }
 
             //Loop for getting the tweets in DB and comparing them to the neighbours
-            for (int i = numberOfNeighbours + 1; i < tweetsInDataBase.size() - 1; i++) {
+            for (int i = numberOfNeighbours + 1; i < tweetsInDataBase.size() - 1; i++)
+            {
 
                 calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet.getTweet(), tweetsInDataBase.get(i).getTweet(), tweetsInDataBase.get(i).getWordsCount());
 
@@ -61,14 +67,12 @@ public class KNN {
             neighboursIdsList.clear();
         }
 
-
-
         // Returning the liste of the newly annoted Tweets
         return annotedTweets;
     }
 
-    public int findIndexOfMin(List<Float> listOfDistances, float currentDistance) {
-
+    private static int findIndexOfMin(List<Float> listOfDistances, float currentDistance)
+    {
         int minIndex = 0;
         for (int i = 0; i < listOfDistances.size(); i++)
             if (currentDistance <= listOfDistances.get(i)) minIndex = i;
@@ -76,8 +80,8 @@ public class KNN {
         return minIndex;
     }
 
-    public int findIndexOfMin(List<Float> listOfDistances) {
-
+    private static int findIndexOfMin(List<Float> listOfDistances)
+    {
         float min = listOfDistances.get(0);
         int index = 0;
 
@@ -91,9 +95,8 @@ public class KNN {
     }
 
 
-
-    public int findCommonWordsNumber(String tweet, String toCompare) {
-
+    private static int findCommonWordsNumber(String tweet, String toCompare)
+    {
         String[] tweetWords = tweet.split(" ");
         String[] toCompareWords = toCompare.split(" ");
 
@@ -106,13 +109,14 @@ public class KNN {
         return commonWordsNumber;
     }
 
-    public int findNumberOfWords(String tweet) {
-
+    private static int findNumberOfWords(String tweet)
+    {
         tweet = cleanString(tweet);
         return tweet.length() - tweet.replaceAll(" ", "").length() + 1;
     }
 
-    public String cleanString(String tweet) {
+    private static String cleanString(String tweet)
+    {
         LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
         {{
             put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)\\W+", "");
@@ -135,9 +139,8 @@ public class KNN {
         return tweet;
     }
 
-    public float findEuclideanDistance(String tweet, String classifiedTweet, int classifiedTweetWordsCount) {
-
+    private static float findEuclideanDistance(String tweet, String classifiedTweet, int classifiedTweetWordsCount)
+    {
         return 1 - findCommonWordsNumber(tweet, classifiedTweet) / (float) (findNumberOfWords(tweet) + classifiedTweetWordsCount);
     }
-
 }
