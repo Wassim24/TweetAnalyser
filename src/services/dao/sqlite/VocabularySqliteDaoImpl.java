@@ -53,7 +53,27 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
     }
 
     @Override
-    public List<Vocabulary> get()
+    public Vocabulary get(String word)
+    {
+        Vocabulary response = null;
+
+        try
+        {
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
+            Statement stmt = dbConnection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +" FROM "+ TABLE_NAME_VOCABULARY +" WHERE "+ COLUMN_WORD +" = "+ word);
+            response = new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC));
+
+            stmt.close();
+            dbConnection.close();
+        }
+        catch (SQLException e) { }
+
+        return response;
+    }
+
+    @Override
+    public List<Vocabulary> getAll()
     {
         ObservableList<Vocabulary> response = FXCollections.observableArrayList();
 
@@ -61,9 +81,9 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +" FROM "+ TABLE_NAME_VOCABULARY);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +" FROM "+ TABLE_NAME_VOCABULARY);
             while (rs.next())
-                response.add(new Vocabulary(rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC)));
+                response.add(new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC)));
 
             stmt.close();
             dbConnection.close();

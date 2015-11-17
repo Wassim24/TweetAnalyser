@@ -11,7 +11,19 @@ public class Bayes
 {
     private Bayes() {}
 
-    public static void buildVocabulary()
+    public static List<Tweet> compute(List<Tweet> toAnnotate)
+    {
+        for (Tweet tweet : toAnnotate)
+        {
+            for (String s : tweet.getTweet().split(" "))
+            {
+
+            }
+        }
+        return null;
+    }
+
+    public static List<Vocabulary> buildVocabulary()
     {
         int posOcc = 0, negOcc = 0, neuOcc = 0;
         List<Vocabulary> vocabularies = new ArrayList<>();
@@ -58,7 +70,6 @@ public class Bayes
             }
         }
 
-        for (Vocabulary voca : vocabularies)
-            System.out.println(voca.getWord() + " == > " + "Pos : " + voca.getPosocc() + " Neg : " + voca.getNegocc() + " Neu : " + voca.getNeuocc() );
+        return vocabularies;
     }
 }

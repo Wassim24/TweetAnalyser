@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 
 public class DictionaryServiceImpl implements DictionaryService
 {
@@ -45,5 +46,11 @@ public class DictionaryServiceImpl implements DictionaryService
     public Dictionary get(Annotation annotation)
     {
         return DictionaryDaoFactory.getInstance().get(annotation);
+    }
+
+    @Override
+    public List<Dictionary> getAll()
+    {
+        return DictionaryDaoFactory.getInstance().getAll();
     }
 }

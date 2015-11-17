@@ -18,7 +18,9 @@ import services.algorithms.classification.KNN;
 import services.dao.DictionaryDaoFactory;
 import services.dao.TweetDaoFactory;
 import services.dao.VocabularyDaoFactory;
+import services.twitter.DictionaryServiceImpl;
 import services.twitter.TweetServiceImpl;
+import services.twitter.VocabularyServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
@@ -116,22 +118,22 @@ public class MainViewController
         TableColumn user = new TableColumn<Tweet, String>("User");
         TableColumn tweet = new TableColumn<Tweet, String>("Tweet");
         TableColumn created = new TableColumn<Tweet, Date>("Date");
-        TableColumn keyword = new TableColumn<Tweet, Annotation>("Annotation");
-        TableColumn annotation = new TableColumn<Tweet, String>("Keyword");
+        TableColumn keyword = new TableColumn<Tweet, String>("Keyword");
+        TableColumn annotation = new TableColumn<Tweet, Annotation>("Annotation");
         TableColumn wordsCount = new TableColumn<Tweet, Integer>("Words Count");
 
         id.setCellValueFactory(new PropertyValueFactory("id"));
         user.setCellValueFactory(new PropertyValueFactory("username"));
         tweet.setCellValueFactory(new PropertyValueFactory("tweet"));
         created.setCellValueFactory(new PropertyValueFactory("date"));
-        keyword.setCellValueFactory(new PropertyValueFactory("keyword"));
         annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
+        keyword.setCellValueFactory(new PropertyValueFactory("keyword"));
         wordsCount.setCellValueFactory(new PropertyValueFactory("wordsCount"));
 
         tweetsInDatabaseTableView.getColumns().clear();
         tweetsInDatabaseTableView.getColumns().addAll(id, user, tweet, created, keyword, annotation, wordsCount);
 
-        this.tweetsInDatabaseTableView.setItems((ObservableList<Tweet>) TweetDaoFactory.getInstance().all());
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Tweet>) TweetServiceImpl.getInstance().getAll());
 
     }
 
@@ -148,7 +150,7 @@ public class MainViewController
         tweetsInDatabaseTableView.getColumns().clear();
         tweetsInDatabaseTableView.getColumns().addAll(id, word, annotation);
 
-        this.tweetsInDatabaseTableView.setItems((ObservableList<Dictionary>) DictionaryDaoFactory.getInstance().getAll());
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Dictionary>) DictionaryServiceImpl.getInstance().getAll());
     }
 
     private void displayVocabularySavedInDatabase()
@@ -168,6 +170,6 @@ public class MainViewController
         tweetsInDatabaseTableView.getColumns().clear();
         tweetsInDatabaseTableView.getColumns().addAll(id, word, posocc, negocc, neuocc);
 
-        this.tweetsInDatabaseTableView.setItems((ObservableList<Vocabulary>) VocabularyDaoFactory.getInstance().get());
+        this.tweetsInDatabaseTableView.setItems((ObservableList<Vocabulary>) VocabularyServiceImpl.getInstance().getAll());
     }
 }

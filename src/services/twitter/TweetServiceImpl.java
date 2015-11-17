@@ -26,7 +26,7 @@ public class TweetServiceImpl implements TweetService
     @Override
     public List<Tweet> search(String keyword) throws TwitterException
     {
-        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword)).getTweets().stream().map(s -> new Tweet(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword)).collect(Collectors.toList());
+        return Twitter4JFactory.getInstance().getTwitterFactory().getInstance().search(new Query(keyword).count(99)).getTweets().stream().map(s -> new Tweet(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword)).collect(Collectors.toList());
     }
 
     @Override
