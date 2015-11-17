@@ -1,11 +1,14 @@
 package services.algorithms.classification;
 
+import domain.Annotation;
 import domain.Tweet;
 import domain.Vocabulary;
 import services.dao.TweetDaoFactory;
+import services.twitter.VocabularyServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Bayes
 {
@@ -13,63 +16,47 @@ public class Bayes
 
     public static List<Tweet> compute(List<Tweet> toAnnotate)
     {
+        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey();
+        int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
+        double probPositive, probNegative, probNeutre, maxValue;
+
+        for (Vocabulary vocabulary : vocabularies.values())
+        {
+            if (vocabulary.getPosocc() > 0)
+                countPositive++;
+
+            if (vocabulary.getNegocc() > 0)
+                countNegative++;
+
+            if (vocabulary.getNeuocc() > 0)
+                countNeutre++;
+        }
+
         for (Tweet tweet : toAnnotate)
         {
+            probPositive = 1; probNegative = 1; probNeutre = 1;
+
             for (String s : tweet.getTweet().split(" "))
             {
+                if (vocabularies.get(s) == null)
+                    continue;
 
+                probPositive *= (vocabularies.get(s).getPosocc() + 1) / (double)(countPositive + size);
+                probNegative *= (vocabularies.get(s).getNegocc() + 1) / (double)(countNegative + size);
+                probNeutre *= (vocabularies.get(s).getNeuocc() + 1) / (double)(countNeutre + size);
             }
-        }
-        return null;
-    }
 
-    public static List<Vocabulary> buildVocabulary()
-    {
-        int posOcc = 0, negOcc = 0, neuOcc = 0;
-        List<Vocabulary> vocabularies = new ArrayList<>();
-        List<Tweet> tweets = TweetDaoFactory.getInstance().all();
-        Vocabulary vocabulary;
+            maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
 
-        // Looping through each tweet in database and getting its words
-        for (Tweet tweet : tweets)
-        {
-            // Getting the words of a tweet with split
-            for (String wordToCompare : tweet.getTweet().split(" "))
-            {
-                // Looping through the tweets and comparing previous words with each tweet words
-                for (Tweet tweetToCompareTo : tweets)
-                {
-
-                    // Getting the annotation of a tweet
-                    // Looping through each tweet to to compare the words
-                    for (String wordToCompareTo : tweetToCompareTo.getTweet().split(" "))
-                    {
-                        // Comparing the words
-                        if(wordToCompareTo.equals(wordToCompare))
-                            switch (tweetToCompareTo.getAnnotation())
-                            {
-                                case NEGATIF:
-                                    negOcc++;
-                                    break;
-                                case NEUTRE:
-                                    neuOcc++;
-                                    break;
-                                default:
-                                    posOcc++;
-                            }
-                    }
-                }
-
-                // Checking if the word has already been added or not
-                vocabulary = new Vocabulary(wordToCompare, posOcc, negOcc, neuOcc);
-
-                if(!vocabularies.contains(vocabulary))
-                    vocabularies.add(vocabulary);
-
-                posOcc = 0; negOcc = 0; neuOcc = 0;
-            }
+            if (maxValue == probNeutre)
+                tweet.setAnnotation(Annotation.NEUTRE);
+            else
+                if (maxValue == probNegative)
+                    tweet.setAnnotation(Annotation.NEGATIF);
+                else
+                    tweet.setAnnotation(Annotation.POSITIF);
         }
 
-        return vocabularies;
+        return toAnnotate;
     }
 }

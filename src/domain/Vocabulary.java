@@ -2,9 +2,8 @@ package domain;
 
 public class Vocabulary implements EntityBeans
 {
-    private String word;
-
     private int id, posocc, negocc, neuocc;
+    private String word;
 
     public Vocabulary(String word, int posocc, int negocc, int neuocc)
     {
@@ -12,6 +11,11 @@ public class Vocabulary implements EntityBeans
         this.setPosocc(posocc);
         this.setNegocc(negocc);
         this.setNeuocc(neuocc);
+    }
+
+    public Vocabulary(String word)
+    {
+        this.setWord(word);
     }
 
     public Vocabulary(int id, String word, int posocc, int negocc, int neuocc)

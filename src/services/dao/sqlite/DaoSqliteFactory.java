@@ -45,9 +45,9 @@ public class DaoSqliteFactory
                 stmt.executeUpdate("CREATE TABLE " + VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY+
                         "(" + VocabularySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " " + VocabularySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER)");
+                        " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER NOT NULL," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER NOT NULL," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER NOT NULL)");
 
                 stmt.close();
                 dbConnection.close();

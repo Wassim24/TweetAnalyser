@@ -100,7 +100,7 @@ public class SearchTabController implements javafx.fxml.Initializable
                 break;
 
             case SIMPLE_BAYES:
-                Bayes.buildVocabulary();
+                annotedTweet.addAll(Bayes.compute(copy));
             case NONE:
             default:
                 annotedTweet.addAll(copy);

@@ -13,7 +13,7 @@ public class KNN
 
     public static List<Tweet> compute(List<Tweet> tweetsToAnnote)
     {
-        return compute(tweetsToAnnote, 10);
+        return compute(tweetsToAnnote, 25);
     }
 
     public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)

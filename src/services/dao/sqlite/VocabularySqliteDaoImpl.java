@@ -39,7 +39,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
             stmt.setString(1, vocabulary.getWord());
             stmt.setInt(2, vocabulary.getPosocc());
             stmt.setInt(3, vocabulary.getNegocc());
-            stmt.setInt(3, vocabulary.getNeuocc());
+            stmt.setInt(4, vocabulary.getNeuocc());
 
             stmt.executeUpdate();
             stmt.close();
@@ -81,9 +81,9 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +" FROM "+ TABLE_NAME_VOCABULARY);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEUOCC +" FROM "+ TABLE_NAME_VOCABULARY);
             while (rs.next())
-                response.add(new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC)));
+                response.add(new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEUOCC)));
 
             stmt.close();
             dbConnection.close();

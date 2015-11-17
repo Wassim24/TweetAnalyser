@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import services.algorithms.classification.Bayes;
 import services.dao.VocabularyDaoFactory;
+import services.twitter.VocabularyServiceImpl;
 
 public class Main extends Application
 {
