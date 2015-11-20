@@ -45,7 +45,7 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
 
             return true;
         }
-        catch (SQLException e) { e.printStackTrace(); }
+        catch (SQLException e) {}
 
         return false;
     }
@@ -59,14 +59,14 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT word FROM "+ TABLE_NAME_DICTIONARY +" WHERE "+ COLUMN_ANNOTATION +" = "+ annotation.getValue());
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_WORD +" FROM "+ TABLE_NAME_DICTIONARY +" WHERE "+ COLUMN_ANNOTATION +" = "+ annotation.getValue());
             while (rs.next())
                 response.getWords().add(rs.getString(COLUMN_WORD));
 
             stmt.close();
             dbConnection.close();
         }
-        catch (SQLException e) { e.printStackTrace(); }
+        catch (SQLException e) {}
 
         return response;
     }
@@ -80,7 +80,7 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id, word, annotation FROM "+ TABLE_NAME_DICTIONARY);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_ANNOTATION +" FROM "+ TABLE_NAME_DICTIONARY);
             while (rs.next())
                 response.add(new Dictionary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), Annotation.values()[(rs.getInt(COLUMN_ANNOTATION) < 0 ) ? (2 - Math.abs(rs.getInt(COLUMN_ANNOTATION))) : (rs.getInt(COLUMN_ANNOTATION) + 2) ]));
 

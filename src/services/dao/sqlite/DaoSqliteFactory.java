@@ -34,8 +34,7 @@ public class DaoSqliteFactory
                         " " + TweetSqliteDaoImpl.COLUMN_TWEET + " TEXT NOT NULL," +
                         " " + TweetSqliteDaoImpl.COLUMN_DATE + " DATETIME NOT NULL," +
                         " " + TweetSqliteDaoImpl.COLUMN_KEYWORD + " TEXT NOT NULL," +
-                        " " + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " INTEGER CHECK(" + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " IN(" + Annotation.NONANNOTE.getValue() + "," + Annotation.NEGATIF.getValue() + "," + Annotation.NEUTRE.getValue() + "," + Annotation.POSITIF.getValue() + ")) NOT NULL DEFAULT(-2)," +
-                        " " + TweetSqliteDaoImpl.COLUMN_WORDSCOUNT + " INTEGER NOT NULL DEFAULT(0))");
+                        " " + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " INTEGER CHECK(" + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " IN(" + Annotation.NONANNOTE.getValue() + "," + Annotation.NEGATIF.getValue() + "," + Annotation.NEUTRE.getValue() + "," + Annotation.POSITIF.getValue() + ")) NOT NULL DEFAULT(-2))");
 
                 stmt.executeUpdate("CREATE TABLE " + DictionarySqliteDaoImpl.TABLE_NAME_DICTIONARY +
                         "(" + DictionarySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
