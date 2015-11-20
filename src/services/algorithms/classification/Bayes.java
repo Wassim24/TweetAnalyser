@@ -37,7 +37,7 @@ public class Bayes
             tweet.cleanString();
             for (String s : new HashSet<String>(Arrays.asList(tweet.getTweet().split(" "))))
             {
-                if (vocabularies.get(s) == null || s.length() <= 2)
+                if (vocabularies.get(s) == null || s.length() <= 3)
                     continue;
 
                 /*

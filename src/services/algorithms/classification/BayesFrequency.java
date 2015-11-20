@@ -26,7 +26,7 @@ public class BayesFrequency
             wordsWithFrequency = Arrays.asList(tweet.getTweet().split(" "));
             for (String s : new HashSet<String>(wordsWithFrequency))
             {
-                if (vocabularies.get(s) == null || s.length() <= 2)
+                if (vocabularies.get(s) == null || s.length() <= 3)
                     continue;
 
                 frequency = Collections.frequency(wordsWithFrequency, s);

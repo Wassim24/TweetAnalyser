@@ -64,7 +64,8 @@ public class VocabularyServiceImpl implements VocabularyService
             // Getting the words of a tweet with split
             for (String wordToCompare : tweet.getTweet().split(" "))
             {
-                if (wordToCompare.length() <= 2) continue;
+                if (wordToCompare.length() <= 3)
+                    continue;
 
                 posOcc = 0; negOcc = 0; neuOcc = 0;
                 // Looping through the tweets and comparing previous words with each tweet words
