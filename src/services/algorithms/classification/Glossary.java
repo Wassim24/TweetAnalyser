@@ -18,8 +18,6 @@ public class Glossary
         for (Tweet tweetToAnnotate : tweetsToAnnote)
         {
             int delta = 0;
-
-            tweetToAnnotate.cleanString();
             for (String wordToFindAnnotation : tweetToAnnotate.getTweet().split(" "))
             {
                 if (positiveWords.getWords().contains(wordToFindAnnotation.toLowerCase()))

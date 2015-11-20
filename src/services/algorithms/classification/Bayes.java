@@ -33,8 +33,6 @@ public class Bayes
         for (Tweet tweet : toAnnotate)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
-
-            tweet.cleanString();
             for (String s : new HashSet<String>(Arrays.asList(tweet.getTweet().split(" "))))
             {
                 if (vocabularies.get(s) == null || s.length() <= 3)

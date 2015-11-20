@@ -23,11 +23,6 @@ public class Tweet implements EntityBeans
         this(username, tweet, date, keyword, Annotation.NONANNOTE);
     }
 
-    public Tweet clone()
-    {
-        return new Tweet(this.getId(), this.getUsername(), this.getTweet(), this.getDate(), new String(this.getKeyword()), this.getAnnotation());
-    }
-
     public Tweet(String username, String tweet, Date date, String keyword, Annotation annotation)
     {
         this.setUsername(username);
@@ -36,6 +31,13 @@ public class Tweet implements EntityBeans
         this.setDate(date);
         this.setAnnotation(annotation);
         this.setId(-1);
+
+        this.cleanString();
+    }
+
+    public Tweet clone()
+    {
+        return new Tweet(this.getId(), this.getUsername(), this.getTweet(), this.getDate(), new String(this.getKeyword()), this.getAnnotation());
     }
 
     public String cleanString()
@@ -48,7 +50,7 @@ public class Tweet implements EntityBeans
             put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)?(…)?", "");
             put("@[a-zA-Z0-9-_]+\\s?:?", "");
             put("#[a-zA-Z0-9-_]+\\s?:?", "");
-            put("\\s?RT\\s", "");
+            put("\\brt\\b", "");
             put("\"", " ");
             put("\'", " ");
             put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
@@ -59,10 +61,10 @@ public class Tweet implements EntityBeans
             put("…", "");
         }};
 
+        this.setTweet(this.getTweet().toLowerCase());
         for (Map.Entry<String, String> entry : regexes.entrySet())
             this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()).toLowerCase());
 
-        this.setTweet(this.getTweet().toLowerCase());
         this.isCleanTweet = true;
         return this.getTweet();
     }
@@ -122,7 +124,6 @@ public class Tweet implements EntityBeans
     }
     public int getWordsCount()
     {
-        this.cleanString();
         return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);
     }
 }

@@ -21,8 +21,6 @@ public class BayesFrequency
         for (Tweet tweet : toAnnotate)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
-
-            tweet.cleanString();
             wordsWithFrequency = Arrays.asList(tweet.getTweet().split(" "));
             for (String s : new HashSet<String>(wordsWithFrequency))
             {
