@@ -10,4 +10,5 @@ public interface VocabularyDao
     boolean add(Vocabulary vocabulary);
     Vocabulary get(String word);
     List<Vocabulary> getAll();
+    List<Vocabulary> getAll(int ngramme);
 }

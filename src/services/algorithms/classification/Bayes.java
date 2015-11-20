@@ -14,7 +14,7 @@ public class Bayes
 
     public static List<Tweet> compute(List<Tweet> toAnnotate)
     {
-        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey();
+        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(1);
         int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
         double probPositive, probNegative, probNeutre, maxValue;
 

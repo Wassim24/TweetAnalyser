@@ -2,15 +2,16 @@ package domain;
 
 public class Vocabulary implements EntityBeans
 {
-    private int id, posocc, negocc, neuocc;
+    private int id, posocc, negocc, neuocc, ngramme;
     private String word;
 
-    public Vocabulary(String word, int posocc, int negocc, int neuocc)
+    public Vocabulary(String word, int posocc, int negocc, int neuocc, int ngramme)
     {
         this.setWord(word);
         this.setPosocc(posocc);
         this.setNegocc(negocc);
         this.setNeuocc(neuocc);
+        this.setNgramme(ngramme);
     }
 
     public Vocabulary(String word)
@@ -18,9 +19,9 @@ public class Vocabulary implements EntityBeans
         this.setWord(word);
     }
 
-    public Vocabulary(int id, String word, int posocc, int negocc, int neuocc)
+    public Vocabulary(int id, String word, int posocc, int negocc, int neuocc, int ngramme)
     {
-        this(word, posocc, negocc, neuocc);
+        this(word, posocc, negocc, neuocc, ngramme);
         this.setId(id);
     }
 
@@ -43,6 +44,8 @@ public class Vocabulary implements EntityBeans
     public int getPosocc() {return this.posocc;}
     public String getWord() {return this.word;}
     public int getNeuocc() {return this.neuocc;}
-    public int getId() {return id;}
+    public int getId() {return this.id;}
     public void setId(int id) {this.id = id;}
+    public int getNgramme() {return this.ngramme;}
+    public void setNgramme(int ngramme) {this.ngramme = ngramme;}
 }

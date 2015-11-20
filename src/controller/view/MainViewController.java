@@ -157,18 +157,20 @@ public class MainViewController
     {
         TableColumn id = new TableColumn<Vocabulary, Integer>("ID");
         TableColumn word = new TableColumn<Vocabulary, String>("Word");
+        TableColumn nGramme = new TableColumn<Vocabulary, Integer>("Gramme");
         TableColumn posocc = new TableColumn<Vocabulary, Integer>("Positive Occurences");
         TableColumn negocc = new TableColumn<Vocabulary, Integer>("Negative Occurences");
         TableColumn neuocc = new TableColumn<Vocabulary, Integer>("Neutral Occurences");
 
         id.setCellValueFactory(new PropertyValueFactory("id"));
         word.setCellValueFactory(new PropertyValueFactory("word"));
+        nGramme.setCellValueFactory(new PropertyValueFactory("ngramme"));
         posocc.setCellValueFactory(new PropertyValueFactory("posocc"));
         negocc.setCellValueFactory(new PropertyValueFactory("negocc"));
         neuocc.setCellValueFactory(new PropertyValueFactory("neuocc"));
 
         tweetsInDatabaseTableView.getColumns().clear();
-        tweetsInDatabaseTableView.getColumns().addAll(id, word, posocc, negocc, neuocc);
+        tweetsInDatabaseTableView.getColumns().addAll(id, word, nGramme, posocc, negocc, neuocc);
 
         this.tweetsInDatabaseTableView.setItems((ObservableList<Vocabulary>) VocabularyServiceImpl.getInstance().getAll());
     }

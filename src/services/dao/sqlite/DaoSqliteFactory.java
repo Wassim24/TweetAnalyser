@@ -47,7 +47,8 @@ public class DaoSqliteFactory
                         " " + VocabularySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
                         " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER NOT NULL," +
                         " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER NOT NULL," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER NOT NULL)");
+                        " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER NOT NULL," +
+                        " " + VocabularySqliteDaoImpl.COLUMN_GRAMME + " INTEGER NOT NULL)");
 
                 stmt.close();
                 dbConnection.close();

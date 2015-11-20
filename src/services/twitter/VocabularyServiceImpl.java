@@ -2,6 +2,7 @@ package services.twitter;
 
 import domain.Tweet;
 import domain.Vocabulary;
+import org.sqlite.util.StringUtils;
 import services.dao.TweetDaoFactory;
 import services.dao.VocabularyDaoFactory;
 
@@ -34,11 +35,17 @@ public class VocabularyServiceImpl implements VocabularyService
     }
 
     @Override
-    public Map<String, Vocabulary> getAllKey()
+    public List<Vocabulary> getAll(int ngramme)
+    {
+        return VocabularyDaoFactory.getInstance().getAll(ngramme);
+    }
+
+    @Override
+    public Map<String, Vocabulary> getAllKey(int ngramme)
     {
         Map<String, Vocabulary> m = new HashMap<String, Vocabulary>();
 
-        for (Vocabulary vocabulary : this.getAll())
+        for (Vocabulary vocabulary : this.getAll(ngramme))
             m.put(vocabulary.getWord(), vocabulary);
 
         return m;
@@ -51,20 +58,26 @@ public class VocabularyServiceImpl implements VocabularyService
     }
 
     @Override
-    public void buildVocabulary()
+    public void buildVocabulary(int ngramme)
     {
-        int posOcc, negOcc, neuOcc;
-        List<Vocabulary> vocabularies = new ArrayList<>();
+        if (ngramme <= 0)
+            return;
+
+        int posOcc, negOcc, neuOcc, i, j, k;
+        List<Vocabulary> vocabularies = new ArrayList<Vocabulary>();
         List<Tweet> tweets = TweetDaoFactory.getInstance().all();
+        String response[] = new String[ngramme];
         Vocabulary vocabulary;
 
         // Looping through each tweet in database and getting its words
         for (Tweet tweet : tweets)
         {
             // Getting the words of a tweet with split
-            for (String wordToCompare : tweet.getTweet().split(" "))
+            String wordsToCompare[] = tweet.getTweet().split(" ");
+            for (i = 0; i < wordsToCompare.length - (ngramme - 1); i++)
             {
-                if (wordToCompare.length() <= 3)
+                for (k = 0; k < ngramme && wordsToCompare[i + k].length() > 3; k++);
+                if (k != ngramme)
                     continue;
 
                 posOcc = 0; negOcc = 0; neuOcc = 0;
@@ -73,12 +86,17 @@ public class VocabularyServiceImpl implements VocabularyService
                 {
                     // Getting the annotation of a tweet
                     // Looping through each tweet to to compare the words
-                    for (String wordToCompareTo : tweetToCompareTo.getTweet().split(" "))
+                    String wordsToCompareTo[] = tweetToCompareTo.getTweet().split(" ");
+                    for (j = 0; j < wordsToCompareTo.length - (ngramme - 1); j++)
                     {
-                        if (wordToCompareTo.length() <= 2) continue;
+                        for (k = 0; k < ngramme && wordsToCompareTo[j + k].length() > 3; k++);
+                        if (k != ngramme)
+                            continue;
 
                         // Comparing the words
-                        if (wordToCompareTo.equals(wordToCompare))
+                        for (k = 0; k < ngramme && wordsToCompareTo[j + k].equals(wordsToCompare[i + k]); k++);
+
+                        if (k == ngramme)
                             switch (tweetToCompareTo.getAnnotation())
                             {
                                 case NEGATIF:
@@ -93,10 +111,11 @@ public class VocabularyServiceImpl implements VocabularyService
                     }
                 }
 
+                System.arraycopy(wordsToCompare, i, response, 0, ngramme);
                 // Checking if the word has already been added or not
-                vocabulary = new Vocabulary(wordToCompare, posOcc, negOcc, neuOcc);
+                vocabulary = new Vocabulary(StringUtils.join(Arrays.asList(response), " "), posOcc, negOcc, neuOcc, ngramme);
 
-                if(!vocabularies.contains(vocabulary))
+                if (!vocabularies.contains(vocabulary))
                     vocabularies.add(vocabulary);
             }
         }
