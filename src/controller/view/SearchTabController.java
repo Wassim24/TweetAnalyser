@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import services.algorithms.classification.Algorithm;
-import services.algorithms.classification.Bayes;
-import services.algorithms.classification.Glossary;
-import services.algorithms.classification.KNN;
+import services.algorithms.classification.*;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -101,6 +98,12 @@ public class SearchTabController implements javafx.fxml.Initializable
 
             case SIMPLE_BAYES:
                 annotedTweet.addAll(Bayes.compute(copy));
+                break;
+
+            case FREQUENCY_BAYES:
+                annotedTweet.addAll(BayesFrequency.compute(copy));
+                break;
+
             case NONE:
             default:
                 annotedTweet.addAll(copy);

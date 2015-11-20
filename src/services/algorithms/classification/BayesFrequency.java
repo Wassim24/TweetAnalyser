@@ -3,51 +3,40 @@ package services.algorithms.classification;
 import domain.Annotation;
 import domain.Tweet;
 import domain.Vocabulary;
-import services.dao.TweetDaoFactory;
 import services.twitter.VocabularyServiceImpl;
 
 import java.util.*;
 
-public class Bayes
+public class BayesFrequency
 {
-    private Bayes() {}
+    private BayesFrequency() {}
 
     public static List<Tweet> compute(List<Tweet> toAnnotate)
     {
+        List<String> wordsWithFrequency;
         Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey();
-        int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
+        int frequency;
         double probPositive, probNegative, probNeutre, maxValue;
-
-        for (Vocabulary vocabulary : vocabularies.values())
-        {
-            if (vocabulary.getPosocc() > 0)
-                countPositive++;
-
-            if (vocabulary.getNegocc() > 0)
-                countNegative++;
-
-            if (vocabulary.getNeuocc() > 0)
-                countNeutre++;
-        }
 
         for (Tweet tweet : toAnnotate)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
 
             tweet.cleanString();
-            for (String s : new HashSet<String>(Arrays.asList(tweet.getTweet().split(" "))))
+            wordsWithFrequency = Arrays.asList(tweet.getTweet().split(" "));
+            for (String s : new HashSet<String>(wordsWithFrequency))
             {
                 if (vocabularies.get(s) == null || s.length() <= 2)
                     continue;
 
+                frequency = Collections.frequency(wordsWithFrequency, s);
+
                 /*
-                 * P(class|t) = Ym∈t P(m|class) * P(class)
-                 * P(m|class) = P(m|c) = (n(m, c) + 1) / (n(c) + N)
-                 * Ne manque t-il pas P(class) dans l'algo ?
+                 * P(t|c) = Ym∈t P(m|c)^(n of m in wordsWithFrequency)
                  */
-                probPositive *= (vocabularies.get(s).getPosocc() + 1) / (double)(countPositive + size);
-                probNegative *= (vocabularies.get(s).getNegocc() + 1) / (double)(countNegative + size);
-                probNeutre *= (vocabularies.get(s).getNeuocc() + 1) / (double)(countNeutre + size);
+                probPositive *= Math.pow(vocabularies.get(s).getPosocc(), frequency);
+                probNegative *= Math.pow(vocabularies.get(s).getNegocc(), frequency);
+                probNeutre *= Math.pow(vocabularies.get(s).getNeuocc(), frequency);
             }
 
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));

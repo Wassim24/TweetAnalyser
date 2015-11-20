@@ -56,11 +56,13 @@ public class Tweet implements EntityBeans
             put("\\s{1,}", " ");
             put("\\A\\s{1,}", "");
             put("\\z\\s{1,}", "");
+            put("…", "");
         }};
 
         for (Map.Entry<String, String> entry : regexes.entrySet())
             this.setTweet(this.getTweet().replaceAll(entry.getKey(), entry.getValue()).toLowerCase());
 
+        this.setTweet(this.getTweet().toLowerCase());
         this.isCleanTweet = true;
         return this.getTweet();
     }
