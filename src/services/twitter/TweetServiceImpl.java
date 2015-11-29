@@ -27,7 +27,7 @@ public class TweetServiceImpl implements TweetService
     public List<Tweet> search(String keyword) throws TwitterException
     {
         return Twitter4JFactory.getInstance().getTwitterFactory().getInstance()
-                .search(new Query(keyword).count(99)).getTweets()
+                .search(new Query(keyword).count(99).lang("fr")).getTweets()
                 .stream()
                 .map(s -> new Tweet(s.getUser().getScreenName(), s.getText(), s.getCreatedAt(), keyword))
                 .filter(s -> s.getTweet().length() > 0)
@@ -64,6 +64,6 @@ public class TweetServiceImpl implements TweetService
     @Override
     public List<Tweet> getAll()
     {
-        return TweetDaoFactory.getInstance().all();
+        return TweetDaoFactory.getInstance().getAll();
     }
 }

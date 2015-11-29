@@ -5,9 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import services.algorithms.classification.Bayes;
-import services.dao.VocabularyDaoFactory;
-import services.twitter.VocabularyServiceImpl;
 
 public class Main extends Application
 {
@@ -16,6 +13,7 @@ public class Main extends Application
     {
         System.setProperty("prism.lcdtext", "false");
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/appStructure.fxml"));
+
 
         primaryStage.setTitle("Feelings Analyzer for Twitter | V 0.0");
         primaryStage.setScene(new Scene(root, 1000, 700));

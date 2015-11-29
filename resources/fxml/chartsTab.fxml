@@ -1,6 +1,36 @@
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<Tab fx:controller="controller.view.ChartsController"
+     xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="chartsTab">
 
-<Tab text="" styleClass="chartsTab">
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+    <VBox>
+
+        <HBox styleClass="titleHbox">
+            <Label maxWidth="Infinity" styleClass="bigTitle" text="Know how your tweets feel !" fx:id="chartsLabel" />
+            <!-- <Separator HBox.hgrow="ALWAYS"></Separator> -->
+            <Separator HBox.hgrow="ALWAYS" />
+
+            <ComboBox HBox.hgrow="ALWAYS" fx:id="chartsCombobox" styleClass="labelCombobox" onAction="#onChangeChart">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Pie Chart" />
+                        <String fx:value="Bar Chart" />
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="Pie Chart" />
+                </value>
+            </ComboBox>
+        </HBox>
+
+        <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" fx:id="chartsVBox">
+
+        </VBox>
+
+    </VBox>
 </Tab>

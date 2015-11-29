@@ -2,7 +2,6 @@ package services.twitter;
 
 import domain.Tweet;
 import domain.Vocabulary;
-import org.sqlite.util.StringUtils;
 import services.dao.TweetDaoFactory;
 import services.dao.VocabularyDaoFactory;
 
@@ -17,10 +16,7 @@ public class VocabularyServiceImpl implements VocabularyService
     private VocabularyServiceImpl() {}
 
     @Override
-    public boolean addAll(List<Vocabulary> vocabularies)
-    {
-        return VocabularyDaoFactory.getInstance().addAll(vocabularies);
-    }
+    public boolean addAll(List<Vocabulary> vocabularies) { return VocabularyDaoFactory.getInstance().addAll(vocabularies); }
 
     @Override
     public boolean add(Vocabulary vocabulary)
@@ -58,45 +54,36 @@ public class VocabularyServiceImpl implements VocabularyService
     }
 
     @Override
-    public void buildVocabulary(int ngramme)
+    public void buildVocabulary(int ngrams)
     {
-        if (ngramme <= 0)
-            return;
-
-        int posOcc, negOcc, neuOcc, i, j, k;
-        List<Vocabulary> vocabularies = new ArrayList<Vocabulary>();
-        List<Tweet> tweets = TweetDaoFactory.getInstance().all();
-        String response[] = new String[ngramme];
+        int posOcc, negOcc, neuOcc;
+        List<Vocabulary> vocabularies = new ArrayList<>();
+        List<Tweet> tweets = TweetDaoFactory.getInstance().getAll();
         Vocabulary vocabulary;
 
         // Looping through each tweet in database and getting its words
         for (Tweet tweet : tweets)
         {
+
             // Getting the words of a tweet with split
-            String wordsToCompare[] = tweet.getTweet().split(" ");
-            for (i = 0; i < wordsToCompare.length - (ngramme - 1); i++)
+            for (String wordToCompare : generateNgrams(ngrams, tweet.getTweet()))
             {
-                for (k = 0; k < ngramme && wordsToCompare[i + k].length() > 3; k++);
-                if (k != ngramme)
-                    continue;
+                // Pour chacun générer les ngrammes necéssaires
+                if (wordToCompare.length() <= 2) continue;
 
                 posOcc = 0; negOcc = 0; neuOcc = 0;
+
                 // Looping through the tweets and comparing previous words with each tweet words
                 for (Tweet tweetToCompareTo : tweets)
                 {
-                    // Getting the annotation of a tweet
-                    // Looping through each tweet to to compare the words
-                    String wordsToCompareTo[] = tweetToCompareTo.getTweet().split(" ");
-                    for (j = 0; j < wordsToCompareTo.length - (ngramme - 1); j++)
+                    // For each tweet generate the ngrams and compare with the previous
+                    for (String wordToCompareTo : generateNgrams(ngrams, tweetToCompareTo.getTweet()))
                     {
-                        for (k = 0; k < ngramme && wordsToCompareTo[j + k].length() > 3; k++);
-                        if (k != ngramme)
-                            continue;
+                        if (wordToCompareTo.length() <= 2) continue;
 
                         // Comparing the words
-                        for (k = 0; k < ngramme && wordsToCompareTo[j + k].equals(wordsToCompare[i + k]); k++);
+                        if (wordToCompareTo.equals(wordToCompare))
 
-                        if (k == ngramme)
                             switch (tweetToCompareTo.getAnnotation())
                             {
                                 case NEGATIF:
@@ -111,15 +98,32 @@ public class VocabularyServiceImpl implements VocabularyService
                     }
                 }
 
-                System.arraycopy(wordsToCompare, i, response, 0, ngramme);
                 // Checking if the word has already been added or not
-                vocabulary = new Vocabulary(StringUtils.join(Arrays.asList(response), " "), posOcc, negOcc, neuOcc, ngramme);
+                vocabulary = new Vocabulary(wordToCompare, posOcc, negOcc, neuOcc, ngrams);
 
-                if (!vocabularies.contains(vocabulary))
+                if(!vocabularies.contains(vocabulary))
                     vocabularies.add(vocabulary);
             }
         }
 
         VocabularyDaoFactory.getInstance().addAll(vocabularies);
+    }
+
+    private List<String> generateNgrams(int n, String text) {
+
+        String array[] = text.split(" ");
+        List<String> ngrams = new ArrayList<>();
+        String sequence = "";
+
+        for (int i = 0; i < (array.length - (n - 1)); i++) {
+            for (int j = i; j < n+i; j++) {
+                sequence += " " + array[j];
+            }
+
+            sequence = sequence.replaceFirst(" ", "");
+            ngrams.add(sequence);
+            sequence = "";
+        }
+        return ngrams;
     }
 }

@@ -1,8 +1,6 @@
 package domain;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Tweet implements EntityBeans
 {
@@ -32,7 +30,8 @@ public class Tweet implements EntityBeans
         this.setAnnotation(annotation);
         this.setId(-1);
 
-        this.cleanString();
+        this.cleanTweet();
+
     }
 
     public Tweet clone()
@@ -40,25 +39,25 @@ public class Tweet implements EntityBeans
         return new Tweet(this.getId(), this.getUsername(), this.getTweet(), this.getDate(), new String(this.getKeyword()), this.getAnnotation());
     }
 
-    public String cleanString()
+    public String cleanTweet()
     {
         if (this.isCleanTweet)
             return this.getTweet();
 
         LinkedHashMap<String, String> regexes = new LinkedHashMap<String, String>()
         {{
-            put("(((https?):\\/\\/)?((www)?\\.)?)?[a-zA-Z0-9\\-]+\\.[\\da-zA-Z]+(\\/[a-zA-Z0-9]+)?(…)?", "");
-            put("@[a-zA-Z0-9-_]+\\s?:?", "");
-            put("#[a-zA-Z0-9-_]+\\s?:?", "");
-            put("\\brt\\b", "");
-            put("\"", " ");
-            put("\'", " ");
-            put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
-            put("\\d[_]+", "");
-            put("\\s{1,}", " ");
-            put("\\A\\s{1,}", "");
-            put("\\z\\s{1,}", "");
             put("…", "");
+            put("https?:?\\/?\\/?[a-zA-Z0-9]\\.?[a-zA-Z0-9]*\\/?[a-zA-Z]*[…]?", "");
+            put("@[a-zA-Z0-9-_]+\\s?:?\\s?", "");
+            put("#[a-zA-Z0-9-_]+\\s?:?", "");
+            put("\\bRT\\b", "");
+            put("\\brt\\b", "");
+            put("\"", "");
+            put("[^\\w^ àâçéèêëîïôûùüÿñæœ']+", "");
+            put("\\d[a-zA-Z]*", "");
+            put("\\s{1,}", " ");
+            put("\\B\\s+", "");
+            put("\\n", "");
         }};
 
         this.setTweet(this.getTweet().toLowerCase());
@@ -125,5 +124,23 @@ public class Tweet implements EntityBeans
     public int getWordsCount()
     {
         return (tweet.length() - tweet.replaceAll(" ", "").length() + 1);
+    }
+
+    public List<String> getTweetNgram(int n) {
+
+        String array[] = this.getTweet().split(" ");
+        List<String> ngrams = new ArrayList<>();
+        String sequence = "";
+
+        for (int i = 0; i < (array.length - (n - 1)); i++) {
+            for (int j = i; j < n+i; j++) {
+                sequence += " " + array[j];
+            }
+
+            sequence = sequence.replaceFirst(" ", "");
+            ngrams.add(sequence);
+            sequence = "";
+        }
+        return ngrams;
     }
 }

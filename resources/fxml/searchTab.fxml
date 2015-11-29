@@ -1,7 +1,8 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.*?>
+
+
 <Tab fx:controller="controller.view.SearchTabController"
      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="searchTab">
     <VBox>
@@ -14,13 +15,14 @@
         <VBox>
             <HBox styleClass="searchBox" spacing="3">
                 <TextField HBox.hgrow="ALWAYS" promptText="Enter your keywords..." fx:id="keywordsTextField" onKeyPressed="#onKeyPressSearchField"/>
-                <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
                 <!-- <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/> -->
                 <ComboBox styleClass="selectAlgorithm" fx:id="queryAlgorithm" onAction="#onChangeAlgorithm">
                     <items>
                         <FXCollections fx:factory="observableArrayList"></FXCollections>
                     </items>
                 </ComboBox>
+                <Spinner fx:id="algorithmSettings" styleClass="algorithmSettings" disable="true" />
+                <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
             </HBox>
 
             <!-- Collapsible menu for setting up the advanced search
@@ -82,8 +84,7 @@
 
         <!-- HBox containing the save buttons and state of the search -->
         <HBox styleClass="statusBar" spacing="3">
-            <Label HBox.hgrow="ALWAYS" text="Remaining queries..." styleClass="statusLabel" fx:id="queriesStatusLabel"
-                   maxWidth="Infinity"/>
+            <Label text="" HBox.hgrow="ALWAYS" fx:id="queriesStatusLabel" styleClass="statusLabel" maxWidth="Infinity"/>
             <Button text="Save selected tweet(s)" onAction="#onClickSaveSelectedTweetsBtn"/>
             <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
             <Button text="Clear results" onAction="#onClickClearTweetsListBtn"/>

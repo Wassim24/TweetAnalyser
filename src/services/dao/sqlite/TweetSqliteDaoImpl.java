@@ -45,7 +45,7 @@ public class TweetSqliteDaoImpl implements TweetDao
     }
 
     @Override
-    public List<Tweet> all()
+    public List<Tweet> getAll()
     {
         ObservableList<Tweet> response = FXCollections.observableArrayList();
 
@@ -54,6 +54,27 @@ public class TweetSqliteDaoImpl implements TweetDao
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_USERNAME +", "+ COLUMN_TWEET +", "+ COLUMN_DATE +", "+ COLUMN_KEYWORD +", "+ COLUMN_ANNOTATION +" FROM "+ TABLE_NAME_TWEET);
+            while (rs.next())
+                response.add(new Tweet(rs.getInt(COLUMN_ID), rs.getString(COLUMN_USERNAME), rs.getString(COLUMN_TWEET), rs.getTimestamp(COLUMN_DATE), rs.getString(COLUMN_KEYWORD), Annotation.values()[(rs.getInt(COLUMN_ANNOTATION) < 0 ) ? (2 - Math.abs(rs.getInt(COLUMN_ANNOTATION))) : (rs.getInt(COLUMN_ANNOTATION) + 2)]));
+
+            stmt.close();
+            dbConnection.close();
+        }
+        catch (SQLException e) {}
+
+        return response;
+    }
+
+    @Override
+    public List<Tweet> getAll(Annotation annotation) {
+
+        ObservableList<Tweet> response = FXCollections.observableArrayList();
+
+        try
+        {
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
+            Statement stmt = dbConnection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM "+ TABLE_NAME_TWEET + " WHERE annotation = " + annotation.getValue());
             while (rs.next())
                 response.add(new Tweet(rs.getInt(COLUMN_ID), rs.getString(COLUMN_USERNAME), rs.getString(COLUMN_TWEET), rs.getTimestamp(COLUMN_DATE), rs.getString(COLUMN_KEYWORD), Annotation.values()[(rs.getInt(COLUMN_ANNOTATION) < 0 ) ? (2 - Math.abs(rs.getInt(COLUMN_ANNOTATION))) : (rs.getInt(COLUMN_ANNOTATION) + 2)]));
 

@@ -20,7 +20,7 @@ public class KNN
     {
         List<Float> distancesList = new ArrayList<Float>();
         List<Integer> neighboursIdsList = new ArrayList<Integer>();
-        List<Tweet> annotedTweets = new ArrayList<Tweet>(), tweetsInDataBase = TweetDaoFactory.getInstance().all();
+        List<Tweet> annotedTweets = new ArrayList<Tweet>(), tweetsInDataBase = TweetDaoFactory.getInstance().getAll();
 
         // Loop for iterating over the selected tweets
         for (Tweet unannotedTweet : tweetsToAnnote)

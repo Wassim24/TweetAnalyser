@@ -17,7 +17,8 @@
     -fx-tab-min-width : 64px;
     -fx-tab-max-width : 64px;
 
-    -fx-background-color : #f5f8fa;
+    -fx-background-color : #ffffff;
+
     -fx-font-size : 12px;
 }
 
@@ -40,8 +41,8 @@
 
     -fx-background-insets: 0 0 0 1;
 
-    -fx-border-color : #e1e8ed;
-    -fx-border-width : 0 0 5 0;
+    -fx-border-color : #55acee;
+    -fx-border-width : 0 0 5 1;
     -fx-effect : null;
 }
 
@@ -66,6 +67,8 @@
 
     -fx-text-fill: #212121;
     -fx-font-weight: bold;
+
+    -fx-background-radius : 0;
 
     /*
      * Bootstrap btn success
@@ -124,26 +127,39 @@
 
 .list-view {
     -fx-border-width :0;
-
     -fx-focus-color: transparent;
-    -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.05) , 10 , 0.04 , 0 , 10);
+}
+
+.list-view:focused {
+    -fx-border-width :1;
+    -fx-focus-color: #C8C8C8;
 }
 
 .list-cell {
     -fx-cell-size: 75px;
     -fx-padding : 29px 0 0 20px;
 
-    -fx-background-color : white;
+    -fx-background: #f5f8fa;
 
-    -fx-border-color : #e1e8ed;
+    -fx-border-color : #ededed;
     -fx-border-width : 1 0 1 0;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+
+    -fx-border-color : #ededed;
+    -fx-border-width : 1 0 1 3;
+    -fx-font-weight : bold;
 }
 
 .list-cell:hover {
     -fx-cell-size: 75px;
     -fx-background-color : #e1e8ed;
     -fx-cursor: hand;
+        -fx-text-fill: black;
 }
+
+
 
 .foundTweetContent {
     -fx-text-fill : BLACK;
@@ -160,13 +176,15 @@
     -fx-background-color :transparent ;
 }
 
-.list-cell:filled:selected:focused,.list-cell:filled:selected, .list-view:horizontal > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+.list-cell:filled:selected:focused,.list-cell:filled:selected,
+.list-view:horizontal > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+
     -fx-text-fill : BLACK;
     -fx-font-width : bold;
     -fx-background-insets: 0;
 
-    -fx-border-color : #EF6C00;
-    -fx-border-width : 0 0 0 5px;
+    -fx-border-color : #8899a6;
+    -fx-border-width : 0 0 0 3;
 
     -fx-background-color : #f5f8fa;
 }
@@ -238,17 +256,16 @@
 .table-cell {
     -fx-padding : 10px 0 0 5px;
     -fx-text-alignment: center;
-
 }
 
 
-.table-view .filler, .tree-table-view .filler {-fx-background-color: #BDBDBD;}
+.table-view .filler, .tree-table-view .filler {-fx-background-color: #dedfe0;}
 .table-view .column-header-background, .tree-table-view .column-header-background {-fx-background-color: #BDBDBD;}
 
 .table-view .column-header {
-    -fx-background-color: #BDBDBD;
+    -fx-background-color: #dedfe0;
     -fx-border-width : 0 1 0 0;
-    -fx-border-color: #999999;
+    -fx-border-color: #ccd6dd;
 }
 
 .separator:horizontal {
@@ -271,17 +288,14 @@
 }
 
 .combo-box > .list-cell {
-
     -fx-background: transparent;
     -fx-background-color: transparent;
-    -fx-text-fill: -fx-text-base-color;
+    -fx-text-fill: black;
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
-
     -fx-cell-size : 45px;
-
     -fx-padding: -3px 0 0 8px;
 }
 
@@ -297,19 +311,19 @@
 .searchBox {-fx-padding : 5 5 5 5;}
 
 .searchTab {
-    -fx-background-image : url(../img/medium/search.png);
+    -fx-background-image : url(../img/medium/search2.png);
 }
 
 .databaseTab {
-    -fx-background-image : url(../img/medium/database.png);
+    -fx-background-image : url(../img/medium/database2.png);
 }
 
 .chartsTab {
-    -fx-background-image : url(../img/medium/charts.png);
+    -fx-background-image : url(../img/medium/charts2.png);
 }
 
 .settingsTab {
-    -fx-background-image : url(../img/medium/settings.png);
+    -fx-background-image : url(../img/medium/settings2.png);
 }
 
 .statusBar {
@@ -345,6 +359,7 @@
 .bigTitle {
     -fx-padding : 22px 0px 23px 24px;
     -fx-font-size : 24px;
+
 }
 
 .settingsMenuLabel {
@@ -397,7 +412,8 @@
 }
 // -----------------------   Styling for the feelings radio buttons ends here ---------------------- //
 
-.databaseCombobox {
+.labelCombobox {
+
     -fx-border-insets: 21px 10px 0 0;
     -fx-background-insets: 21px 10px 0 0;
 
@@ -416,6 +432,8 @@
     -fx-border-color : rgba(34, 36, 38, 0.15);
     -fx-border-width : 0 0 3 0;
 
+    -fx-background-image: url(http://www.transparenttextures.com/patterns/diagmonds-light.png);
+
     -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
 }
 
@@ -427,4 +445,43 @@
 {
     -fx-min-height : 34px;
     -fx-max-height : 34px;
+}
+
+.algorithmSettings
+{
+    -fx-min-height : 34px;
+    -fx-max-height : 34px;
+    -fx-background-radius : 0;
+}
+
+.algorithmSettings:focused
+{
+    -fx-background-color : transparent;
+}
+
+.algorithmSettings > .increment-arrow-button
+{
+    -fx-background-color: #55acee;
+    -fx-background-insets: 0, 1, 2;
+    -fx-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.algorithmSettings > .decrement-arrow-button
+{
+    -fx-background-color: #55acee;
+    -fx-background-insets: 0, 1, 2;
+    -fx-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.algorithmSettings > .text-field
+{
+    -fx-background-color : white;
+    -fx-background-insets: 1;
+
+    -fx-border-color : #E0E0E0;
+    -fx-border-width : 1;
+
+    -fx-effect : innershadow( gaussian , rgba(0,0,0,0.2) , 10 , 0.1 , 0 , 0 );
 }

@@ -5,27 +5,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import services.algorithms.classification.*;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
-public class SearchTabController implements javafx.fxml.Initializable
+public class SearchTabController
 {
     @FXML private TextField keywordsTextField;
     @FXML private ListView<Tweet> foundTweetsListView;
     @FXML private Label queriesStatusLabel;
     @FXML private ComboBox queryAlgorithm;
+    @FXML private Spinner<Integer> algorithmSettings;
     private List<Tweet> queriedTweets;
 
-    public void onKeyPressSearchField(KeyEvent keyEvent)
+    public void onKeyPressSearchField()
     {
         /*if (keyEvent.getCode() == KeyCode.ENTER)
             onClickSearchForTweetsBtn();*/
@@ -35,12 +32,14 @@ public class SearchTabController implements javafx.fxml.Initializable
     {
         try
         {
+            this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
+
             this.queriedTweets = TweetServiceImpl.getInstance().search(this.keywordsTextField.getText());
+
             this.onChangeAlgorithm();
         }
-        catch (TwitterException ignored)
-        {
-        }
+        catch (TwitterException ignored) {}
 
         updateRateInStatusBar();
     }
@@ -73,50 +72,65 @@ public class SearchTabController implements javafx.fxml.Initializable
         }
     }
 
-    public void onChangeAlgorithm()
+    public void applyAlgorithm(List<Tweet> unannotedTweets)
     {
-        if (this.queriedTweets == null || this.queriedTweets.isEmpty())
+        if(unannotedTweets.isEmpty())
             return;
 
-        this.foundTweetsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        this.foundTweetsListView.setCellFactory(param -> new RadioListCell());
+        ObservableList<Tweet> annotedTweets =  FXCollections.observableArrayList();
 
-        List<Tweet> copy = new ArrayList<Tweet>(this.queriedTweets.size());
-        for (Tweet t : this.queriedTweets)
-            copy.add(t.clone());
-
-        ObservableList<Tweet> annotedTweet = FXCollections.observableArrayList();
         switch ((Algorithm)this.queryAlgorithm.getValue())
         {
             case DICTIONARY:
-                annotedTweet.addAll(Glossary.compute(copy));
+                annotedTweets.addAll(Glossary.compute(unannotedTweets));
                 break;
 
             case KNN:
-                annotedTweet.addAll(KNN.compute(copy));
+                annotedTweets.addAll(KNN.compute(unannotedTweets, algorithmSettings.getValue()));
                 break;
 
             case SIMPLE_BAYES:
-                annotedTweet.addAll(Bayes.compute(copy));
+                annotedTweets.addAll(Bayes.compute(unannotedTweets));
                 break;
 
             case FREQUENCY_BAYES:
-                annotedTweet.addAll(BayesFrequency.compute(copy));
+                annotedTweets.addAll(BayesFrequency.compute(unannotedTweets));
+                break;
+
+            case NGRAMMES_BAYES:
+                annotedTweets.addAll(BayesNgrams.compute(unannotedTweets, algorithmSettings.getValue()));
                 break;
 
             case NONE:
+                annotedTweets.addAll(unannotedTweets);
+                break;
+
             default:
-                annotedTweet.addAll(copy);
+                annotedTweets.addAll(unannotedTweets);
                 break;
         }
 
-        this.foundTweetsListView.setItems(annotedTweet);
+        this.foundTweetsListView.getItems().clear();
+        this.foundTweetsListView.setItems(annotedTweets);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public void onChangeAlgorithm()
+    {
+        if(this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.NGRAMMES_BAYES)
+            algorithmSettings.setDisable(false);
+        else
+            algorithmSettings.setDisable(true);
+
+        if(this.queriedTweets != null)
+            applyAlgorithm(this.queriedTweets);
+    }
+
+    public void initialize()
     {
         this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
         this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
+
+        algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+        algorithmSettings.setEditable(true);
     }
 }

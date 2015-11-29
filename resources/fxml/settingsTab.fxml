@@ -1,9 +1,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
-<Tab fx:controller="controller.view.MainViewController"
+<Tab fx:controller="controller.view.SettingsController"
      xmlns:fx="http://javafx.com/fxml/1"
-     xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab" onSelectionChanged="#onSelectingSettingsTab">
+     xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab">
 
     <VBox>
         <!-- Label for displaying the bigger title -->
@@ -52,6 +54,33 @@
             <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
                        fx:id="proxyPortTextField" promptText="3128"/>
 
+        </GridPane>
+
+        <GridPane styleClass="authSettingsGP" fx:id="dictionarySettings">
+            <columnConstraints>
+                <ColumnConstraints minWidth="230.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Load custom dictionaries" styleClass="settingsMenuLabel"/>
+
+            <Label styleClass="menuItemLabel" text="Locate a dictionary" GridPane.rowIndex="1"/>
+            <Label styleClass="menuItemLabel" text="Choose the type " GridPane.rowIndex="2"/>
+            <Label styleClass="menuItemLabel" text="Import your dictionary " GridPane.rowIndex="3"/>
+
+            <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose a file" onAction="#loadDictionary"/>
+            <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Positive Dictionary"/>
+                        <String fx:value="Negative Dictionary"/>
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="Positive Dictionary" />
+                </value>
+            </ComboBox>
+            <Button GridPane.columnIndex="1" GridPane.rowIndex="3" text="Import" onAction="#importDictionary"/>
         </GridPane>
 
 

@@ -61,52 +61,7 @@ public class MainViewController
         }
     }
 
-    public void onClickResetSettingsBtn() throws IOException
-    {
-        saveProperties("", "", "", "", "", "");
 
-        this.consumerKeyTextField.clear();
-        this.consumerKeySecretTextField.clear();
-        this.accessTokenTextField.clear();
-        this.accessTokenSecretTextField.clear();
-        this.proxyHostTextField.clear();
-        this.proxyPortTextField.clear();
-    }
-
-    public void onClickSaveSettingsBtn() throws IOException
-    {
-        saveProperties(this.consumerKeyTextField.getText(), this.consumerKeySecretTextField.getText(), this.accessTokenTextField.getText(), this.accessTokenSecretTextField.getText(), this.proxyHostTextField.getText(), this.proxyPortTextField.getText());
-    }
-
-    private void saveProperties(String consumer, String consumerSec, String token, String tokenSec, String host, String port) throws IOException
-    {
-        Properties props = new Properties();
-        props.setProperty("oauth.consumerKey", consumer);
-        props.setProperty("oauth.consumerSecret", consumerSec);
-        props.setProperty("oauth.accessToken", token);
-        props.setProperty("oauth.accessTokenSecret", tokenSec);
-        props.setProperty("http.proxyHost", host);
-        props.setProperty("http.proxyPort", port);
-        props.store(new FileOutputStream(new File("twitter4j.properties")), "User preferences");
-    }
-
-    public void onSelectingSettingsTab() throws IOException
-    {
-        if (this.configFile == null)
-        {
-            this.configFile = new File("twitter4j.properties");
-            InputStream inputStream = new FileInputStream(this.configFile);
-            Properties props = new Properties();
-            props.load(inputStream);
-
-            this.consumerKeyTextField.setText(props.getProperty("oauth.consumerKey"));
-            this.consumerKeySecretTextField.setText(props.getProperty("oauth.consumerSecret"));
-            this.accessTokenTextField.setText(props.getProperty("oauth.accessToken"));
-            this.accessTokenSecretTextField.setText(props.getProperty("oauth.accessTokenSecret"));
-            this.proxyHostTextField.setText(props.getProperty("http.proxyHost"));
-            this.proxyPortTextField.setText(props.getProperty("http.proxyPort"));
-        }
-    }
 
     public void onSelectingDatabaseTab() {
         this.displayTweetsSavedInDatabase();
@@ -120,7 +75,6 @@ public class MainViewController
         TableColumn created = new TableColumn<Tweet, Date>("Date");
         TableColumn keyword = new TableColumn<Tweet, String>("Keyword");
         TableColumn annotation = new TableColumn<Tweet, Annotation>("Annotation");
-        TableColumn wordsCount = new TableColumn<Tweet, Integer>("Words Count");
 
         id.setCellValueFactory(new PropertyValueFactory("id"));
         user.setCellValueFactory(new PropertyValueFactory("username"));
@@ -128,10 +82,9 @@ public class MainViewController
         created.setCellValueFactory(new PropertyValueFactory("date"));
         annotation.setCellValueFactory(new PropertyValueFactory("annotation"));
         keyword.setCellValueFactory(new PropertyValueFactory("keyword"));
-        wordsCount.setCellValueFactory(new PropertyValueFactory("wordsCount"));
 
         tweetsInDatabaseTableView.getColumns().clear();
-        tweetsInDatabaseTableView.getColumns().addAll(id, user, tweet, created, keyword, annotation, wordsCount);
+        tweetsInDatabaseTableView.getColumns().addAll(id, user, tweet, created, keyword, annotation);
 
         this.tweetsInDatabaseTableView.setItems((ObservableList<Tweet>) TweetServiceImpl.getInstance().getAll());
 

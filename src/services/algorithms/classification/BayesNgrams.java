@@ -3,18 +3,19 @@ package services.algorithms.classification;
 import domain.Annotation;
 import domain.Tweet;
 import domain.Vocabulary;
-import services.dao.TweetDaoFactory;
 import services.twitter.VocabularyServiceImpl;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
-public class Bayes
-{
-    private Bayes() {}
+public class BayesNgrams {
 
-    public static List<Tweet> compute(List<Tweet> toAnnotate)
+    private BayesNgrams() {}
+
+    public static List<Tweet> compute(List<Tweet> toAnnotate, int ngrams)
     {
-        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(1);
+        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngrams);
         int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
         double probPositive, probNegative, probNeutre, maxValue;
 
@@ -33,16 +34,15 @@ public class Bayes
         for (Tweet tweet : toAnnotate)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
-
-            for (String s : new HashSet<String>(Arrays.asList(tweet.getTweet().split(" "))))
+            for (String s : new HashSet<String>(tweet.getTweetNgram(ngrams)))
             {
                 if (vocabularies.get(s) == null || s.length() <= 3)
                     continue;
 
-                /*
-                 * P(class|t) = Ym∈t P(m|class) * P(class)
-                 * P(m|class) = P(m|c) = (n(m, c) + 1) / (n(c) + N)
-                 */
+            /*
+             * P(class|t) = Ym∈t P(m|class) * P(class)
+             * P(m|class) = P(m|c) = (n(m, c) + 1) / (n(c) + N)
+             */
 
                 probPositive *= (vocabularies.get(s).getPosocc() + 1) / (double)(countPositive + size);
                 probNegative *= (vocabularies.get(s).getNegocc() + 1) / (double)(countNegative + size);
@@ -58,10 +58,10 @@ public class Bayes
             if (maxValue == probNeutre)
                 tweet.setAnnotation(Annotation.NEUTRE);
             else
-                if (maxValue == probNegative)
-                    tweet.setAnnotation(Annotation.NEGATIF);
-                else
-                    tweet.setAnnotation(Annotation.POSITIF);
+            if (maxValue == probNegative)
+                tweet.setAnnotation(Annotation.NEGATIF);
+            else
+                tweet.setAnnotation(Annotation.POSITIF);
         }
 
         return toAnnotate;
