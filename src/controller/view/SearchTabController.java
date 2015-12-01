@@ -111,7 +111,7 @@ public class SearchTabController
 
     public void onChangeAlgorithm()
     {
-        if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES)
+        if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
             algorithmSettings.setDisable(false);
         else
             algorithmSettings.setDisable(true);
