@@ -1,7 +1,6 @@
 <?import javafx.scene.control.TabPane?>
 
-<TabPane fx:controller="controller.view.MainViewController"
-         xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+<TabPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
          side="LEFT"
          tabClosingPolicy="UNAVAILABLE"
          stylesheets="/css/bootstrap.css">
@@ -17,6 +16,4 @@
 
     <!-- Tab for modifiying the different settings of the app -->
     <fx:include source="settingsTab.fxml"/>
-
-
 </TabPane>

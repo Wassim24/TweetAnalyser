@@ -11,17 +11,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import services.twitter.DictionaryServiceImpl;
 import services.twitter.TweetServiceImpl;
 import services.twitter.VocabularyServiceImpl;
-
-import java.io.*;
 import java.util.*;
 
-public class MainViewController
+public class DatabaseController
 {
     @FXML private Label databseLabel;
     @FXML private TableView tweetsInDatabaseTableView;
     @FXML private ComboBox dataBaseComboBox;
-
-    private File configFile = null;
 
     public void onSelectingTableCombobox()
     {
