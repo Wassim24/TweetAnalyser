@@ -12,7 +12,6 @@ import twitter4j.TwitterException;
 
 import java.util.List;
 
-
 public class SearchTabController
 {
     @FXML private TextField keywordsTextField;
@@ -89,16 +88,12 @@ public class SearchTabController
                 annotedTweets.addAll(KNN.compute(unannotedTweets, algorithmSettings.getValue()));
                 break;
 
-            case SIMPLE_BAYES:
-                annotedTweets.addAll(Bayes.compute(unannotedTweets));
+            case BAYES:
+                annotedTweets.addAll(Bayes.compute(unannotedTweets, algorithmSettings.getValue()));
                 break;
 
             case FREQUENCY_BAYES:
-                annotedTweets.addAll(BayesFrequency.compute(unannotedTweets));
-                break;
-
-            case NGRAMMES_BAYES:
-                annotedTweets.addAll(BayesNgrams.compute(unannotedTweets, algorithmSettings.getValue()));
+                annotedTweets.addAll(BayesFrequency.compute(unannotedTweets, algorithmSettings.getValue()));
                 break;
 
             case NONE:
@@ -116,12 +111,12 @@ public class SearchTabController
 
     public void onChangeAlgorithm()
     {
-        if(this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.NGRAMMES_BAYES)
+        if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES)
             algorithmSettings.setDisable(false);
         else
             algorithmSettings.setDisable(true);
 
-        if(this.queriedTweets != null)
+        if (this.queriedTweets != null)
             applyAlgorithm(this.queriedTweets);
     }
 

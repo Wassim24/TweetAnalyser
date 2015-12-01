@@ -9,6 +9,7 @@ import java.util.*;
 
 public class VocabularyServiceImpl implements VocabularyService
 {
+    private static int MINIMUM_VOCABULARY_LENGTH_PER_WORD = 3;
     private static VocabularyServiceImpl ourInstance = new VocabularyServiceImpl();
     public static VocabularyServiceImpl getInstance() {
         return ourInstance;
@@ -56,20 +57,23 @@ public class VocabularyServiceImpl implements VocabularyService
     @Override
     public void buildVocabulary(int ngrams)
     {
-        int posOcc, negOcc, neuOcc;
+        int posOcc, negOcc, neuOcc, k;
         List<Vocabulary> vocabularies = new ArrayList<>();
         List<Tweet> tweets = TweetDaoFactory.getInstance().getAll();
         Vocabulary vocabulary;
+        String[] checkWords;
 
         // Looping through each tweet in database and getting its words
         for (Tweet tweet : tweets)
         {
-
             // Getting the words of a tweet with split
             for (String wordToCompare : generateNgrams(ngrams, tweet.getTweet()))
             {
-                // Pour chacun générer les ngrammes necéssaires
-                if (wordToCompare.length() <= 2) continue;
+                /* verification de la taille des grammes */
+                checkWords = wordToCompare.split(" ");
+                for (k = 0; k < ngrams && checkWords[k].length() > MINIMUM_VOCABULARY_LENGTH_PER_WORD; k++);
+                if (k != ngrams)
+                    continue;
 
                 posOcc = 0; negOcc = 0; neuOcc = 0;
 
@@ -79,11 +83,14 @@ public class VocabularyServiceImpl implements VocabularyService
                     // For each tweet generate the ngrams and compare with the previous
                     for (String wordToCompareTo : generateNgrams(ngrams, tweetToCompareTo.getTweet()))
                     {
-                        if (wordToCompareTo.length() <= 2) continue;
+                        /* verification de la taille des grammes */
+                        checkWords = wordToCompareTo.split(" ");
+                        for (k = 0; k < ngrams && checkWords[k].length() > MINIMUM_VOCABULARY_LENGTH_PER_WORD; k++);
+                        if (k != ngrams)
+                            continue;
 
                         // Comparing the words
                         if (wordToCompareTo.equals(wordToCompare))
-
                             switch (tweetToCompareTo.getAnnotation())
                             {
                                 case NEGATIF:
@@ -100,8 +107,7 @@ public class VocabularyServiceImpl implements VocabularyService
 
                 // Checking if the word has already been added or not
                 vocabulary = new Vocabulary(wordToCompare, posOcc, negOcc, neuOcc, ngrams);
-
-                if(!vocabularies.contains(vocabulary))
+                if (!vocabularies.contains(vocabulary))
                     vocabularies.add(vocabulary);
             }
         }
@@ -109,21 +115,23 @@ public class VocabularyServiceImpl implements VocabularyService
         VocabularyDaoFactory.getInstance().addAll(vocabularies);
     }
 
-    private List<String> generateNgrams(int n, String text) {
-
+    private List<String> generateNgrams(int n, String text)
+    {
         String array[] = text.split(" ");
-        List<String> ngrams = new ArrayList<>();
-        String sequence = "";
+        List<String> ngrams = new ArrayList<String>();
+        String sequence;
 
-        for (int i = 0; i < (array.length - (n - 1)); i++) {
-            for (int j = i; j < n+i; j++) {
+        for (int i = 0; i < (array.length - (n - 1)); i++)
+        {
+            sequence = "";
+
+            for (int j = i; j < n + i; j++)
                 sequence += " " + array[j];
-            }
 
             sequence = sequence.replaceFirst(" ", "");
             ngrams.add(sequence);
-            sequence = "";
         }
+
         return ngrams;
     }
 }

@@ -11,10 +11,10 @@ public class BayesFrequency
 {
     private BayesFrequency() {}
 
-    public static List<Tweet> compute(List<Tweet> toAnnotate)
+    public static List<Tweet> compute(List<Tweet> toAnnotate, int ngramme)
     {
         List<String> wordsWithFrequency;
-        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(1);
+        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
         int frequency;
         double probPositive, probNegative, probNeutre, maxValue;
 

@@ -11,30 +11,32 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import services.dao.TweetDaoFactory;
 
-public class ChartsController {
-
+public class ChartsController
+{
     @FXML private VBox chartsVBox;
     @FXML private ComboBox chartsCombobox;
-
     private PieChart pieChart;
     private BarChart barChart;
 
+    public void initialize() {
+        this.initializePieChart();
+    }
 
-    public void initializeBarChart() {
-
+    public void initializeBarChart()
+    {
         CategoryAxis feelingAxis = new CategoryAxis();
         feelingAxis.setLabel("Feeling");
 
         NumberAxis tweetsNumberAxis = new NumberAxis();
         tweetsNumberAxis.setLabel("Number of tweets");
 
-        barChart = new BarChart<>(feelingAxis, tweetsNumberAxis);
-        barChart.setTitle("Tweets feelings chart");
-        barChart.setBarGap(3);
-        barChart.setCategoryGap(20);
+        this.barChart = new BarChart<>(feelingAxis, tweetsNumberAxis);
+        this.barChart.setTitle("Tweets feelings chart");
+        this.barChart.setBarGap(3);
+        this.barChart.setCategoryGap(20);
 
-        barChart.setLegendSide(Side.BOTTOM);
-        barChart.setLegendVisible(false);
+        this.barChart.setLegendSide(Side.BOTTOM);
+        this.barChart.setLegendVisible(false);
 
         XYChart.Series data = new XYChart.Series();
         data.setName("Positive");
@@ -42,19 +44,18 @@ public class ChartsController {
         data.getData().add(new XYChart.Data("Neutral", TweetDaoFactory.getInstance().getAll(Annotation.NEUTRE).size()));
         data.getData().add(new XYChart.Data("Negative", TweetDaoFactory.getInstance().getAll(Annotation.NEGATIF).size()));
 
-        barChart.getData().addAll(data);
+        this.barChart.getData().addAll(data);
 
-        chartsVBox.getChildren().clear();
-        chartsVBox.setVgrow(barChart, Priority.ALWAYS);
-        chartsVBox.getChildren().add(barChart);
-
+        this.chartsVBox.getChildren().clear();
+        this.chartsVBox.setVgrow(barChart, Priority.ALWAYS);
+        this.chartsVBox.getChildren().add(barChart);
     }
 
-    public void initializePieChart() {
-
-        pieChart = new PieChart();
-        pieChart.setTitle("Tweets feelings chart");
-        pieChart.setLegendSide(Side.BOTTOM);
+    public void initializePieChart()
+    {
+        this.pieChart = new PieChart();
+        this.pieChart.setTitle("Tweets feelings chart");
+        this.pieChart.setLegendSide(Side.BOTTOM);
 
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
             new PieChart.Data("Positive", TweetDaoFactory.getInstance().getAll(Annotation.POSITIF).size()),
@@ -62,20 +63,16 @@ public class ChartsController {
             new PieChart.Data("Negative", TweetDaoFactory.getInstance().getAll(Annotation.NEGATIF).size())
         );
 
-        pieChart.setData(data);
+        this.pieChart.setData(data);
 
-        chartsVBox.getChildren().clear();
-        chartsVBox.getChildren().add(pieChart);
-        chartsVBox.setVgrow(pieChart, Priority.ALWAYS);
+        this.chartsVBox.getChildren().clear();
+        this.chartsVBox.getChildren().add(pieChart);
+        this.chartsVBox.setVgrow(pieChart, Priority.ALWAYS);
     }
 
-    public void initialize() {
-        initializePieChart();
-    }
-
-    public void onChangeChart() {
-
-        switch (chartsCombobox.getValue().toString())
+    public void onChangeChart()
+    {
+        switch (this.chartsCombobox.getValue().toString())
         {
             case "Bar Chart" :
                 initializeBarChart();
@@ -83,7 +80,6 @@ public class ChartsController {
             default:
                 initializePieChart();
                 break;
-
         }
     }
 }

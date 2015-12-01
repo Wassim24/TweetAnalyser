@@ -12,9 +12,9 @@ public class Bayes
 {
     private Bayes() {}
 
-    public static List<Tweet> compute(List<Tweet> toAnnotate)
+    public static List<Tweet> compute(List<Tweet> toAnnotate, int ngramme)
     {
-        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(1);
+        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
         int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
         double probPositive, probNegative, probNeutre, maxValue;
 

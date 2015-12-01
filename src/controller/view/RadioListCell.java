@@ -2,11 +2,10 @@ package controller.view;
 
 import domain.Annotation;
 import domain.Tweet;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 public class RadioListCell extends ListCell<Tweet>
 {
@@ -14,12 +13,10 @@ public class RadioListCell extends ListCell<Tweet>
     public void updateItem(Tweet obj, boolean empty)
     {
         super.updateItem(obj, empty);
-
-
-        if (empty)
+        if (empty || obj == null)
         {
-            setText(null);
-            setGraphic(null);
+            super.setText(null);
+            super.setGraphic(null);
         }
         else
         {
@@ -29,6 +26,10 @@ public class RadioListCell extends ListCell<Tweet>
             RadioButton positive = new RadioButton();
             Label tweet = new Label();
 
+            // Adding the radio buttons to a ToggleGroup to avoid multiple checking
+            negative.setToggleGroup(radioButtonsFeelingsGroup);
+            neutral.setToggleGroup(radioButtonsFeelingsGroup);
+            positive.setToggleGroup(radioButtonsFeelingsGroup);
             // Settings the css class names for the radio buttons
             negative.getStyleClass().add("anoteNegativeRadio");
             neutral.getStyleClass().add("anoteNeutralRadio");
@@ -47,29 +48,18 @@ public class RadioListCell extends ListCell<Tweet>
                     break;
             }
 
-            // Adding the radio buttons to a ToggleGroup to avoid multiple checking
-            negative.setToggleGroup(radioButtonsFeelingsGroup);
-            neutral.setToggleGroup(radioButtonsFeelingsGroup);
-            positive.setToggleGroup(radioButtonsFeelingsGroup);
-
             // Adding the tweet to the label and a css class name
             tweet.setText(obj.getTweet()); tweet.getStyleClass().add("foundTweetContent");
-
-            // Adding everything to the layout
-            HBox layoutForFeelingsTweet = new HBox();
-            layoutForFeelingsTweet.getChildren().addAll(negative, neutral, positive, tweet);
 
             // Used to generate action listeners for the radio buttons
             negative.setOnAction(event -> {
                 obj.setAnnotation(Annotation.NEGATIF);
-
                 // Remove classes from unselected radios
                 neutral.getStyleClass().remove("anoteNeutralRadio-selected");
                 positive.getStyleClass().remove("anotePositiveRadio-selected");
 
                 // Add "-selected" class to the selected button
                 negative.getStyleClass().add("anoteNegativeRadio-selected");
-
             });
 
             neutral.setOnAction(event -> {
@@ -81,9 +71,7 @@ public class RadioListCell extends ListCell<Tweet>
 
                 // Add "-selected" class to the selected button
                 neutral.getStyleClass().add("anoteNeutralRadio-selected");
-
             });
-
 
             positive.setOnAction(event -> {
                 obj.setAnnotation(Annotation.POSITIF);
@@ -94,19 +82,12 @@ public class RadioListCell extends ListCell<Tweet>
 
                 // Add "-selected" class to the selected button
                 positive.getStyleClass().add("anotePositiveRadio-selected");
-
             });
 
-            // Used to set the graphics of the list view
-            setGraphic(layoutForFeelingsTweet);
-        }
-    }
 
-    /**
-     * @param obj of type Tweet
-     * @implNote Used to generate the action listeners for the radio buttons
-     */
-    private void generateActions(Tweet obj)
-    {
+            // Used to set the graphics of the list view
+            // Adding everything to the layout
+            super.setGraphic(new HBox(negative, neutral, positive, tweet));
+        }
     }
 }

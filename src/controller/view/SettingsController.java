@@ -9,8 +9,8 @@ import javafx.stage.FileChooser;
 import java.io.*;
 import java.util.Properties;
 
-public class SettingsController {
-
+public class SettingsController
+{
     @FXML private TextField consumerKeyTextField;
     @FXML private TextField consumerKeySecretTextField;
     @FXML private TextField accessTokenTextField;
@@ -18,7 +18,6 @@ public class SettingsController {
     @FXML private TextField proxyHostTextField;
     @FXML private TextField proxyPortTextField;
     @FXML private GridPane dictionarySettings;
-
     private File configFile = null;
     private File dictionary = null;
 
@@ -69,10 +68,9 @@ public class SettingsController {
         }
     }
 
-    public void initialize() {
-
+    public void initialize()
+    {
         try { this.onSelectingSettingsTab();} catch (IOException e) {e.printStackTrace();}
-
     }
 
     public void loadDictionary() {
@@ -83,8 +81,8 @@ public class SettingsController {
         dictionary = dictionaryLocator.showOpenDialog(dictionarySettings.getScene().getWindow());
     }
 
-    public void importDictionary() {
-
+    public void importDictionary()
+    {
         if (dictionary == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Oh Snap ! Something went wrong...");
