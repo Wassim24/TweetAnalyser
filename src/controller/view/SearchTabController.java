@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import services.algorithms.classification.*;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
@@ -21,10 +23,10 @@ public class SearchTabController
     @FXML private Spinner<Integer> algorithmSettings;
     private List<Tweet> queriedTweets;
 
-    public void onKeyPressSearchField()
+    public void onKeyPressSearchField(KeyEvent keyEvent)
     {
-        /*if (keyEvent.getCode() == KeyCode.ENTER)
-            onClickSearchForTweetsBtn();*/
+        if (keyEvent.getCode() == KeyCode.ENTER)
+            this.onClickSearchForTweetsBtn();
     }
 
     public void onClickSearchForTweetsBtn()
@@ -40,7 +42,7 @@ public class SearchTabController
         }
         catch (TwitterException ignored) {}
 
-        updateRateInStatusBar();
+        this.updateRateInStatusBar();
     }
 
     public void onClickClearTweetsListBtn()
@@ -112,12 +114,12 @@ public class SearchTabController
     public void onChangeAlgorithm()
     {
         if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
-            algorithmSettings.setDisable(false);
+            this.algorithmSettings.setDisable(false);
         else
-            algorithmSettings.setDisable(true);
+            this.algorithmSettings.setDisable(true);
 
         if (this.queriedTweets != null)
-            applyAlgorithm(this.queriedTweets);
+            this.applyAlgorithm(this.queriedTweets);
     }
 
     public void initialize()
@@ -125,7 +127,7 @@ public class SearchTabController
         this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
         this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
 
-        algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
-        algorithmSettings.setEditable(true);
+        this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+        this.algorithmSettings.setEditable(true);
     }
 }
