@@ -73,7 +73,7 @@ public class SearchTabController
 
     public void applyAlgorithm(List<Tweet> unannotedTweets)
     {
-        if(unannotedTweets.isEmpty())
+        if (unannotedTweets.isEmpty())
             return;
 
         ObservableList<Tweet> annotedTweets =  FXCollections.observableArrayList();

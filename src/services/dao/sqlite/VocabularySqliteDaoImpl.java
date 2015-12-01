@@ -35,7 +35,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
         try
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
-            PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO " + TABLE_NAME_VOCABULARY +"("+ COLUMN_WORD +", "+ COLUMN_POSOCC + ", "+  COLUMN_NEGOCC +", "+ COLUMN_NEUOCC+ ", "+ COLUMN_GRAMME + ") VALUES (?, ?, ?, ?, ?);");
+            PreparedStatement stmt = dbConnection.prepareStatement("INSERT OR REPLACE INTO " + TABLE_NAME_VOCABULARY +"("+ COLUMN_WORD +", "+ COLUMN_POSOCC + ", "+  COLUMN_NEGOCC +", "+ COLUMN_NEUOCC+ ", "+ COLUMN_GRAMME + ") VALUES (?, ?, ?, ?, ?);");
             stmt.setString(1, vocabulary.getWord());
             stmt.setInt(2, vocabulary.getPosocc());
             stmt.setInt(3, vocabulary.getNegocc());
@@ -62,7 +62,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_GRAMME +" FROM "+ TABLE_NAME_VOCABULARY +" WHERE "+ COLUMN_WORD +" = "+ word);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_GRAMME +" FROM "+ TABLE_NAME_VOCABULARY +" WHERE "+ COLUMN_WORD +" = '"+ word +"'");
             response = new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_GRAMME));
 
             stmt.close();

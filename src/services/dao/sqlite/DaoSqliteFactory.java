@@ -41,13 +41,14 @@ public class DaoSqliteFactory
                         " " + DictionarySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
                         " " + DictionarySqliteDaoImpl.COLUMN_ANNOTATION + " INTEGER CHECK(" + TweetSqliteDaoImpl.COLUMN_ANNOTATION + " IN(" + Annotation.NONANNOTE.getValue() + "," + Annotation.NEGATIF.getValue() + "," + Annotation.NEUTRE.getValue() + "," + Annotation.POSITIF.getValue() + ")) NOT NULL DEFAULT(-2))");
 
-                stmt.executeUpdate("CREATE TABLE " + VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY+
+                stmt.executeUpdate("CREATE TABLE " + VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY +
                         "(" + VocabularySqliteDaoImpl.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " " + VocabularySqliteDaoImpl.COLUMN_WORD + " TEXT NOT NULL," +
                         " " + VocabularySqliteDaoImpl.COLUMN_POSOCC + " INTEGER NOT NULL," +
                         " " + VocabularySqliteDaoImpl.COLUMN_NEGOCC + " INTEGER NOT NULL," +
                         " " + VocabularySqliteDaoImpl.COLUMN_NEUOCC + " INTEGER NOT NULL," +
-                        " " + VocabularySqliteDaoImpl.COLUMN_GRAMME + " INTEGER NOT NULL)");
+                        " " + VocabularySqliteDaoImpl.COLUMN_GRAMME + " INTEGER NOT NULL);");
+                stmt.executeUpdate("CREATE UNIQUE INDEX "+ VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY +"_idx ON "+ VocabularySqliteDaoImpl.TABLE_NAME_VOCABULARY +"("+ VocabularySqliteDaoImpl.COLUMN_WORD +");");
 
                 stmt.close();
                 dbConnection.close();

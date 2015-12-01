@@ -1,5 +1,6 @@
 package services.twitter;
 
+import domain.Tweet;
 import domain.Vocabulary;
 
 import java.util.List;
@@ -13,5 +14,8 @@ public interface VocabularyService
     List<Vocabulary> getAll(int ngramme);
     Map<String, Vocabulary> getAllKey(int ngramme);
     Vocabulary get(String word);
-    void buildVocabulary(int ngramme);
+    void buildVocabulary(int ngramme, List<Tweet> addTweetList);
+    void buildAllVocabulary(int tongramme);
+    void buildAllVocabulary();
+    void addToVocabulary(Tweet tweet);
 }

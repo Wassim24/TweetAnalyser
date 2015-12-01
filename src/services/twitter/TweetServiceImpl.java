@@ -1,11 +1,13 @@
 package services.twitter;
 
 import domain.Tweet;
+import domain.Vocabulary;
 import services.dao.TweetDaoFactory;
 import twitter4j.Query;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +45,7 @@ public class TweetServiceImpl implements TweetService
     @Override
     public boolean add(Tweet tweet)
     {
+        VocabularyServiceImpl.getInstance().addToVocabulary(tweet);
         return TweetDaoFactory.getInstance().add(tweet);
     }
 
