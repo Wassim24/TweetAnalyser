@@ -13,9 +13,11 @@ public class Bayes
 
     public static List<Tweet> compute(List<Tweet> toAnnotate, int ngramme)
     {
-        if (ngramme > 2) ngramme = 2;
+        return compute(VocabularyServiceImpl.getInstance().getAllKey(ngramme), toAnnotate, ngramme);
+    }
 
-        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
+    public static List<Tweet> compute(Map<Vocabulary, String> vocabularies, List<Tweet> toAnnotate, int ngramme)
+    {
         int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
         double probPositive, probNegative, probNeutre, maxValue;
 
@@ -31,19 +33,20 @@ public class Bayes
                 countNeutre++;
         }
 
+        ArrayList<Tweet> response = new ArrayList<Tweet>();
+        for(Tweet p : toAnnotate)
+            response.add(p.clone());
 
-        for (Tweet tweet : toAnnotate)
+        for (Tweet tweet : response)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
 
             for (String word : generateNgrams(ngramme, tweet.getTweet()))
             {
-
-                for (Vocabulary v : vocabularies.keySet()) {
-
-                    if(v.getWord().length() <= 3)
-                        continue;
-                    if ( v.getWord().equalsIgnoreCase(word) ) {
+                for (Vocabulary v : vocabularies.keySet())
+                {
+                    if (v.getWord().equalsIgnoreCase(word))
+                    {
                         probPositive *= (v.getPosocc() + 1) / (double) (countPositive + size);
                         probNegative *= (v.getNegocc() + 1) / (double) (countNegative + size);
                         probNeutre *= (v.getNeuocc() + 1) / (double) (countNeutre + size);
@@ -60,82 +63,13 @@ public class Bayes
             if (maxValue == probNeutre)
                 tweet.setAnnotation(Annotation.NEUTRE);
             else
-            if (maxValue == probNegative)
-                tweet.setAnnotation(Annotation.NEGATIF);
-            else
-                tweet.setAnnotation(Annotation.POSITIF);
+                if (maxValue == probNegative)
+                    tweet.setAnnotation(Annotation.NEGATIF);
+                else
+                    tweet.setAnnotation(Annotation.POSITIF);
         }
 
-        return toAnnotate;
-    }
-
-    public static List<Tweet> validate(List<Tweet> toAnnotate, List<Vocabulary> learningSet, int ngramme)
-    {
-        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
-        int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
-        double probPositive, probNegative, probNeutre, maxValue;
-
-        Iterator it = vocabularies.entrySet().iterator();
-        while (it.hasNext()) {
-
-            Map.Entry pair = (Map.Entry)it.next();
-
-            if ( !learningSet.contains(pair.getKey()) ) {
-                it.remove();
-            }
-        }
-
-        for (Vocabulary vocabulary : vocabularies.keySet())
-        {
-            if (vocabulary.getPosocc() > 0)
-                countPositive++;
-
-            if (vocabulary.getNegocc() > 0)
-                countNegative++;
-
-            if (vocabulary.getNeuocc() > 0)
-                countNeutre++;
-        }
-
-        for (Tweet tweet : toAnnotate)
-        {
-            probPositive = 1; probNegative = 1; probNeutre = 1;
-
-            for (String word : generateNgrams(ngramme, tweet.getTweet()))
-            {
-
-                for (Vocabulary v : vocabularies.keySet()) {
-
-                    if(v.getWord().length() <= 3)
-                        continue;
-
-                    if ( v.getWord().equalsIgnoreCase(word) )
-                    {
-                        probPositive *= (v.getPosocc() + 1) / (double)(countPositive + size);
-                        probNegative *= (v.getNegocc() + 1) / (double)(countNegative + size);
-                        probNeutre *= (v.getNeuocc() + 1) / (double)(countNeutre + size);
-                    }
-
-                }
-
-            }
-
-            probPositive *= countPositive / (double) size;
-            probNegative *= countNegative / (double) size;
-            probNeutre *= countNeutre / (double) size;
-
-            maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
-
-            if (maxValue == probNeutre)
-                tweet.setAnnotation(Annotation.NEUTRE);
-            else
-            if (maxValue == probNegative)
-                tweet.setAnnotation(Annotation.NEGATIF);
-            else
-                tweet.setAnnotation(Annotation.POSITIF);
-        }
-
-        return toAnnotate;
+        return response;
     }
 
     private static List<String> generateNgrams(int n, String text)

@@ -67,7 +67,7 @@ public class TweetSqliteDaoImpl implements TweetDao
     }
 
     @Override
-    public List<Tweet> get(int start, int limit)
+    public List<Tweet> getBetween(int start, int limit)
     {
         List<Tweet> response = new ArrayList<>();
 
@@ -88,8 +88,8 @@ public class TweetSqliteDaoImpl implements TweetDao
     }
 
     @Override
-    public List<Tweet> getAll(Annotation annotation) {
-
+    public List<Tweet> getAll(Annotation annotation)
+    {
         ObservableList<Tweet> response = FXCollections.observableArrayList();
 
         try
@@ -109,8 +109,8 @@ public class TweetSqliteDaoImpl implements TweetDao
     }
 
     @Override
-    public List<Tweet> getAll(Annotation annotation, String keyword) {
-
+    public List<Tweet> getAll(Annotation annotation, String keyword)
+    {
         ObservableList<Tweet> response = FXCollections.observableArrayList();
 
         try

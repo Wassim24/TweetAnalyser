@@ -1,6 +1,5 @@
 package controller.view;
 
-import domain.Annotation;
 import domain.Tweet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,16 +10,11 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import services.algorithms.classification.*;
-import services.dao.TweetDaoFactory;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -52,7 +46,6 @@ public class SearchTabController
     {
         if (keyEvent.getCode() == KeyCode.ENTER)
             this.onClickSearchForTweetsBtn();
-
     }
 
     public void onClickSearchForTweetsBtn()
@@ -131,7 +124,6 @@ public class SearchTabController
             return;
 
         ObservableList<Tweet> annotedTweets =  FXCollections.observableArrayList();
-
         switch ((Algorithm)this.queryAlgorithm.getValue())
         {
             case DICTIONARY:
@@ -151,9 +143,6 @@ public class SearchTabController
                 break;
 
             case NONE:
-                annotedTweets.addAll(unannotedTweets);
-                break;
-
             default:
                 annotedTweets.addAll(unannotedTweets);
                 break;
@@ -170,10 +159,10 @@ public class SearchTabController
         if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
         {
             this.algorithmSettings.setDisable(false);
-            algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+            this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
 
             if (this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
-                algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2));
+                this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2));
         }
         else
             this.algorithmSettings.setDisable(true);
@@ -182,19 +171,30 @@ public class SearchTabController
             this.applyAlgorithm(this.queriedTweets, algoSettingValue);
     }
 
-    private int[] countFeelingsInFoundTweets() {
-
-
-        int feelings[] = {0,0,0};
+    private int[] countFeelingsInFoundTweets()
+    {
+        int feelings[] = {0, 0, 0};
 
         if(this.queriedTweets == null)
             return feelings;
 
         this.queriedTweets.forEach(
-                tweet -> {if (tweet.getAnnotation() == Annotation.POSITIF) feelings[0]++;
-                else if (tweet.getAnnotation() == Annotation.NEUTRE) feelings[1]++;
-                else feelings[2]++;
-                });
+            tweet ->
+            {
+                switch (tweet.getAnnotation())
+                {
+                    case POSITIF:
+                        feelings[0]++;
+                        break;
+                    case NEUTRE:
+                        feelings[1]++;
+                        break;
+                    case NEGATIF:
+                    default:
+                        feelings[2]++;
+                        break;
+                }
+        });
 
         return feelings;
     }

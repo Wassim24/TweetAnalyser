@@ -304,23 +304,23 @@
 .searchBox {-fx-padding : 5 5 5 5;}
 
 .searchTab {
-    -fx-background-image : url(../img/medium/search2.png);
+    -fx-background-image : url(../img/medium/search.png);
 }
 
 .databaseTab {
-    -fx-background-image : url(../img/medium/database2.png);
+    -fx-background-image : url(../img/medium/database.png);
 }
 
 .chartsTab {
-    -fx-background-image : url(../img/medium/charts2.png);
+    -fx-background-image : url(../img/medium/charts.png);
 }
 
 .evaluationTab {
-    -fx-background-image : url(../img/medium/charts2.png);
+    -fx-background-image : url(../img/medium/charts.png);
 }
 
 .settingsTab {
-    -fx-background-image : url(../img/medium/settings2.png);
+    -fx-background-image : url(../img/medium/settings.png);
 }
 
 .statusBar {

@@ -2,6 +2,7 @@ package services.algorithms.classification;
 
 import domain.Tweet;
 import services.dao.TweetDaoFactory;
+import services.twitter.TweetServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,22 +10,30 @@ import java.util.List;
 
 public class KNN
 {
-
     private KNN() {}
 
-    public static List<Tweet> compute(List<Tweet> tweetsToAnnote)
+    public static List<Tweet> compute(List<Tweet> toAnnotate)
     {
-        return compute(tweetsToAnnote, 25);
+        return compute(TweetServiceImpl.getInstance().getAll(), toAnnotate, 25, 1);
     }
 
-    public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
+    public static List<Tweet> compute(List<Tweet> toAnnotate, int numberOfNeighbours)
     {
-        List<Float> distancesList = new ArrayList<>();
-        List<Integer> neighboursIdsList = new ArrayList<>();
-        List<Tweet> annotedTweets = new ArrayList<>(), tweetsInDataBase = TweetDaoFactory.getInstance().getAll();
+        return compute(TweetServiceImpl.getInstance().getAll(), toAnnotate, 25, 1);
+    }
+
+    public static List<Tweet> compute(List<Tweet> tweetsInDataBase, List<Tweet> toAnnotate, int numberOfNeighbours, int step)
+    {
+        List<Float> distancesList = new ArrayList<Float>();
+        List<Integer> neighboursIdsList = new ArrayList<Integer>();
+        List<Tweet> annotedTweets = new ArrayList<Tweet>();
+
+        ArrayList<Tweet> response = new ArrayList<Tweet>();
+        for(Tweet p : toAnnotate)
+            response.add(p.clone());
 
         // Loop for iterating over the selected tweets
-        for (Tweet unannotedTweet : tweetsToAnnote)
+        for (Tweet unannotedTweet : response)
         {
             // Loop for putting the first numberOfNeighbours in the distancesList
             for (Tweet tweetInDB : tweetsInDataBase)
@@ -48,7 +57,13 @@ public class KNN
             }
 
             // For annotating the new tweets based on the min distance of the neighbours annotation
-            unannotedTweet.setAnnotation(tweetsInDataBase.get(neighboursIdsList.get(findIndexOfMin(distancesList)) - 1).getAnnotation());
+
+            // For annotating the new tweets based on the min distance of the neighbours annotation
+            if (neighboursIdsList.get(findIndexOfMin(distancesList)) >= tweetsInDataBase.size())
+                unannotedTweet.setAnnotation(tweetsInDataBase.get(neighboursIdsList.get(findIndexOfMin(distancesList)) - step).getAnnotation());
+            else
+                unannotedTweet.setAnnotation(tweetsInDataBase.get(neighboursIdsList.get(findIndexOfMin(distancesList))).getAnnotation());
+
             //Adding the newly annoted Tweet to the annotedTweetsList
             annotedTweets.add(unannotedTweet);
 

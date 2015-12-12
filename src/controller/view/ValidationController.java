@@ -1,29 +1,18 @@
 package controller.view;
 
-import domain.Annotation;
 import domain.Tweet;
-import domain.Vocabulary;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.*;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import services.algorithms.classification.Bayes;
-import services.algorithms.classification.BayesFrequency;
-import services.algorithms.classification.Glossary;
-import services.algorithms.classification.KNN;
-import services.dao.TweetDaoFactory;
+import services.algorithms.classification.*;
+import services.algorithms.classification.test.BayesFrequencyTest;
+import services.algorithms.classification.test.BayesTest;
+import services.twitter.TweetServiceImpl;
 import services.twitter.VocabularyServiceImpl;
 
 import java.util.LinkedList;
@@ -34,12 +23,12 @@ public class ValidationController
     @FXML private Spinner validationSetting;
     @FXML private VBox chartsVBox;
     private BarChart barChart;
+    private int numberOfTweets;
 
-    public void initialize() {
-
+    public void initialize()
+    {
         this.validationSetting.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 100));
         this.validationSetting.setEditable(true);
-
     }
 
     public void initializeBarChart()
@@ -48,8 +37,6 @@ public class ValidationController
         feelingAxis.setLabel("Algorithm");
 
         int foldsNumber = (int) this.validationSetting.getValue();
-
-
         NumberAxis tweetsNumberAxis = new NumberAxis();
         tweetsNumberAxis.setLabel("Error Rate");
 
@@ -61,13 +48,15 @@ public class ValidationController
         this.barChart.setLegendSide(Side.BOTTOM);
         this.barChart.setLegendVisible(false);
 
+        this.numberOfTweets = TweetServiceImpl.getInstance().getAll().size();
+
         XYChart.Series data = new XYChart.Series();
         data.setName("Algorithms");
         data.getData().add(new XYChart.Data("KNN", validateKNN(foldsNumber)));
-        data.getData().add(new XYChart.Data("Bayes", validateBayes(foldsNumber, 1)));
-        data.getData().add(new XYChart.Data("Bayes 1", validateBayes(foldsNumber, 2)));
-        data.getData().add(new XYChart.Data("Bayes Fq", validateBayesFrequency(foldsNumber, 1)));
-        data.getData().add(new XYChart.Data("Bayes Fq 1", validateBayesFrequency(foldsNumber, 2)));
+        data.getData().add(new XYChart.Data("Bayes Uni", validateBayes(foldsNumber, 1, Algorithm.BAYES)));
+        data.getData().add(new XYChart.Data("Bayes Bi", validateBayes(foldsNumber, 2, Algorithm.BAYES)));
+        data.getData().add(new XYChart.Data("Bayes Fq Uni", validateBayes(foldsNumber, 1, Algorithm.FREQUENCY_BAYES)));
+        data.getData().add(new XYChart.Data("Bayes Fq Bi", validateBayes(foldsNumber, 2, Algorithm.FREQUENCY_BAYES)));
         data.getData().add(new XYChart.Data("Dictionary", validateGlossary(foldsNumber)));
 
 
@@ -80,24 +69,18 @@ public class ValidationController
 
     private float validateKNN(int numberOfGroups)
     {
-        int total = TweetDaoFactory.getInstance().getAll().size();
-        int goodAnnotation = 0;
-        int step = total / numberOfGroups;
-        List<List<Tweet>> all = new LinkedList<>();
+        int step = this.numberOfTweets / numberOfGroups;
+        List<List<Tweet>> all = this.getTweetsByGroup(numberOfGroups);
         List<Tweet> learningSet = new LinkedList<>();
-        List<Annotation> annotations = new LinkedList<>();
 
-        for (int i = 0; i < numberOfGroups; i++) {all.add(TweetDaoFactory.getInstance().get(i*step, step));}
-
-        for (int i = 0; i < numberOfGroups; i++) {
-
+        int goodAnnotation = 0;
+        for (int i = 0; i < numberOfGroups; i++)
+        {
             for (int j = 0; j < numberOfGroups; j++)
-                if (i == j) continue;
-                else learningSet.addAll(all.get(j));
+                if (i != j)
+                    learningSet.addAll(all.get(j));
 
-            all.get(i).forEach(tweet -> annotations.add(tweet.getAnnotation()));
-            goodAnnotation += compareResults(KNN.validate(all.get(i), learningSet, (int) Math.sqrt(all.get(i).size()), step), annotations, step);
-            annotations.clear();
+            goodAnnotation += this.compareResults(all.get(i), KNN.compute(learningSet, all.get(i), (int) Math.sqrt(all.get(i).size()), step));
             learningSet.clear();
         }
 
@@ -106,104 +89,69 @@ public class ValidationController
 
     private float validateGlossary(int numberOfGroups)
     {
-        int total = TweetDaoFactory.getInstance().getAll().size();
+        List<List<Tweet>> all = this.getTweetsByGroup(numberOfGroups);
+        List<Tweet> learningSet = new LinkedList<Tweet>();
+
         int goodAnnotation = 0;
-        int step = total / numberOfGroups;
-
-        List<List<Tweet>> all = new LinkedList<>();
-        List<Tweet> learningSet = new LinkedList<>();
-        List<Annotation> annotations = new LinkedList<>();
-
-        for (int i = 0; i < numberOfGroups; i++) {all.add(TweetDaoFactory.getInstance().get(i*step, step));}
-
-        for (int i = 0; i < numberOfGroups; i++) {
+        for (int i = 0; i < numberOfGroups; i++)
+        {
             for (int j = 0; j < numberOfGroups; j++)
-                if (i == j) continue;
-                else learningSet.addAll(all.get(j));
+                if (i != j)
+                    learningSet.addAll(all.get(j));
 
-            all.get(i).forEach(tweet -> annotations.add(tweet.getAnnotation()));
-            goodAnnotation += compareResults(Glossary.validate(all.get(i)), annotations, step);
-            annotations.clear();
+            goodAnnotation += compareResults(all.get(i), Glossary.compute(all.get(i)));
             learningSet.clear();
         }
 
         return (float) goodAnnotation / (float) numberOfGroups;
     }
 
-    private float validateBayes(int numberOfGroups, int ngrams)
+    private float validateBayes(int numberOfGroups, int ngrams, Algorithm algorithm)
     {
-        int total = TweetDaoFactory.getInstance().getAll().size();
+        List<List<Tweet>> all = this.getTweetsByGroup(numberOfGroups);
+        List<Tweet> learningSet = new LinkedList<Tweet>();
+
         int goodAnnotation = 0;
-        int step = total / numberOfGroups;
-        List<List<Tweet>> all = new LinkedList<>();
-        List<Tweet> learningSet = new LinkedList<>();
-        List<Annotation> annotations = new LinkedList<>();
-
-        List<Vocabulary> vocabularyLearning;
-
-        for (int i = 0; i < numberOfGroups; i++) {all.add(TweetDaoFactory.getInstance().get(i*step, step));}
-
-        for (int i = 0; i < numberOfGroups; i++) {
-
+        for (int i = 0; i < numberOfGroups; i++)
+        {
             for (int j = 0; j < numberOfGroups; j++)
-                if (i == j) continue;
-                else learningSet.addAll(all.get(j));
+                if (i != j)
+                    learningSet.addAll(all.get(j));
 
-            all.get(i).forEach(tweet -> annotations.add(tweet.getAnnotation()));
-            vocabularyLearning = VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet);
-            goodAnnotation += compareResults(Bayes.validate(all.get(i), vocabularyLearning, ngrams), annotations, step);
-            annotations.clear();
+
+            if (algorithm == Algorithm.BAYES)
+                goodAnnotation += this.compareResults(all.get(i), BayesTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+            else
+                goodAnnotation += this.compareResults(all.get(i), BayesFrequencyTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+
             learningSet.clear();
         }
 
         return (float) goodAnnotation / (float) numberOfGroups;
     }
 
-    private float validateBayesFrequency(int numberOfGroups, int ngrams)
+    private List<List<Tweet>> getTweetsByGroup(int numberOfGroups)
     {
-        int total = TweetDaoFactory.getInstance().getAll().size();
-        int goodAnnotation = 0;
-        int step = total / numberOfGroups;
-        List<List<Tweet>> all = new LinkedList<>();
-        List<Tweet> learningSet = new LinkedList<>();
-        List<Annotation> annotations = new LinkedList<>();
+        List<List<Tweet>> response = new LinkedList<List<Tweet>>();
 
-        List<Vocabulary> vocabularyLearning;
+        for (int i = 0, step = this.numberOfTweets / numberOfGroups; i < numberOfGroups; i++)
+            response.add(TweetServiceImpl.getInstance().getBetween(i * step, step));
 
-        for (int i = 0; i < numberOfGroups; i++) {all.add(TweetDaoFactory.getInstance().get(i*step, step));}
-
-        for (int i = 0; i < numberOfGroups; i++) {
-
-            for (int j = 0; j < numberOfGroups; j++)
-                if (i == j) continue;
-                else learningSet.addAll(all.get(j));
-
-            all.get(i).forEach(tweet -> annotations.add(tweet.getAnnotation()));
-            vocabularyLearning = VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet);
-            goodAnnotation += compareResults(BayesFrequency.validate(all.get(i), vocabularyLearning, ngrams), annotations, step);
-            annotations.clear();
-            learningSet.clear();
-        }
-
-        return (float) goodAnnotation / (float) numberOfGroups;
+        return response;
     }
 
-    public int compareResults(List<Tweet> annotated, List<Annotation> annotations, int step)
+    public int compareResults(List<Tweet> annotated, List<Tweet> newAnnotation)
     {
-        int goodAnnotation = 0;
+        int sameResult = 0;
 
-        for (int i = 0; i < step; i++) {
-            if(annotations.get(i) == annotated.get(i).getAnnotation())
-                goodAnnotation++;
-        }
+        for (Tweet t : annotated)
+            if (newAnnotation.contains(t))
+                sameResult++;
 
-        return goodAnnotation;
+        return sameResult;
     }
 
     public void onClickValidate(ActionEvent actionEvent) {
         this.initializeBarChart();
-    }
-
-    public void onKeyPressedValidate(Event event) {
     }
 }

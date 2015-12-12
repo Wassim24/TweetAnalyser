@@ -15,4 +15,5 @@ public interface TweetService
      boolean add(String username, String tweet, Date date, String keyword);
      boolean addAll(List<Tweet> tweets);
      List<Tweet> getAll();
+     List<Tweet> getBetween(int start, int limit);
 }

@@ -9,10 +9,7 @@ public interface TweetDao
 {
     boolean add(Tweet tweet);
     List<Tweet> getAll();
-
-    List<Tweet> get(int start, int limit);
-
+    List<Tweet> getBetween(int start, int limit);
     List<Tweet> getAll(Annotation annotation);
-
     List<Tweet> getAll(Annotation annotation, String keyword);
 }

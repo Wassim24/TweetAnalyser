@@ -69,4 +69,10 @@ public class TweetServiceImpl implements TweetService
     {
         return TweetDaoFactory.getInstance().getAll();
     }
+
+    @Override
+    public List<Tweet> getBetween(int start, int limit)
+    {
+        return TweetDaoFactory.getInstance().getBetween(start, limit);
+    }
 }

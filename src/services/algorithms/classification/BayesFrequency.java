@@ -13,23 +13,27 @@ public class BayesFrequency
 
     public static List<Tweet> compute(List<Tweet> toAnnotate, int ngramme)
     {
-        if ( ngramme > 2 ) ngramme = 2;
+        return compute(VocabularyServiceImpl.getInstance().getAllKey(ngramme), toAnnotate, ngramme);
+    }
 
+    public static List<Tweet> compute(Map<Vocabulary, String> vocabularies, List<Tweet> toAnnotate, int ngramme)
+    {
         List<String> wordsWithFrequency;
-        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
         int frequency;
         double probPositive, probNegative, probNeutre, maxValue;
 
-        for (Tweet tweet : toAnnotate)
+        ArrayList<Tweet> response = new ArrayList<Tweet>();
+        for(Tweet p : toAnnotate)
+            response.add(p.clone());
+
+        for (Tweet tweet : response)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
             wordsWithFrequency = generateNgrams(ngramme, tweet.getTweet());
 
             for (String word : new HashSet<String>(wordsWithFrequency))
             {
-
                 frequency = Collections.frequency(wordsWithFrequency, word);
-
 
                 for (Vocabulary v : vocabularies.keySet())
                 {
@@ -56,61 +60,7 @@ public class BayesFrequency
                     tweet.setAnnotation(Annotation.POSITIF);
         }
 
-        return toAnnotate;
-    }
-
-    public static List<Tweet> validate(List<Tweet> toAnnotate, List<Vocabulary> learningSet, int ngramme)
-    {
-        List<String> wordsWithFrequency;
-        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
-        int frequency;
-        double probPositive, probNegative, probNeutre, maxValue;
-
-        Iterator it = vocabularies.entrySet().iterator();
-        while (it.hasNext()) {
-
-            Map.Entry pair = (Map.Entry)it.next();
-
-            if ( !learningSet.contains(pair.getValue()) )
-                it.remove();
-        }
-
-        for (Tweet tweet : toAnnotate)
-        {
-            probPositive = 1; probNegative = 1; probNeutre = 1;
-            wordsWithFrequency = generateNgrams(ngramme, tweet.getTweet());
-
-            for (String word : new HashSet<String>(wordsWithFrequency))
-            {
-
-                frequency = Collections.frequency(wordsWithFrequency, word);
-
-                for (Vocabulary v : vocabularies.keySet())
-                {
-                    if(v.getWord().length() <= 3 || v == null)
-                        continue;
-
-                    if ( v.getWord().equalsIgnoreCase(word) ) {
-
-                        probPositive *= Math.pow(v.getPosocc(), frequency);
-                        probNegative *= Math.pow(v.getNegocc(), frequency);
-                        probNeutre *= Math.pow(v.getNeuocc(), frequency);
-                    }
-                }
-            }
-
-            maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
-
-            if (maxValue == probNeutre)
-                tweet.setAnnotation(Annotation.NEUTRE);
-            else
-            if (maxValue == probNegative)
-                tweet.setAnnotation(Annotation.NEGATIF);
-            else
-                tweet.setAnnotation(Annotation.POSITIF);
-        }
-
-        return toAnnotate;
+        return response;
     }
 
     private static List<String> generateNgrams(int n, String text)

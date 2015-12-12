@@ -143,4 +143,32 @@ public class Tweet implements EntityBeans
         }
         return ngrams;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tweet tweet1 = (Tweet) o;
+
+        if (isCleanTweet != tweet1.isCleanTweet) return false;
+        if (!username.equals(tweet1.username)) return false;
+        if (!tweet.equals(tweet1.tweet)) return false;
+        if (!keyword.equals(tweet1.keyword)) return false;
+        if (!date.equals(tweet1.date)) return false;
+        return annotation == tweet1.annotation;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = username.hashCode();
+        result = 31 * result + tweet.hashCode();
+        result = 31 * result + keyword.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + annotation.hashCode();
+        result = 31 * result + (isCleanTweet ? 1 : 0);
+        return result;
+    }
 }
