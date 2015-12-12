@@ -14,7 +14,6 @@ public class Main extends Application
         System.setProperty("prism.lcdtext", "false");
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/appStructure.fxml"));
 
-
         primaryStage.setTitle("Feelings Analyzer for Twitter | V 0.0");
         primaryStage.setScene(new Scene(root, 1000, 700));
         primaryStage.show();

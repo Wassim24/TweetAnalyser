@@ -1,13 +1,26 @@
 package controller.view;
 
+import domain.Annotation;
 import domain.Tweet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 import services.algorithms.classification.*;
+import services.dao.TweetDaoFactory;
 import services.twitter.TweetServiceImpl;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;
@@ -16,6 +29,7 @@ import java.util.List;
 
 public class SearchTabController
 {
+    @FXML private VBox searchLayout;
     @FXML private TextField keywordsTextField;
     @FXML private ListView<Tweet> foundTweetsListView;
     @FXML private Label queriesStatusLabel;
@@ -23,10 +37,22 @@ public class SearchTabController
     @FXML private Spinner<Integer> algorithmSettings;
     private List<Tweet> queriedTweets;
 
+    private int algoSettingValue;
+
+    public void initialize()
+    {
+        this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
+        this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
+
+        this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+        this.algorithmSettings.setEditable(true);
+    }
+
     public void onKeyPressSearchField(KeyEvent keyEvent)
     {
         if (keyEvent.getCode() == KeyCode.ENTER)
             this.onClickSearchForTweetsBtn();
+
     }
 
     public void onClickSearchForTweetsBtn()
@@ -45,9 +71,35 @@ public class SearchTabController
         this.updateRateInStatusBar();
     }
 
-    public void onClickClearTweetsListBtn()
+    public void onClickDisplayCharts()
     {
-        this.foundTweetsListView.getItems().clear();
+        Stage charts = new Stage();
+        VBox chartsVBox = new VBox();
+        PieChart pieChart = new PieChart();
+        Scene chartsScene = new Scene(chartsVBox);
+
+        pieChart.getStylesheets().add("css/bootstrap.css");
+
+        pieChart.setTitle("Tweets feelings chart");
+        pieChart.setLegendSide(Side.BOTTOM);
+
+        int feelings[] = countFeelingsInFoundTweets();
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
+                new PieChart.Data("Positive", feelings[0]),
+                new PieChart.Data("Neutral", feelings[1]),
+                new PieChart.Data("Negative", feelings[2])
+        );
+
+        pieChart.setData(data);
+
+        chartsVBox.getChildren().clear();
+        chartsVBox.getChildren().add(pieChart);
+        VBox.setVgrow(pieChart, Priority.ALWAYS);
+
+        charts.initModality(Modality.WINDOW_MODAL);
+        charts.setScene(chartsScene);
+        charts.show();
     }
 
     public void onClickSaveAllTweetsBtn()
@@ -73,7 +125,7 @@ public class SearchTabController
         }
     }
 
-    public void applyAlgorithm(List<Tweet> unannotedTweets)
+    public void applyAlgorithm(List<Tweet> unannotedTweets, int algoSettingValue)
     {
         if (unannotedTweets.isEmpty())
             return;
@@ -87,15 +139,15 @@ public class SearchTabController
                 break;
 
             case KNN:
-                annotedTweets.addAll(KNN.compute(unannotedTweets, algorithmSettings.getValue()));
+                annotedTweets.addAll(KNN.compute(unannotedTweets, algoSettingValue));
                 break;
 
             case BAYES:
-                annotedTweets.addAll(Bayes.compute(unannotedTweets, algorithmSettings.getValue()));
+                annotedTweets.addAll(Bayes.compute(unannotedTweets, algoSettingValue));
                 break;
 
             case FREQUENCY_BAYES:
-                annotedTweets.addAll(BayesFrequency.compute(unannotedTweets, algorithmSettings.getValue()));
+                annotedTweets.addAll(BayesFrequency.compute(unannotedTweets, algoSettingValue));
                 break;
 
             case NONE:
@@ -113,21 +165,37 @@ public class SearchTabController
 
     public void onChangeAlgorithm()
     {
+        algoSettingValue = algorithmSettings.getValue();
+
         if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
+        {
             this.algorithmSettings.setDisable(false);
+            algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
+
+            if (this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
+                algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2));
+        }
         else
             this.algorithmSettings.setDisable(true);
 
         if (this.queriedTweets != null)
-            this.applyAlgorithm(this.queriedTweets);
+            this.applyAlgorithm(this.queriedTweets, algoSettingValue);
     }
 
-    public void initialize()
-    {
-        this.queryAlgorithm.setItems(FXCollections.observableArrayList(Algorithm.values()));
-        this.queryAlgorithm.setValue(Algorithm.DICTIONARY);
+    private int[] countFeelingsInFoundTweets() {
 
-        this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
-        this.algorithmSettings.setEditable(true);
+
+        int feelings[] = {0,0,0};
+
+        if(this.queriedTweets == null)
+            return feelings;
+
+        this.queriedTweets.forEach(
+                tweet -> {if (tweet.getAnnotation() == Annotation.POSITIF) feelings[0]++;
+                else if (tweet.getAnnotation() == Annotation.NEUTRE) feelings[1]++;
+                else feelings[2]++;
+                });
+
+        return feelings;
     }
 }

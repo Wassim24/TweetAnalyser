@@ -145,13 +145,6 @@
     -fx-border-width : 1 0 1 0;
 }
 
-.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
-
-    -fx-border-color : #ededed;
-    -fx-border-width : 1 0 1 3;
-    -fx-font-weight : bold;
-}
-
 .list-cell:hover {
     -fx-cell-size: 75px;
     -fx-background-color : #e1e8ed;
@@ -186,7 +179,7 @@
     -fx-border-color : #8899a6;
     -fx-border-width : 0 0 0 3;
 
-    -fx-background-color : #f5f8fa;
+    -fx-background-color : #e6e9eb;
 }
 
 .scroll-bar:vertical{
@@ -322,6 +315,10 @@
     -fx-background-image : url(../img/medium/charts2.png);
 }
 
+.evaluationTab {
+    -fx-background-image : url(../img/medium/charts2.png);
+}
+
 .settingsTab {
     -fx-background-image : url(../img/medium/settings2.png);
 }
@@ -379,6 +376,20 @@
     -fx-spacing : 5;
 }
 
+.default-color0.chart-pie { -fx-pie-color: #549ae3; }
+.default-color1.chart-pie { -fx-pie-color: #d2b61f; }
+.default-color2.chart-pie { -fx-pie-color: #e5242a; }
+
+.data0.chart-bar { -fx-bar-fill: #549ae3; }
+.data1.chart-bar { -fx-bar-fill: #d2b61f; }
+.data2.chart-bar { -fx-bar-fill: #e5242a; }
+.data3.chart-bar { -fx-bar-fill: #f99b00; }
+.data4.chart-bar { -fx-bar-fill: #f9005e; }
+.data5.chart-bar { -fx-bar-fill: #5ef900; }
+.data6.chart-bar { -fx-bar-fill: #00f99b; }
+.data7.chart-bar { -fx-bar-fill: #b51900; }
+.data8.chart-bar { -fx-bar-fill: #00cf85; }
+
 
 // -----------------------   Styling for the feelings radio buttons starts here ---------------------- //
 
@@ -432,7 +443,7 @@
     -fx-border-color : rgba(34, 36, 38, 0.15);
     -fx-border-width : 0 0 3 0;
 
-    -fx-background-image: url(http://www.transparenttextures.com/patterns/diagmonds-light.png);
+    -fx-background-image: url(../img/medium/diagmonds-light.png);
 
     -fx-effect : innershadow( three-pass-box, rgba(0,0,0,.03) , 10 , 0.04 , 0 , -10);
 }

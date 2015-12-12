@@ -9,6 +9,7 @@ import java.util.List;
 
 public class KNN
 {
+
     private KNN() {}
 
     public static List<Tweet> compute(List<Tweet> tweetsToAnnote)
@@ -18,9 +19,9 @@ public class KNN
 
     public static List<Tweet> compute(List<Tweet> tweetsToAnnote, int numberOfNeighbours)
     {
-        List<Float> distancesList = new ArrayList<Float>();
-        List<Integer> neighboursIdsList = new ArrayList<Integer>();
-        List<Tweet> annotedTweets = new ArrayList<Tweet>(), tweetsInDataBase = TweetDaoFactory.getInstance().getAll();
+        List<Float> distancesList = new ArrayList<>();
+        List<Integer> neighboursIdsList = new ArrayList<>();
+        List<Tweet> annotedTweets = new ArrayList<>(), tweetsInDataBase = TweetDaoFactory.getInstance().getAll();
 
         // Loop for iterating over the selected tweets
         for (Tweet unannotedTweet : tweetsToAnnote)
@@ -98,5 +99,63 @@ public class KNN
                 commonWordsNumber++;
 
         return 1 - commonWordsNumber / (float)(toClassifyTweet.getWordsCount() + classifiedTweet.getWordsCount());
+    }
+
+    public static List<Tweet> validate(List<Tweet> tweets, List<Tweet> learningSet, int numberOfNeighbours, int step)
+    {
+
+        List<Float> distancesList = new ArrayList<>();
+        List<Integer> neighboursIdsList = new ArrayList<>();
+        List<Tweet> annotedTweets = new ArrayList<>();
+
+        // Loop for iterating over the selected tweets
+        for (Tweet unannotedTweet : tweets)
+        {
+            // Loop for putting the first numberOfNeighbours in the distancesList
+            for (Tweet tweetInDB : learningSet)
+            {
+                distancesList.add(findEuclideanDistance(unannotedTweet, tweetInDB));
+                neighboursIdsList.add(tweetInDB.getId());
+
+                if (distancesList.size() == numberOfNeighbours)
+                    break;
+            }
+
+            //Loop for getting the tweets in DB and comparing them to the neighbours
+            for (int i = numberOfNeighbours + 1; i < learningSet.size() - 1; i++)
+            {
+                float calculatedEuclideanDistance = findEuclideanDistance(unannotedTweet, learningSet.get(i));
+                int minDistIndex = findIndexOfMin(distancesList, calculatedEuclideanDistance);
+
+                // For replacing the distance at minDistIndex with the new calculatedEuclideanDistance and the id
+                distancesList.set(minDistIndex, calculatedEuclideanDistance);
+                neighboursIdsList.set(minDistIndex, learningSet.get(i).getId());
+            }
+
+            // For annotating the new tweets based on the min distance of the neighbours annotation
+            if( neighboursIdsList.get(findIndexOfMin(distancesList)) >= learningSet.size() )
+                unannotedTweet.setAnnotation(learningSet.get(neighboursIdsList.get(findIndexOfMin(distancesList)) - step).getAnnotation());
+            else
+                unannotedTweet.setAnnotation(learningSet.get(neighboursIdsList.get(findIndexOfMin(distancesList))).getAnnotation());
+
+
+
+            //Adding the newly annoted Tweet to the annotedTweetsList
+            annotedTweets.add(unannotedTweet);
+
+            //Clearing the lists for the new round :P
+            distancesList.clear();
+            neighboursIdsList.clear();
+        }
+
+
+
+
+        // Returning the liste of the newly annoted Tweets
+        return annotedTweets;
+    }
+
+    private static void errorRate(List<Tweet> newTweets) {
+        newTweets.forEach(tweet -> System.out.println(tweet.getAnnotation()));
     }
 }

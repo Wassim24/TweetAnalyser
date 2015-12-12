@@ -1,0 +1,23 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.*?>
+<Tab fx:controller="controller.view.ValidationController"
+     xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="evaluationTab">
+
+    <VBox>
+
+        <HBox styleClass="titleHbox">
+            <Label maxWidth="Infinity" styleClass="bigTitle" text="Cross-Validation " />
+        </HBox>
+
+        <HBox styleClass="searchBox" spacing="3">
+            <Spinner HBox.hgrow="ALWAYS" fx:id="validationSetting" styleClass="algorithmSettings" maxWidth="Infinity" disable="false" />
+            <!-- <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/> -->
+            <Button text="Launch Validation" onAction="#onClickValidate"/>
+        </HBox>
+
+        <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" fx:id="chartsVBox"></VBox>
+    </VBox>
+</Tab>

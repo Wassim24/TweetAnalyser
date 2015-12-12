@@ -72,6 +72,27 @@ public class DictionarySqliteDaoImpl implements DictionaryDao
     }
 
     @Override
+    public Dictionary get(Annotation annotation, int start, int limit)
+    {
+        Dictionary response = new Dictionary(annotation);
+
+        try
+        {
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
+            Statement stmt = dbConnection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_WORD +" FROM "+ TABLE_NAME_DICTIONARY +" WHERE "+ COLUMN_ANNOTATION +" = "+ annotation.getValue());
+            while (rs.next())
+                response.getWords().add(rs.getString(COLUMN_WORD));
+
+            stmt.close();
+            dbConnection.close();
+        }
+        catch (SQLException e) {}
+
+        return response;
+    }
+
+    @Override
     public List<Dictionary> getAll()
     {
         ObservableList<Dictionary> response = FXCollections.observableArrayList();

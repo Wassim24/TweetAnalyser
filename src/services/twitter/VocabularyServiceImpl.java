@@ -39,12 +39,14 @@ public class VocabularyServiceImpl implements VocabularyService
     }
 
     @Override
-    public Map<String, Vocabulary> getAllKey(int ngramme)
+    public Map<Vocabulary, String> getAllKey(int ngramme)
     {
-        Map<String, Vocabulary> m = new HashMap<String, Vocabulary>();
+        Map<Vocabulary, String> m = new HashMap();
+        List<Vocabulary> vocab = this.getAll(ngramme);
 
-        for (Vocabulary vocabulary : this.getAll(ngramme))
-            m.put(vocabulary.getWord(), vocabulary);
+        for (Vocabulary v : vocab) {
+            m.put(v, v.getWord());
+        }
 
         return m;
     }
@@ -111,6 +113,55 @@ public class VocabularyServiceImpl implements VocabularyService
         List<Tweet> databaseTweet = TweetDaoFactory.getInstance().getAll();
         for (int i = 1; i <= to_ngramme; i++)
             this.buildVocabulary(i, databaseTweet);
+    }
+
+    @Override
+    public List<Vocabulary> buildAllVocabulary(int ngrams, List<Tweet> addTweetList)
+    {
+        int posOcc, negOcc, neuOcc, k;
+        List<Vocabulary> vocabularies = new ArrayList<>();
+        List<Tweet> tweets = TweetDaoFactory.getInstance().getAll();
+        Vocabulary vocabulary;
+
+        // Looping through each tweet in database and getting its words
+        for (Tweet tweet : tweets)
+        {
+            // Getting the words of a tweet with split
+            for (String wordToCompare : generateNgrams(ngrams, tweet.getTweet()))
+            {
+                /* verification de la taille des grammes */
+                posOcc = 0; negOcc = 0; neuOcc = 0;
+
+                // Looping through the tweets and comparing previous words with each tweet words
+                for (Tweet tweetToCompareTo : addTweetList)
+                {
+                    // For each tweet generate the ngrams and compare with the previous
+                    for (String wordToCompareTo : generateNgrams(ngrams, tweetToCompareTo.getTweet()))
+                    {
+                        // Comparing the words
+                        if (wordToCompareTo.equals(wordToCompare))
+                            switch (tweetToCompareTo.getAnnotation())
+                            {
+                                case NEGATIF:
+                                    negOcc++;
+                                    break;
+                                case NEUTRE:
+                                    neuOcc++;
+                                    break;
+                                default:
+                                    posOcc++;
+                            }
+                    }
+                }
+
+                // Checking if the word has already been added or not
+                vocabulary = new Vocabulary(wordToCompare, posOcc, negOcc, neuOcc, ngrams);
+                if (!vocabularies.contains(vocabulary))
+                    vocabularies.add(vocabulary);
+            }
+        }
+
+        return vocabularies;
     }
 
     @Override

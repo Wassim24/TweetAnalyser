@@ -5,7 +5,7 @@
 
 <Tab fx:controller="controller.view.SearchTabController"
      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="searchTab">
-    <VBox>
+    <VBox fx:id="searchLayout">
         <!-- Label for displaying the big title -->
         <HBox styleClass="titleHbox">
             <Label styleClass="bigTitle" text="Searching for tweets" maxWidth="Infinity"/>
@@ -24,6 +24,7 @@
                 <Spinner fx:id="algorithmSettings" styleClass="algorithmSettings" disable="true" />
                 <Button text="Search" onAction="#onClickSearchForTweetsBtn"/>
             </HBox>
+
         </VBox>
 
         <!-- List view for displaying the found tweets -->
@@ -32,9 +33,9 @@
         <!-- HBox containing the save buttons and state of the search -->
         <HBox styleClass="statusBar" spacing="3">
             <Label text="" HBox.hgrow="ALWAYS" fx:id="queriesStatusLabel" styleClass="statusLabel" maxWidth="Infinity"/>
-            <Button text="Save selected tweet(s)" onAction="#onClickSaveSelectedTweetsBtn"/>
-            <Button text="Save all the tweets" onAction="#onClickSaveAllTweetsBtn"/>
-            <Button text="Clear results" onAction="#onClickClearTweetsListBtn"/>
+            <Button text="Save selected" onAction="#onClickSaveSelectedTweetsBtn"/>
+            <Button text="Save all" onAction="#onClickSaveAllTweetsBtn"/>
+            <Button text="Get Trend Charts" onAction="#onClickDisplayCharts"/>
         </HBox>
     </VBox>
 </Tab>

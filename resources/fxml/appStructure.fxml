@@ -16,4 +16,6 @@
 
     <!-- Tab for modifiying the different settings of the app -->
     <fx:include source="settingsTab.fxml"/>
+
+    <fx:include source="validation.fxml"/>
 </TabPane>

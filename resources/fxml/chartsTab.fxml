@@ -5,6 +5,9 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <Tab fx:controller="controller.view.ChartsController"
      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" text="" styleClass="chartsTab">
 
@@ -26,6 +29,12 @@
                     <String fx:value="Pie Chart" />
                 </value>
             </ComboBox>
+        </HBox>
+        <HBox styleClass="searchBox" spacing="3">
+            <TextField HBox.hgrow="ALWAYS" promptText="Enter your keyword to show the charts for it." fx:id="databaseTextField" onKeyPressed="#onKeyPressSearchKeyword"/>
+
+            <!-- <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/> -->
+            <Button text="Search" onAction="#onClickFindKeyword"/>
         </HBox>
 
         <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" fx:id="chartsVBox">

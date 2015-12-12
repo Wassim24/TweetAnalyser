@@ -13,28 +13,36 @@ public class BayesFrequency
 
     public static List<Tweet> compute(List<Tweet> toAnnotate, int ngramme)
     {
+        if ( ngramme > 2 ) ngramme = 2;
+
         List<String> wordsWithFrequency;
-        Map<String, Vocabulary> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
+        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
         int frequency;
         double probPositive, probNegative, probNeutre, maxValue;
 
         for (Tweet tweet : toAnnotate)
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
-            wordsWithFrequency = Arrays.asList(tweet.getTweet().split(" "));
-            for (String s : new HashSet<String>(wordsWithFrequency))
+            wordsWithFrequency = generateNgrams(ngramme, tweet.getTweet());
+
+            for (String word : new HashSet<String>(wordsWithFrequency))
             {
-                if (vocabularies.get(s) == null || s.length() <= 3)
-                    continue;
 
-                frequency = Collections.frequency(wordsWithFrequency, s);
+                frequency = Collections.frequency(wordsWithFrequency, word);
 
-                /*
-                 * P(t|c) = Ym∈t P(m|c)^(n of m in wordsWithFrequency)
-                 */
-                probPositive *= Math.pow(vocabularies.get(s).getPosocc(), frequency);
-                probNegative *= Math.pow(vocabularies.get(s).getNegocc(), frequency);
-                probNeutre *= Math.pow(vocabularies.get(s).getNeuocc(), frequency);
+
+                for (Vocabulary v : vocabularies.keySet())
+                {
+                    if(v.getWord().length() <= 3 || v == null)
+                        continue;
+
+                    if ( v.getWord().equalsIgnoreCase(word) ) {
+
+                        probPositive *= Math.pow(v.getPosocc(), frequency);
+                        probNegative *= Math.pow(v.getNegocc(), frequency);
+                        probNeutre *= Math.pow(v.getNeuocc(), frequency);
+                    }
+                }
             }
 
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
@@ -49,5 +57,83 @@ public class BayesFrequency
         }
 
         return toAnnotate;
+    }
+
+    public static List<Tweet> validate(List<Tweet> toAnnotate, List<Vocabulary> learningSet, int ngramme)
+    {
+        List<String> wordsWithFrequency;
+        Map<Vocabulary, String> vocabularies = VocabularyServiceImpl.getInstance().getAllKey(ngramme);
+        int frequency;
+        double probPositive, probNegative, probNeutre, maxValue;
+
+        Iterator it = vocabularies.entrySet().iterator();
+        while (it.hasNext()) {
+
+            Map.Entry pair = (Map.Entry)it.next();
+
+            if ( !learningSet.contains(pair.getValue()) )
+                it.remove();
+        }
+
+        for (Tweet tweet : toAnnotate)
+        {
+            probPositive = 1; probNegative = 1; probNeutre = 1;
+            wordsWithFrequency = generateNgrams(ngramme, tweet.getTweet());
+
+            for (String word : new HashSet<String>(wordsWithFrequency))
+            {
+
+                frequency = Collections.frequency(wordsWithFrequency, word);
+
+                for (Vocabulary v : vocabularies.keySet())
+                {
+                    if(v.getWord().length() <= 3 || v == null)
+                        continue;
+
+                    if ( v.getWord().equalsIgnoreCase(word) ) {
+
+                        probPositive *= Math.pow(v.getPosocc(), frequency);
+                        probNegative *= Math.pow(v.getNegocc(), frequency);
+                        probNeutre *= Math.pow(v.getNeuocc(), frequency);
+                    }
+                }
+            }
+
+            maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
+
+            if (maxValue == probNeutre)
+                tweet.setAnnotation(Annotation.NEUTRE);
+            else
+            if (maxValue == probNegative)
+                tweet.setAnnotation(Annotation.NEGATIF);
+            else
+                tweet.setAnnotation(Annotation.POSITIF);
+        }
+
+        return toAnnotate;
+    }
+
+    private static List<String> generateNgrams(int n, String text)
+    {
+        String array[] = text.split(" ");
+        List<String> ngrams = new ArrayList<String>();
+        String sequence;
+
+        parentloop:
+        for (int i = 0; i < (array.length - (n - 1)); i++)
+        {
+            sequence = "";
+
+            for (int j = i; j < n + i; j++)
+                if (array[j].length() < 3)
+                    continue parentloop;
+                else
+                    sequence += " " + array[j];
+
+            sequence = sequence.replaceFirst(" ", "");
+            ngrams.add(sequence);
+        }
+
+        return ngrams;
     }
 }
