@@ -118,7 +118,6 @@ public class ValidationController
                 if (i != j)
                     learningSet.addAll(all.get(j));
 
-
             if (algorithm == Algorithm.BAYES)
                 goodAnnotation += this.compareResults(all.get(i), BayesTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
             else
@@ -142,13 +141,13 @@ public class ValidationController
 
     public int compareResults(List<Tweet> annotated, List<Tweet> newAnnotation)
     {
-        int sameResult = 0;
+        int differentResult = 0;
 
         for (Tweet t : annotated)
-            if (newAnnotation.contains(t))
-                sameResult++;
+            if (! newAnnotation.contains(t))
+                differentResult++;
 
-        return sameResult;
+        return differentResult;
     }
 
     public void onClickValidate(ActionEvent actionEvent) {
