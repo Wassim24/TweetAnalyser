@@ -44,9 +44,8 @@ public class VocabularyServiceImpl implements VocabularyService
         Map<Vocabulary, String> m = new HashMap();
         List<Vocabulary> vocab = this.getAll(ngramme);
 
-        for (Vocabulary v : vocab) {
+        for (Vocabulary v : vocab)
             m.put(v, v.getWord());
-        }
 
         return m;
     }
@@ -60,11 +59,10 @@ public class VocabularyServiceImpl implements VocabularyService
     @Override
     public void buildVocabulary(int ngrams, List<Tweet> addTweetList)
     {
-        int posOcc, negOcc, neuOcc, k;
+        int posOcc, negOcc, neuOcc;
         List<Vocabulary> vocabularies = new ArrayList<>();
         List<Tweet> tweets = TweetDaoFactory.getInstance().getAll();
         Vocabulary vocabulary;
-        String[] checkWords;
 
         // Looping through each tweet in database and getting its words
         for (Tweet tweet : tweets)
@@ -118,7 +116,7 @@ public class VocabularyServiceImpl implements VocabularyService
     @Override
     public List<Vocabulary> buildAllVocabulary(int ngrams, List<Tweet> addTweetList)
     {
-        int posOcc, negOcc, neuOcc, k;
+        int posOcc, negOcc, neuOcc;
         List<Vocabulary> vocabularies = new ArrayList<>();
         List<Tweet> tweets = TweetDaoFactory.getInstance().getAll();
         Vocabulary vocabulary;
