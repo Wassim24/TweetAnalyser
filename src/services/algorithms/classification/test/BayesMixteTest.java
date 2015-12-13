@@ -3,13 +3,14 @@ package services.algorithms.classification.test;
 import domain.Tweet;
 import domain.Vocabulary;
 import services.algorithms.classification.Bayes;
+import services.algorithms.classification.BayesMixte;
 import services.twitter.VocabularyServiceImpl;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class BayesTest
+public class BayesMixteTest
 {
     public static List<Tweet> test(List<Tweet> toAnnotate, List<Vocabulary> learningSet, int ngramme)
     {
@@ -24,6 +25,6 @@ public class BayesTest
                 it.remove();
         }
 
-        return Bayes.compute(vocabularies, toAnnotate, ngramme);
+        return BayesMixte.compute(vocabularies, toAnnotate, ngramme);
     }
 }

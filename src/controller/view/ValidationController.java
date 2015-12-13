@@ -10,7 +10,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import services.algorithms.classification.*;
+import services.algorithms.classification.test.BayesFrequencyMixteTest;
 import services.algorithms.classification.test.BayesFrequencyTest;
+import services.algorithms.classification.test.BayesMixteTest;
 import services.algorithms.classification.test.BayesTest;
 import services.twitter.TweetServiceImpl;
 import services.twitter.VocabularyServiceImpl;
@@ -56,8 +58,10 @@ public class ValidationController
         data.getData().add(new XYChart.Data("KNN", validateKNN(15)));
         data.getData().add(new XYChart.Data("Bayes Uni", validateBayes(foldsNumber, 1, Algorithm.BAYES)));
         data.getData().add(new XYChart.Data("Bayes Bi", validateBayes(foldsNumber, 2, Algorithm.BAYES)));
+        data.getData().add(new XYChart.Data("Bayes Mixte", validateBayes(foldsNumber, 2, Algorithm.BAYES_MIXTE)));
         data.getData().add(new XYChart.Data("Bayes Fq Uni", validateBayes(foldsNumber, 1, Algorithm.FREQUENCY_BAYES)));
         data.getData().add(new XYChart.Data("Bayes Fq Bi", validateBayes(foldsNumber, 2, Algorithm.FREQUENCY_BAYES)));
+        data.getData().add(new XYChart.Data("Bayes Fq Mixte", validateBayes(foldsNumber, 2, Algorithm.FREQUENCY_BAYES_MIXTE)));
         data.getData().add(new XYChart.Data("Dictionary", validateGlossary(foldsNumber)));
 
         this.barChart.getData().addAll(data);
@@ -118,10 +122,24 @@ public class ValidationController
                 if (i != j)
                     learningSet.addAll(all.get(j));
 
-            if (algorithm == Algorithm.BAYES)
-                goodAnnotation += this.compareResults(all.get(i), BayesTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
-            else
-                goodAnnotation += this.compareResults(all.get(i), BayesFrequencyTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+            switch (algorithm) {
+
+                case BAYES:
+                    goodAnnotation += this.compareResults(all.get(i), BayesTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+                    break;
+
+                case BAYES_MIXTE:
+                    goodAnnotation += this.compareResults(all.get(i), BayesMixteTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+                    break;
+
+                case FREQUENCY_BAYES_MIXTE:
+                    goodAnnotation += this.compareResults(all.get(i), BayesFrequencyMixteTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+                    break;
+
+                default:
+                    goodAnnotation += this.compareResults(all.get(i), BayesFrequencyTest.test(all.get(i), VocabularyServiceImpl.getInstance().buildAllVocabulary(ngrams, learningSet), ngrams));
+                    break;
+            }
 
             learningSet.clear();
         }

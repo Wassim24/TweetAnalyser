@@ -125,6 +125,7 @@ public class SearchTabController
         ObservableList<Tweet> annotedTweets =  FXCollections.observableArrayList();
         switch ((Algorithm)this.queryAlgorithm.getValue())
         {
+
             case DICTIONARY:
                 annotedTweets.addAll(Glossary.compute(unannotedTweets));
                 break;
@@ -137,11 +138,20 @@ public class SearchTabController
                 annotedTweets.addAll(Bayes.compute(unannotedTweets, algoSettingValue));
                 break;
 
+            case BAYES_MIXTE:
+                annotedTweets.addAll(BayesMixte.compute(unannotedTweets, algoSettingValue));
+                break;
+
             case FREQUENCY_BAYES:
                 annotedTweets.addAll(BayesFrequency.compute(unannotedTweets, algoSettingValue));
                 break;
 
+            case FREQUENCY_BAYES_MIXTE:
+                annotedTweets.addAll(BayesFrequencyMixte.compute(unannotedTweets, algoSettingValue));
+                break;
+
             case NONE:
+
             default:
                 annotedTweets.addAll(unannotedTweets);
                 break;
@@ -155,12 +165,12 @@ public class SearchTabController
     {
         algoSettingValue = algorithmSettings.getValue();
 
-        if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
+        if (this.queryAlgorithm.getValue() == Algorithm.DICTIONARY || this.queryAlgorithm.getValue() == Algorithm.NONE)
         {
-            this.algorithmSettings.setDisable(false);
+            this.algorithmSettings.setDisable(true);
         }
         else
-            this.algorithmSettings.setDisable(true);
+            this.algorithmSettings.setDisable(false);
 
         if (this.queriedTweets != null)
             this.applyAlgorithm(this.queriedTweets, algoSettingValue);

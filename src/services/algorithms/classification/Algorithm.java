@@ -2,7 +2,9 @@ package services.algorithms.classification;
 
 public enum Algorithm
 {
-    DICTIONARY("Dictionary"), KNN("KNN"), BAYES("Bayes n-grammes"), FREQUENCY_BAYES("Bayes frequency n-grammes"), NONE("Without");
+    DICTIONARY("Dictionary"), KNN("KNN"), BAYES("Bayes Naive"),BAYES_MIXTE("Bayes Mixte"), FREQUENCY_BAYES("Bayes Frequency"),
+    FREQUENCY_BAYES_MIXTE("Bayes Frequency Mixte"),  NONE("Without");
+
     private String value;
 
     Algorithm(String i)
