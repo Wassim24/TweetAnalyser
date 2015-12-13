@@ -33,10 +33,11 @@ public class ValidationController
 
     public void initializeBarChart()
     {
+        int foldsNumber = (int) this.validationSetting.getValue();
+
         CategoryAxis feelingAxis = new CategoryAxis();
         feelingAxis.setLabel("Algorithm");
 
-        int foldsNumber = (int) this.validationSetting.getValue();
         NumberAxis tweetsNumberAxis = new NumberAxis();
         tweetsNumberAxis.setLabel("Error Rate");
 
@@ -52,13 +53,12 @@ public class ValidationController
 
         XYChart.Series data = new XYChart.Series();
         data.setName("Algorithms");
-        data.getData().add(new XYChart.Data("KNN", validateKNN(foldsNumber)));
+        data.getData().add(new XYChart.Data("KNN", validateKNN(15)));
         data.getData().add(new XYChart.Data("Bayes Uni", validateBayes(foldsNumber, 1, Algorithm.BAYES)));
         data.getData().add(new XYChart.Data("Bayes Bi", validateBayes(foldsNumber, 2, Algorithm.BAYES)));
         data.getData().add(new XYChart.Data("Bayes Fq Uni", validateBayes(foldsNumber, 1, Algorithm.FREQUENCY_BAYES)));
         data.getData().add(new XYChart.Data("Bayes Fq Bi", validateBayes(foldsNumber, 2, Algorithm.FREQUENCY_BAYES)));
         data.getData().add(new XYChart.Data("Dictionary", validateGlossary(foldsNumber)));
-
 
         this.barChart.getData().addAll(data);
 

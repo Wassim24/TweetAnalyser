@@ -5,7 +5,7 @@
 
 <Tab fx:controller="controller.view.SettingsController"
      xmlns:fx="http://javafx.com/fxml/1"
-     xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab">
+     xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab" onSelectionChanged="#onSelectingSettingsTab">
 
     <VBox>
         <!-- Label for displaying the bigger title -->
@@ -69,7 +69,7 @@
             <Label styleClass="menuItemLabel" text="Import your dictionary " GridPane.rowIndex="3"/>
 
             <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose a file" onAction="#loadDictionary"/>
-            <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="annotationDictionary">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Positive Dictionary"/>

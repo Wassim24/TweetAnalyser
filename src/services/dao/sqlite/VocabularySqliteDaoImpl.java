@@ -103,7 +103,7 @@ public class VocabularySqliteDaoImpl implements VocabularyDao
         {
             SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
             Statement stmt = dbConnection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEUOCC +", "+ COLUMN_GRAMME +" FROM "+ TABLE_NAME_VOCABULARY +" WHERE "+ COLUMN_GRAMME +" = "+ ngramme);
+            ResultSet rs = stmt.executeQuery("SELECT "+ COLUMN_ID +", "+ COLUMN_WORD +", "+ COLUMN_POSOCC +", "+ COLUMN_NEGOCC +", "+ COLUMN_NEUOCC +", "+ COLUMN_GRAMME +" FROM "+ TABLE_NAME_VOCABULARY +" WHERE "+ COLUMN_GRAMME +" = '"+ ngramme + "'");
             while (rs.next())
                 response.add(new Vocabulary(rs.getInt(COLUMN_ID), rs.getString(COLUMN_WORD), rs.getInt(COLUMN_POSOCC), rs.getInt(COLUMN_NEGOCC), rs.getInt(COLUMN_NEUOCC), rs.getInt(COLUMN_GRAMME)));
 

@@ -23,7 +23,6 @@ import java.util.List;
 
 public class SearchTabController
 {
-    @FXML private VBox searchLayout;
     @FXML private TextField keywordsTextField;
     @FXML private ListView<Tweet> foundTweetsListView;
     @FXML private Label queriesStatusLabel;
@@ -159,10 +158,6 @@ public class SearchTabController
         if (this.queryAlgorithm.getValue() == Algorithm.KNN || this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
         {
             this.algorithmSettings.setDisable(false);
-            this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
-
-            if (this.queryAlgorithm.getValue() == Algorithm.BAYES || this.queryAlgorithm.getValue() == Algorithm.FREQUENCY_BAYES)
-                this.algorithmSettings.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2));
         }
         else
             this.algorithmSettings.setDisable(true);
@@ -178,23 +173,20 @@ public class SearchTabController
         if(this.queriedTweets == null)
             return feelings;
 
-        this.queriedTweets.forEach(
-            tweet ->
-            {
-                switch (tweet.getAnnotation())
-                {
-                    case POSITIF:
-                        feelings[0]++;
-                        break;
-                    case NEUTRE:
-                        feelings[1]++;
-                        break;
-                    case NEGATIF:
-                    default:
-                        feelings[2]++;
-                        break;
-                }
-        });
+        this.foundTweetsListView.getItems().forEach(tweet -> {
+
+            switch (tweet.getAnnotation()) {
+                case POSITIF:
+                    feelings[0]++;
+                    break;
+                case NEUTRE:
+                    feelings[1]++;
+                    break;
+                default:
+                    feelings[2]++;
+                    break;
+            }
+        } );
 
         return feelings;
     }

@@ -19,8 +19,21 @@ public class BayesFrequency
     public static List<Tweet> compute(Map<Vocabulary, String> vocabularies, List<Tweet> toAnnotate, int ngramme)
     {
         List<String> wordsWithFrequency;
-        int frequency;
+        int frequency = 1;
         double probPositive, probNegative, probNeutre, maxValue;
+
+        int countPositive = 0, countNegative = 0, countNeutre = 0, size = vocabularies.size();
+        for (Vocabulary vocabulary : vocabularies.keySet())
+        {
+            if (vocabulary.getPosocc() > 0)
+                countPositive++;
+
+            if (vocabulary.getNegocc() > 0)
+                countNegative++;
+
+            if (vocabulary.getNeuocc() > 0)
+                countNeutre++;
+        }
 
         ArrayList<Tweet> response = new ArrayList<Tweet>();
         for(Tweet p : toAnnotate)
@@ -31,7 +44,7 @@ public class BayesFrequency
             probPositive = 1; probNegative = 1; probNeutre = 1;
             wordsWithFrequency = generateNgrams(ngramme, tweet.getTweet());
 
-            for (String word : new HashSet<String>(wordsWithFrequency))
+            for (String word : new HashSet<>(wordsWithFrequency))
             {
                 frequency = Collections.frequency(wordsWithFrequency, word);
 
@@ -42,12 +55,16 @@ public class BayesFrequency
 
                     if ( v.getWord().equalsIgnoreCase(word) ) {
 
-                        probPositive *= Math.pow(v.getPosocc(), frequency);
-                        probNegative *= Math.pow(v.getNegocc(), frequency);
-                        probNeutre *= Math.pow(v.getNeuocc(), frequency);
+                        probPositive *= (v.getPosocc() + 1) / (double) (countPositive + size);
+                        probNegative *= (v.getNegocc() + 1) / (double) (countNegative + size);
+                        probNeutre *= (v.getNeuocc() + 1) / (double) (countNeutre + size);
                     }
                 }
             }
+
+            probPositive = Math.pow(probPositive, frequency);
+            probNegative = Math.pow(probNegative, frequency);
+            probNeutre = Math.pow(probNeutre, frequency);
 
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
 

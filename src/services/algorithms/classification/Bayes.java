@@ -34,6 +34,7 @@ public class Bayes
         }
 
         ArrayList<Tweet> response = new ArrayList<Tweet>();
+
         for(Tweet p : toAnnotate)
             response.add(p.clone());
 
@@ -54,9 +55,9 @@ public class Bayes
                 }
             }
 
-            probPositive *= countPositive / (double) size;
-            probNegative *= countNegative / (double) size;
-            probNeutre *= countNeutre / (double) size;
+            probPositive *= (countPositive / (double) size);
+            probNegative *= (countNegative / (double) size);
+            probNeutre *= (countNeutre / (double) size);
 
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
 

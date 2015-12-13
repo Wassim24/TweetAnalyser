@@ -1,16 +1,20 @@
 package controller.view;
 
+import domain.Annotation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import services.twitter.DictionaryServiceImpl;
 
 import java.io.*;
 import java.util.Properties;
 
 public class SettingsController
 {
+    @FXML private ComboBox annotationDictionary;
     @FXML private TextField consumerKeyTextField;
     @FXML private TextField consumerKeySecretTextField;
     @FXML private TextField accessTokenTextField;
@@ -18,6 +22,7 @@ public class SettingsController
     @FXML private TextField proxyHostTextField;
     @FXML private TextField proxyPortTextField;
     @FXML private GridPane dictionarySettings;
+
     private File configFile = null;
     private File dictionary = null;
 
@@ -52,6 +57,8 @@ public class SettingsController
 
     public void onSelectingSettingsTab() throws IOException
     {
+
+
         if (this.configFile == null)
         {
             this.configFile = new File("twitter4j.properties");
@@ -68,10 +75,7 @@ public class SettingsController
         }
     }
 
-    public void initialize()
-    {
-        try { this.onSelectingSettingsTab();} catch (IOException e) {e.printStackTrace();}
-    }
+    public void initialize() {}
 
     public void loadDictionary() {
         FileChooser dictionaryLocator = new FileChooser();
@@ -92,7 +96,11 @@ public class SettingsController
         }
         else
         {
-            //TO DO : CREATE METHOD FOR IMPORTING TEXT FILES AS DICTIONARIES
+            if (annotationDictionary.getValue().toString().equals("Positive Dictionary"))
+                DictionaryServiceImpl.getInstance().addFromFile(dictionary, Annotation.POSITIF);
+            else
+                DictionaryServiceImpl.getInstance().addFromFile(dictionary, Annotation.NEGATIF);
+
         }
     }
 }
