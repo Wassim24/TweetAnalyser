@@ -81,7 +81,8 @@ public class SettingsController
                     alert.setContentText("I was unable to create the configuration file ! May be rights problem ?");
                     alert.setHeaderText(null);
                     alert.showAndWait();
-                }
+
+                }else {saveProperties(this.consumerKeyTextField.getText(), this.consumerKeySecretTextField.getText(), this.accessTokenTextField.getText(), this.accessTokenSecretTextField.getText(), this.proxyHostTextField.getText(), this.proxyPortTextField.getText());}
 
 
             InputStream inputStream = new FileInputStream(this.configFile);
@@ -102,7 +103,8 @@ public class SettingsController
 
     }
 
-    public void loadDictionary() {
+    public void loadDictionary()
+    {
         FileChooser dictionaryLocator = new FileChooser();
         dictionaryLocator.setTitle("Locate a dictionary");
         dictionaryLocator.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
