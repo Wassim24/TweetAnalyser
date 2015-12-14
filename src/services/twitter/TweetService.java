@@ -1,5 +1,6 @@
 package services.twitter;
 
+import domain.Annotation;
 import domain.Tweet;
 import twitter4j.RateLimitStatus;
 import twitter4j.TwitterException;

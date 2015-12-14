@@ -17,7 +17,7 @@
     -fx-tab-min-width : 64px;
     -fx-tab-max-width : 64px;
 
-    -fx-background-color : #ffffff;
+    -fx-background-color : #393c3e;
 
     -fx-font-size : 12px;
 }
@@ -27,14 +27,14 @@
 }
 
 .tab-pane .tab-header-background {
-    -fx-background-color : #f5f8fa;
+    -fx-background-color : #393c3e;
 
-    -fx-border-color : #e1e8ed;
+    -fx-border-color : #393c3e;
     -fx-border-width : 0 0 5 0;
 }
 
 .tab {
-    -fx-background-color : #F5F5F5;
+    -fx-background-color : #393c3e;
     -fx-background-repeat: no-repeat;
     -fx-background-radius : 0;
     -fx-background-position : center;
@@ -57,7 +57,7 @@
 }
 
 .tab:hover {
-    -fx-background-color : #E0E0E0;
+    -fx-background-color : #393c3e;
 }
 
 .button, .button:focused {
@@ -73,7 +73,7 @@
     /*
      * Bootstrap btn success
      */
-    -fx-text-fill: #fff;
+    -fx-text-fill: #393c3e;
     -fx-background-color: rgba(0,132,180,.8);
     -fx-cursor: hand;
 }
@@ -89,7 +89,7 @@
     -fx-min-height : 35px;
     -fx-max-height : 35px;
 
-    -fx-background-color : WHITE;
+    -fx-background-color : 393c3e;
     -fx-background-radius : 0;
 
     -fx-border-width : 1.1;
@@ -112,7 +112,7 @@
     -fx-border-width : 0;
 
         -fx-border-width : 0 0 3 0;
-        -fx-border-color : #E0E0E0;
+        -fx-border-color : #393c3e;
 }
 
 .accordion > .titled-pane > .title {
@@ -139,18 +139,20 @@
     -fx-cell-size: 75px;
     -fx-padding : 29px 0 0 20px;
 
-    -fx-background: #f5f8fa;
+    -fx-background: #393c3e;
 
-    -fx-border-color : #BDBDBD;
-    -fx-border-width : 0 0 0 0;
+    -fx-border-color : #ededed;
+    -fx-border-width : 1 0 1 0;
 }
 
 .list-cell:hover {
     -fx-cell-size: 75px;
-    -fx-background-color : #f2f3f4;
+    -fx-background-color : #393c3e;
     -fx-cursor: hand;
         -fx-text-fill: black;
 }
+
+
 
 .foundTweetContent {
     -fx-text-fill : BLACK;
@@ -174,7 +176,7 @@
     -fx-font-width : bold;
     -fx-background-insets: 0;
 
-    -fx-border-color : #BDBDBD;
+    -fx-border-color : #8899a6;
     -fx-border-width : 0 0 0 3;
 
     -fx-background-color : #e6e9eb;
@@ -198,7 +200,7 @@
 }
 
 .scroll-bar:vertical > .increment-button > .increment-arrow {
-    -fx-background-color: WHITE;
+    -fx-background-color: 393c3e;
     -fx-background-insets: 1 0 -1 0, 0;
 
     -fx-padding: 0.333333em 0.5em 0.0em 0.0em; /* 4 6 0 0 */
@@ -207,7 +209,7 @@
 }
 
 .scroll-bar:vertical > .decrement-button > .decrement-arrow {
-    -fx-background-color: WHITE;
+    -fx-background-color: 393c3e;
     -fx-background-insets: 1 0 -1 0, 0;
 
     -fx-padding: 0.333333em 0.5em 0.0em 0.0em; /* 4 6 0 0 */
@@ -216,7 +218,7 @@
 }
 
 .table-view {
-    -fx-table-cell-border-color: #e1e8ed;
+    -fx-table-cell-border-color: #393c3e;
     -fx-control-inner-background: #BDBDBD;
     -fx-background-color: #BDBDBD;
 }
@@ -233,7 +235,7 @@
 
 .table-row-cell:filled:selected {
         -fx-border-width : 1 0 1 0;
-        -fx-border-color : #e1e8ed;
+        -fx-border-color : #393c3e;
         }
 
 .table-row-cell:filled:selected > .table-cell{
@@ -270,17 +272,12 @@
 
 .combo-box {
 
-    -fx-background-color : white;
-    -fx-background-insets: 1;
-
-    -fx-border-color : #E0E0E0;
-    -fx-border-width : 1;
-
+    -fx-background-color : #393c3e;
     -fx-text-fill: -fx-text-base-color;
+    -fx-border-width : 1;
+    -fx-border-color : #828282;
     -fx-min-height: 25px;
     -fx-max-height: 25px;
-
-    -fx-effect : innershadow( gaussian , rgba(0,0,0,0.2) , 10 , 0.1 , 0 , 0 );
 }
 
 .combo-box > .list-cell {
@@ -337,10 +334,10 @@
 
     -fx-font-size : 11px;
 
-    -fx-background-color : white;
+    -fx-background-color : 393c3e;
     -fx-background-insets: 1;
 
-    -fx-border-color : #E0E0E0;
+    -fx-border-color : #393c3e;
     -fx-border-width : 1;
 
     -fx-effect : innershadow( gaussian , rgba(0,0,0,0.2) , 10 , 0.1 , 0 , 0 );
@@ -349,7 +346,7 @@
 .authSettingsGP {
 
     -fx-border-width : 0 0 3px 0;
-    -fx-border-color : #E0E0E0;
+    -fx-border-color : #393c3e;
 
     -fx-padding : 0 15px 20px 15px;
     -fx-vgap : 10px;
@@ -439,7 +436,7 @@
 }
 
 .titleHbox {
-    -fx-background-color: #eceef1;
+    -fx-background-color: #393c3e;
     -fx-min-height : 77px;
     -fx-max-height : 77px;
     -fx-background-insets : 0;
@@ -491,10 +488,10 @@
 
 .algorithmSettings > .text-field
 {
-    -fx-background-color : white;
+    -fx-background-color : 393c3e;
     -fx-background-insets: 1;
 
-    -fx-border-color : #E0E0E0;
+    -fx-border-color : #393c3e;
     -fx-border-width : 1;
 
     -fx-effect : innershadow( gaussian , rgba(0,0,0,0.2) , 10 , 0.1 , 0 , 0 );

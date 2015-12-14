@@ -1,19 +1,26 @@
 package controller.view;
 
 import domain.Annotation;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import services.twitter.DictionaryServiceImpl;
+import services.twitter.VocabularyServiceImpl;
 
 import java.io.*;
 import java.util.Properties;
 
 public class SettingsController
 {
+    @FXML private VBox vboxSettings;
+    @FXML private ComboBox vocabularyGramsCombobox;
+    @FXML private ScrollPane scrollPaneSettings;
     @FXML private ComboBox annotationDictionary;
     @FXML private TextField consumerKeyTextField;
     @FXML private TextField consumerKeySecretTextField;
@@ -57,7 +64,10 @@ public class SettingsController
 
     public void onSelectingSettingsTab() throws IOException
     {
+        scrollPaneSettings.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {vboxSettings.setMinWidth(scrollPaneSettings.getWidth() - 17);});
 
+        vocabularyGramsCombobox.getItems().addAll("0 Gramme", "1 Gramme", "2 Grammes");
+        vocabularyGramsCombobox.setValue("1 Gramme");
 
         if (this.configFile == null)
         {
@@ -75,7 +85,10 @@ public class SettingsController
         }
     }
 
-    public void initialize() {}
+    public void initialize()
+    {
+
+    }
 
     public void loadDictionary() {
         FileChooser dictionaryLocator = new FileChooser();
@@ -102,5 +115,17 @@ public class SettingsController
                 DictionaryServiceImpl.getInstance().addFromFile(dictionary, Annotation.NEGATIF);
 
         }
+    }
+
+    public void buildVocabulary()
+    {
+        int ngram = Integer.parseInt(vocabularyGramsCombobox.getValue().toString().charAt(0) + "");
+
+        if(ngram == 1)
+            VocabularyServiceImpl.getInstance().buildAllVocabulary(1);
+        else if (ngram == 2)
+            VocabularyServiceImpl.getInstance().buildAllVocabulary(2);
+        else
+            VocabularyServiceImpl.getInstance().buildAllVocabulary(2);
     }
 }

@@ -3,92 +3,112 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<Tab fx:controller="controller.view.SettingsController"
-     xmlns:fx="http://javafx.com/fxml/1"
+<Tab xmlns:fx="http://javafx.com/fxml/1"
+     fx:controller="controller.view.SettingsController"
      xmlns="http://javafx.com/javafx/8" text="" styleClass="settingsTab" onSelectionChanged="#onSelectingSettingsTab">
 
-    <VBox>
-        <!-- Label for displaying the bigger title -->
-        <HBox styleClass="titleHbox">
-            <Label styleClass="bigTitle" text="Editing settings" maxWidth="Infinity"/>
-        </HBox>
+    <ScrollPane fx:id="scrollPaneSettings">
+            <VBox fx:id="vboxSettings" minWidth="912" maxWidth="Infinity">
+                <!-- Label for displaying the bigger title -->
+                <HBox styleClass="titleHbox">
+                    <Label styleClass="bigTitle" text="Editing settings" maxWidth="Infinity"/>
+                </HBox>
 
-        <GridPane styleClass="authSettingsGP">
+                <GridPane styleClass="authSettingsGP">
 
-            <columnConstraints>
-                <ColumnConstraints minWidth="230.0"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="230.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-            <Label text="Authentication Settings" styleClass="settingsMenuLabel"/>
+                    <Label text="Authentication Settings" styleClass="settingsMenuLabel"/>
 
-            <Label styleClass="menuItemLabel" text="Consumer Key" GridPane.rowIndex="1"/>
-            <Label styleClass="menuItemLabel" text="Consumer Key Secret" GridPane.rowIndex="2"/>
-            <Label styleClass="menuItemLabel" text="Access Token" GridPane.rowIndex="3"/>
-            <Label styleClass="menuItemLabel" text="Access Token Secret" GridPane.rowIndex="4"/>
+                    <Label styleClass="menuItemLabel" text="Consumer Key" GridPane.rowIndex="1"/>
+                    <Label styleClass="menuItemLabel" text="Consumer Key Secret" GridPane.rowIndex="2"/>
+                    <Label styleClass="menuItemLabel" text="Access Token" GridPane.rowIndex="3"/>
+                    <Label styleClass="menuItemLabel" text="Access Token Secret" GridPane.rowIndex="4"/>
 
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
-                       fx:id="consumerKeyTextField" promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
-                       fx:id="consumerKeySecretTextField" promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"
-                       fx:id="accessTokenTextField" promptText="Enter your Access Token : 3736207823-IfY..."/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4"
-                       fx:id="accessTokenSecretTextField" promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                               fx:id="consumerKeyTextField" promptText="Enter your Consumer Key : mu1kZEx0ncu1sy5M..."/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                               fx:id="consumerKeySecretTextField"
+                               promptText="Enter your Consumer Key Secret : NMNLU9ak6..."/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"
+                               fx:id="accessTokenTextField" promptText="Enter your Access Token : 3736207823-IfY..."/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="4"
+                               fx:id="accessTokenSecretTextField"
+                               promptText="Enter your Access Token Secret : f2cIePhEIze..."/>
 
-        </GridPane>
+                </GridPane>
 
-        <GridPane styleClass="authSettingsGP">
-            <columnConstraints>
-                <ColumnConstraints minWidth="230.0"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
+                <GridPane styleClass="authSettingsGP">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="230.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-            <Label text="Proxy Settings" styleClass="settingsMenuLabel"/>
+                    <Label text="Proxy Settings" styleClass="settingsMenuLabel"/>
 
-            <Label styleClass="menuItemLabel" text="HTTP Proxy" GridPane.rowIndex="1"/>
-            <Label styleClass="menuItemLabel" text="Port" GridPane.rowIndex="2"/>
+                    <Label styleClass="menuItemLabel" text="HTTP Proxy" GridPane.rowIndex="1"/>
+                    <Label styleClass="menuItemLabel" text="Port" GridPane.rowIndex="2"/>
 
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
-                       fx:id="proxyHostTextField" promptText="cache-etu.univ-lille1.fr"/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
-                       fx:id="proxyPortTextField" promptText="3128"/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"
+                               fx:id="proxyHostTextField" promptText="cache-etu.univ-lille1.fr"/>
+                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="2"
+                               fx:id="proxyPortTextField" promptText="3128"/>
 
-        </GridPane>
+                </GridPane>
 
-        <GridPane styleClass="authSettingsGP" fx:id="dictionarySettings">
-            <columnConstraints>
-                <ColumnConstraints minWidth="230.0"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
+                <GridPane styleClass="authSettingsGP" fx:id="dictionarySettings">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="230.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-            <Label text="Load custom dictionaries" styleClass="settingsMenuLabel"/>
+                    <Label text="Load custom dictionaries" styleClass="settingsMenuLabel"/>
 
-            <Label styleClass="menuItemLabel" text="Locate a dictionary" GridPane.rowIndex="1"/>
-            <Label styleClass="menuItemLabel" text="Choose the type " GridPane.rowIndex="2"/>
-            <Label styleClass="menuItemLabel" text="Import your dictionary " GridPane.rowIndex="3"/>
+                    <Label styleClass="menuItemLabel" text="Locate a dictionary" GridPane.rowIndex="1"/>
+                    <Label styleClass="menuItemLabel" text="Choose the type " GridPane.rowIndex="2"/>
+                    <Label styleClass="menuItemLabel" text="Import your dictionary " GridPane.rowIndex="3"/>
 
-            <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose a file" onAction="#loadDictionary"/>
-            <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="annotationDictionary">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Positive Dictionary"/>
-                        <String fx:value="Negative Dictionary"/>
-                    </FXCollections>
-                </items>
-                <value>
-                    <String fx:value="Positive Dictionary" />
-                </value>
-            </ComboBox>
-            <Button GridPane.columnIndex="1" GridPane.rowIndex="3" text="Import" onAction="#importDictionary"/>
-        </GridPane>
+                    <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose a file"
+                            onAction="#loadDictionary"/>
+                    <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="annotationDictionary">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Positive Dictionary"/>
+                                <String fx:value="Negative Dictionary"/>
+                            </FXCollections>
+                        </items>
+                        <value>
+                            <String fx:value="Positive Dictionary"/>
+                        </value>
+                    </ComboBox>
+                    <Button GridPane.columnIndex="1" GridPane.rowIndex="3" text="Import" onAction="#importDictionary"/>
+                </GridPane>
+
+                <GridPane styleClass="authSettingsGP" fx:id="vocabularySettings">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="230.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Label text="Build your vocabulary" styleClass="settingsMenuLabel"/>
+
+                    <Label styleClass="menuItemLabel" text="N-Grams ( 0 makes them all ) " GridPane.rowIndex="1"/>
+                    <Label styleClass="menuItemLabel" text="Build the vocabulary " GridPane.rowIndex="2"/>
+
+                    <Button GridPane.columnIndex="1" GridPane.rowIndex="2" text="Build" onAction="#buildVocabulary"/>
+                    <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="vocabularyGramsCombobox" />
+                </GridPane>
 
 
-        <HBox styleClass="settingsTabButtonsHBox">
-            <Button text="Reset Settings" onAction="#onClickResetSettingsBtn"/>
-            <Button text="Save Settings" onAction="#onClickSaveSettingsBtn"/>
-        </HBox>
+                <HBox styleClass="settingsTabButtonsHBox">
+                    <Button text="Reset Settings" onAction="#onClickResetSettingsBtn"/>
+                    <Button text="Save Settings" onAction="#onClickSaveSettingsBtn"/>
+                </HBox>
 
-    </VBox>
+            </VBox>
+    </ScrollPane>
 
 </Tab>

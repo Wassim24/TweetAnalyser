@@ -8,6 +8,7 @@ import java.util.List;
 public interface TweetDao
 {
     boolean add(Tweet tweet);
+    boolean update (Tweet tweet);
     List<Tweet> getAll();
     List<Tweet> getBetween(int start, int limit);
     List<Tweet> getAll(Annotation annotation);

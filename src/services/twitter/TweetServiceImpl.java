@@ -1,5 +1,6 @@
 package services.twitter;
 
+import domain.Annotation;
 import domain.Tweet;
 import domain.Vocabulary;
 import services.dao.TweetDaoFactory;
@@ -75,4 +76,5 @@ public class TweetServiceImpl implements TweetService
     {
         return TweetDaoFactory.getInstance().getBetween(start, limit);
     }
+
 }

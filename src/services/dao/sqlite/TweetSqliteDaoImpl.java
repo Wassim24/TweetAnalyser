@@ -46,6 +46,25 @@ public class TweetSqliteDaoImpl implements TweetDao
     }
 
     @Override
+    public boolean update(Tweet tweet) {
+
+        try
+        {
+            SQLiteConnection dbConnection = DaoSqliteFactory.getSQLiteConnection();
+
+            PreparedStatement stmt = dbConnection.prepareStatement("UPDATE " + TABLE_NAME_TWEET +" SET " + COLUMN_ANNOTATION + " = " + tweet.getAnnotation().getValue() + " WHERE " + COLUMN_ID + " = " + tweet.getId());
+            stmt.executeUpdate();
+
+            stmt.close();
+            dbConnection.close();
+            return true;
+        }
+        catch (SQLException e) {}
+
+        return false;
+    }
+
+    @Override
     public List<Tweet> getAll()
     {
         ObservableList<Tweet> response = FXCollections.observableArrayList();
