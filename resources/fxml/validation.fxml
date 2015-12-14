@@ -17,7 +17,6 @@
             <!-- <Button text="Advanced Search" onAction="#onClickAdvSearchForTweetsBtn"/> -->
             <Button text="Launch Validation" onAction="#onClickValidate"/>
         </HBox>
-
         <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" fx:id="chartsVBox"></VBox>
     </VBox>
 </Tab>

@@ -5,10 +5,7 @@ import domain.Tweet;
 import domain.Vocabulary;
 import services.twitter.VocabularyServiceImpl;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BayesMixte
 {
@@ -49,7 +46,7 @@ public class BayesMixte
 
             for (int i = 1; i <= ngramme; i++) {
 
-                for (String word : generateNgrams(i, tweet.getTweet())) {
+                for (String word : new HashSet<>(generateNgrams(i, tweet.getTweet()))) {
 
                     for (Vocabulary v : vocabularies.keySet()) {
 

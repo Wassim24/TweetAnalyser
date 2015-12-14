@@ -42,7 +42,7 @@ public class Bayes
         {
             probPositive = 1; probNegative = 1; probNeutre = 1;
 
-            for (String word : generateNgrams(ngramme, tweet.getTweet()))
+            for (String word : new HashSet<>(generateNgrams(ngramme, tweet.getTweet())))
             {
                 for (Vocabulary v : vocabularies.keySet())
                 {

@@ -60,11 +60,11 @@ public class BayesFrequency
                         probNeutre *= (v.getNeuocc() + 1) / (double) (countNeutre + size);
                     }
                 }
-            }
 
-            probPositive = Math.pow(probPositive, frequency);
-            probNegative = Math.pow(probNegative, frequency);
-            probNeutre = Math.pow(probNeutre, frequency);
+                probPositive = Math.pow(probPositive, frequency);
+                probNegative = Math.pow(probNegative, frequency);
+                probNeutre = Math.pow(probNeutre, frequency);
+            }
 
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
 

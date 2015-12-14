@@ -35,13 +35,15 @@ public class BayesFrequencyMixte
                 countNeutre++;
         }
 
-        ArrayList<Tweet> response = new ArrayList<Tweet>();
+        ArrayList<Tweet> response = new ArrayList<>();
         for(Tweet p : toAnnotate)
             response.add(p.clone());
 
         for (Tweet tweet : response) {
 
+
             probPositive = 1; probNegative = 1; probNeutre = 1;
+
             for (int i = 1; i <= ngramme; i++) {
 
                 wordsWithFrequency = generateNgrams(i, tweet.getTweet());
@@ -63,14 +65,11 @@ public class BayesFrequencyMixte
 
                         }
                     }
+
+                    probPositive = Math.pow(probPositive, frequency);
+                    probNegative = Math.pow(probNegative, frequency);
+                    probNeutre = Math.pow(probNeutre, frequency);
                 }
-
-
-                probPositive = Math.pow(probPositive, frequency);
-                probNegative = Math.pow(probNegative, frequency);
-                probNeutre = Math.pow(probNeutre, frequency);
-
-
             }
             maxValue = Math.max(probPositive, Math.max(probNegative, probNeutre));
 
