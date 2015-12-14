@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="TweetAnalyser:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="70b196f1-f3ca-4928-971e-b3384e43ec29" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rapport.pdf" />
+    <list default="true" id="70b196f1-f3ca-4928-971e-b3384e43ec29" name="Default" comment="Ajout du rapport">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OUTPUT_JAR/TweetAnalyser.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OUTPUT_JAR/project.sqlite" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OUTPUT_JAR/twitter4j.properties" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/negative.txt" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/positive.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/META-INF/MANIFEST.MF" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TweetAnalyser.iws" />
@@ -34,18 +42,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="diagmonds-light.png" pinned="false" current-in-tab="true">
+      <file leaf-file-name="diagmonds-light.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/img/medium/diagmonds-light.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Glossary.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/services/algorithms/classification/Glossary.java">
+      <file leaf-file-name="twitter4j.properties" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/OUTPUT_JAR/twitter4j.properties">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -608,7 +616,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15625" />
     <property name="project.structure.side.proportion" value="0.20344828" />
     <property name="recentsLimit" value="5" />
@@ -954,7 +962,13 @@
       <option name="project" value="LOCAL" />
       <updated>1449934494409</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Ajout du rapport">
+      <created>1450129100121</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1450129100121</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1004,7 +1018,8 @@
     <MESSAGE value="Création de la DAO pour le Vocabulaire.&#10;L'implementation du service du Vocabulaire&#10;Bayes à été commencé et la création du vocabulaire aussi&#10;( Un fouillie dans KNN ne pas en tenir compte :P )" />
     <MESSAGE value="Refactor de l'analyse expérimentale" />
     <MESSAGE value="Suppression des variables useless" />
-    <option name="LAST_COMMIT_MESSAGE" value="Suppression des variables useless" />
+    <MESSAGE value="Ajout du rapport" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout du rapport" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1017,14 +1032,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/services/twitter/TweetServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/services/twitter/TweetService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1416,16 +1423,26 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/OUTPUT_JAR/twitter4j.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>TweetAnalyser:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.20344828" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -1445,7 +1462,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>juv-rtmp-client-1.5.16</last-edited>
+          <last-edited>libraries</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
