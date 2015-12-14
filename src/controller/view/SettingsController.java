@@ -72,6 +72,18 @@ public class SettingsController
         if (this.configFile == null)
         {
             this.configFile = new File("twitter4j.properties");
+
+            if ( !configFile.exists() )
+                if ( !configFile.createNewFile() )
+                {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Oh Snap ! Something went wrong...");
+                    alert.setContentText("I was unable to create the configuration file ! May be rights problem ?");
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                }
+
+
             InputStream inputStream = new FileInputStream(this.configFile);
             Properties props = new Properties();
             props.load(inputStream);
